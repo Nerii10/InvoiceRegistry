@@ -20,7 +20,7 @@ function GoogleLoginButton() {
 
   return (
     <div onClick={() => login()} className="google-login-button">
-      <img src="/google-logo.webp" alt="Google" className="google-logo" />
+      <img src="/InvoiceRegistry/google-logo.webp" alt="Google" className="google-logo" />
       <p>Login with google</p>
     </div>
   );
