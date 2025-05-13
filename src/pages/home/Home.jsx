@@ -210,7 +210,7 @@ export default function Home() {
                 <MousePointer2 />
               </motion.div>
               <img
-                src="/placeholder.png"
+                src="/InvoiceRegistry/placeholder.png"
                 alt="Team collaboration illustration"
               />
             </div>
