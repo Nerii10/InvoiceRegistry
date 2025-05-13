@@ -1,0 +1,37 @@
+.error-popup-container {
+    position: absolute;
+    z-index: 10;
+    bottom: 20px;
+    right: 20px;
+}
+
+.error-popup {
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.535);
+    border: 1px var(--borderColor) solid;
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.error-message {
+    margin: 0;
+}
+
+.close-button {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    background-color: red;
+    border: none;
+    border-radius: 50%;
+}

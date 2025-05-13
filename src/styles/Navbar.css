@@ -1,0 +1,17 @@
+.navbar {
+  background-color: var(--accentColor);
+  border-bottom: 1px var(--borderColor) solid;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 10px;
+}
+
+.navbar-right {
+  height: 100%;
+  position: relative;
+}

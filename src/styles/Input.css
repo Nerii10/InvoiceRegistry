@@ -1,0 +1,106 @@
+* {
+  --custom-input-color: rgb(83, 83, 83);
+}
+
+.custom-input {
+  width: var(--input-width, 100%);
+  max-width: var(--input-max-width, 100%);
+  box-sizing: border-box;
+  padding: 8px;
+  font-size: 15px;
+  border-radius: var(--border-radius, 6px);
+  border: 1px solid var(--borderColor, #ccc);
+  color: var(--custom-input-color);
+  border-style: var(--border-style);
+  height: var(--height);
+  background-color: var(--background-color);
+  overflow: hidden;
+  transition: 0.5s ease;
+}
+
+.custom-input-text {
+  color: var(--custom-input-color);
+  pointer-events: none;
+  white-space: nowrap;
+  margin: 0;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+}
+
+.custom-input:focus {
+  border-color: #007bff;
+  box-shadow: 0px 0px 0px 0px black;
+}
+
+.custom-input.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg fill='gray' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10% center;
+  background-size: 1rem;
+  cursor: pointer;
+  font-size: 15px;
+  overflow: hidden;
+}
+
+.custom-input-file-wrapper {
+  width: var(--input-width, 100%);
+  max-width: var(--input-max-width, 100%);
+  box-sizing: border-box;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 13px;
+  border: 1px solid var(--borderColor, #ccc);
+  border-radius: var(--border-radius, 6px);
+  color: var(--custom-input-color);
+  border-style: var(--border-style);
+  height: var(--height);
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+  transition: 0.5s ease;
+}
+
+.custom-input-file {
+  display: none;
+}
+
+.custom-input.button {
+  background-color: var(--background-color);
+  border: 1px solid var(--borderColor, #ccc);
+  border-radius: var(--border-radius, 6px);
+  cursor: pointer;
+  display: flex;
+  width: var(--input-width);
+  justify-content: center;
+  gap: 5px;
+  align-items: center;
+  border-style: var(--border-style);
+  box-sizing: border-box;
+  padding: 0px 10px;
+  transition: 0.25s ease;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.custom-input.active-button {
+  background-color: rgb(94, 166, 255);
+  border-color: rgb(120, 128, 228);
+  border-style: var(--border-style);
+  gap: 5px;
+  display: flex;
+  font-size: 12px;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 10px;
+  overflow: hidden;
+  color: rgb(255, 255, 255);
+}
