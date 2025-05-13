@@ -99,7 +99,7 @@ export function UserProvider({ children }) {
 
   async function loginGoogle(GoogleToken) {
     try {
-      const response = await fetch(`http://localhost:3000/login/google`, {
+      const response = await fetch(`${API_URL}/login/google`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
