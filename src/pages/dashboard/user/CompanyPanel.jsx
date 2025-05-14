@@ -12,6 +12,7 @@ export default function CompanyPanel({
   moveUnit,
   removeUnit,
   leaveCompany,
+  loading,
 }) {
   //Admin
   const [selectedAction, setSelectedAction] = useState("New");
@@ -101,6 +102,7 @@ export default function CompanyPanel({
               height="30px"
               type="button"
               borderRadius="0px"
+              disabled={loading}
               width="50%"
               borderStyle="none"
               onClick={() => {
@@ -115,6 +117,7 @@ export default function CompanyPanel({
               type="button"
               borderRadius="0px"
               width="50%"
+              disabled={loading}
               borderStyle="none"
               onClick={() => {
                 setSelectedAction("Move");
@@ -130,6 +133,7 @@ export default function CompanyPanel({
                 type="button"
                 borderRadius="0px"
                 width="50%"
+                disabled={loading}
                 borderStyle="none"
                 onClick={() => {
                   setSelectedAction("Remove");
@@ -183,6 +187,7 @@ export default function CompanyPanel({
                       borderRadius: "0px",
                       label: "New Unit Name",
                       borderStyle: "none",
+                      disabled: loading,
                       children: "Add",
                       onClick: () => {
                         newUnit(newUnitData);
@@ -243,6 +248,7 @@ export default function CompanyPanel({
                     {
                       type: "button",
                       borderRadius: "0px",
+                      disabled: loading,
                       customStyle: {
                         border: "none",
                       },
@@ -300,6 +306,7 @@ export default function CompanyPanel({
                     {
                       type: "button",
                       borderRadius: "0px",
+                      disabled: loading,
                       width: "100%",
                       borderStyle: "none",
                       onClick: () => {

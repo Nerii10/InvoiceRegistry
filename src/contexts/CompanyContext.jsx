@@ -4,7 +4,6 @@ import { useUser } from "../contexts/UserContext";
 const CompanyContext = createContext();
 
 export function CompanyProvider({ children }) {
-
   const { token, API_URL } = useUser();
   const [data, setData] = useState(null);
   const [total, setTotal] = useState(0);
@@ -41,6 +40,7 @@ export function CompanyProvider({ children }) {
   }, [token]);
 
   const newUnit = async (unitData) => {
+    setLoading(true);
     await fetch(`${API_URL}/unit/new`, {
       method: "POST",
       headers: {
@@ -50,9 +50,11 @@ export function CompanyProvider({ children }) {
       body: JSON.stringify(unitData),
     });
     fetchCompanyData();
+    setLoading(false);
   };
 
   const moveUnit = async (unitData) => {
+    setLoading(true);
     await fetch(`${API_URL}/unit/move`, {
       method: "PATCH",
       headers: {
@@ -62,9 +64,12 @@ export function CompanyProvider({ children }) {
       body: JSON.stringify(unitData),
     });
     fetchCompanyData();
+    setLoading(false);
   };
 
   const removeUnit = async (unitData) => {
+    setLoading(true);
+
     await fetch(`${API_URL}/unit/remove`, {
       method: "PATCH",
       headers: {
@@ -74,9 +79,12 @@ export function CompanyProvider({ children }) {
       body: JSON.stringify(unitData),
     });
     fetchCompanyData();
+    setLoading(false);
   };
 
   const leaveCompany = async (data) => {
+    setLoading(true);
+
     await fetch(`${API_URL}/unit/leave`, {
       method: "PATCH", // Zakładam że to PATCH a nie UPDATE
       headers: {
@@ -86,6 +94,7 @@ export function CompanyProvider({ children }) {
       body: JSON.stringify(data),
     });
     fetchCompanyData();
+    setLoading(false);
   };
 
   return (

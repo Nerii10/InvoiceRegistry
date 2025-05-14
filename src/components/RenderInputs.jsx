@@ -10,6 +10,7 @@ export default function RenderInputs({data, className }) {
               type={input.type}
               borderStyle={input.borderStyle}
               width={input.width}
+              disabled={input.disabled}
               label={input.label}
               required={input.required}
               value={input.value}

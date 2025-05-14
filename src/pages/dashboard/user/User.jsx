@@ -24,6 +24,7 @@ export default function User() {
           company={data}
           newUnit={newUnit}
           moveUnit={moveUnit}
+          loading={loading}
           removeUnit={removeUnit}
           leaveCompany={leaveCompany}
         ></CompanyPanel>
