@@ -45,13 +45,14 @@ export default function AddDocument() {
     console.log(currentFile);
   }, [currentFile]);
 
-  const noCompany = companyData?.unitsData?.length !== 0 || true;
-
+  const Company = companyData?.me?.userUnit == null ? false : true;
+  console.log(Company);
+  console.log(companyData);
   return (
     <>
       <ErrorPopup
         error={
-          noCompany
+          Company
             ? error
             : {
                 message:
@@ -103,7 +104,7 @@ export default function AddDocument() {
 
             <Input
               type="submit"
-              disabled={noCompany}
+              disabled={!Company}
               width="fit-content"
               borderRadius="10px"
             >
@@ -114,8 +115,8 @@ export default function AddDocument() {
       </DashboardPageWrapper>
       <br></br>
       <br></br>
-      <div className="add-document-frame">
-        {fileURL && (
+      {fileURL && (
+        <div className="add-document-frame">
           <iframe
             src={fileURL}
             width="100%"
@@ -123,8 +124,9 @@ export default function AddDocument() {
             style={{ borderRadius: "var(--borderRadius)", border: "none" }}
             title="Podgląd PDF-a"
           />
-        )}
-      </div>
+        </div>
+      )}
+
       <br></br>
     </>
   );
