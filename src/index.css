@@ -14,33 +14,30 @@ body {
   background-color: white;
   margin: 0;
   min-width: 320px;
-  --accentColor:white;
+  --accentColor: white;
   --secondColor: #e7e7e7;
   --borderRadius: 20px;
   --borderColor: rgb(200, 200, 200);
 }
 
-
-/* 
-@media only screen and (max-width: 200px) {
-  html, body {
+@media only screen and (max-width: 700px) {
+  html,
+  body {
     height: 100dvh;
   }
-  
+
   @supports (height: 100dvh) {
-    html, body {
+    html,
+    body {
       height: 100dvh;
     }
   }
 
-
-body {
-  background-color: white;
-  margin: 0;
-  min-width: 320px;
-  width: 100vw;
-  position: fixed;
+  body {
+    background-color: rgb(144, 20, 20);
+    margin: 0;
+    min-width: 320px;
+    width: 100vw;
+    position: fixed;
+  }
 }
-
-  
-} */

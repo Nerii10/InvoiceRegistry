@@ -13,28 +13,36 @@
     height: 100%;
     width: 100%;
     z-index: 20;
-    flex-shrink: 0;
+    overflow: hidden;
+    transition: 0.4s ease-in-out;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
 .sidebar-mobile-closed{
     background-color: rgb(10, 29, 63);
-    color:rgba(255, 255, 255, 0);
+    color:white;
     position: fixed;
     height: 100%;
-    pointer-events: none;
-    width: 0%;
+    width: 100%;
     z-index: 20;
+    overflow: hidden;
     flex-shrink: 0;
+    transition: 0.4s ease-in-out;
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
 }
 
 .sidebar-mobile-button{
-    top: 50%;
+    bottom: 10%;
     width: 50px;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    border: 2px rgb(105, 105, 105) solid;
     height: 50px;
-    border-radius: 50%;
-    right: 10px;
-    position: absolute;
-    transform: translate(0%, -50%);
+    z-index: 25;
+    left: -5px;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    position: fixed;
 }
 
 .sidebar-header{
