@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import SlidingText from "../../components/SlidingText.jsx";
 
 export default function Home() {
   const iconSize = 30;
@@ -80,7 +81,8 @@ export default function Home() {
         >
           <div className="container hero__content">
             <div className="hero__text">
-              <h1 className="hero__title">Manage invoices faster than ever.</h1>
+        
+        <motion.h1 className="hero__title">Manage invoices <SlidingText inputs={['faster', 'better', 'easier']} /> than ever.</motion.h1>
               <p className="hero__subtitle">
                 A simple and secure application to register and keep track of
                 invoices and structure of your company.
