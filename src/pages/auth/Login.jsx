@@ -32,7 +32,7 @@ function GoogleLoginButton() {
 
 export default function Login({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
-  const { login, authMessage } = useUser();
+  const { login, authMessage, loading } = useUser();
 
   return (
     <section className="login-wrapper">
@@ -77,7 +77,7 @@ export default function Login({ setAction }) {
 
         <div className="auth-buttons">
           <div className="auth-button">
-            <Input type="submit" className="auth-button-submit" active={true}>
+            <Input disabled={loading} type="submit" className="auth-button-submit" active={true}>
               <LogIn /> Login
             </Input>
           </div>

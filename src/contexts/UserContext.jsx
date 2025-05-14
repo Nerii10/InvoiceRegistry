@@ -10,6 +10,7 @@ export function UserProvider({ children }) {
   const [token, setToken] = useState(null);
   const [user, setUser] = useState(null);
   const [authMessage, setAuthMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -27,8 +28,6 @@ export function UserProvider({ children }) {
       }
     }
   }, []);
-
-  
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -68,6 +67,7 @@ export function UserProvider({ children }) {
   };
 
   const login = async (credentials) => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/login`, {
         method: "POST",
@@ -83,6 +83,7 @@ export function UserProvider({ children }) {
         setAuthMessage({ message: "Succesfully logged in..", type: "login" });
         setTimeout(() => {
           window.location.reload();
+          setLoading(false);
         }, 1000);
       } else {
         const data = await response.json();
@@ -90,6 +91,7 @@ export function UserProvider({ children }) {
           message: data.error || "Wystąpił błąd podczas logowania.",
           type: "error",
         });
+        setLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -97,6 +99,7 @@ export function UserProvider({ children }) {
         message: "Wystąpił błąd podczas łączenia z serwerem.",
         type: "error",
       });
+      setLoading(false);
     }
   };
 
@@ -116,6 +119,7 @@ export function UserProvider({ children }) {
         setAuthMessage({ message: "Succesfully logged in..", type: "login" });
         setTimeout(() => {
           window.location.reload();
+          setLoading(true);
         }, 1000);
       } else {
         const data = await response.json();
@@ -123,6 +127,7 @@ export function UserProvider({ children }) {
           message: data.error || "Wystąpił błąd podczas logowania.",
           type: "error",
         });
+        setLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -130,6 +135,7 @@ export function UserProvider({ children }) {
         message: "Wystąpił błąd podczas łączenia z serwerem.",
         type: "error",
       });
+      setLoading(false);
     }
   }
 
