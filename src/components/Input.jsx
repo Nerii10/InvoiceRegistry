@@ -169,8 +169,7 @@ export default function Input({
               justifyContent: "center",
               alignItems: "center",
               position: "relative",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
               width: width,
               height: height,
             }}
@@ -178,19 +177,12 @@ export default function Input({
             <input
               type={type}
               required={required}
-              className="custom-input text"
+              className="custom-input"
               value={value}
               onChange={(e) => {
                 setValue(e.target.value);
               }}
-              style={{
-                "--input-width": "100%",
-                "--input-max-width": "100%",
-                "--border-radius": borderRadius,
-                "--background-color": backgroundColor,
-                "--height": "100%",
-                "--border-style": borderStyle,
-              }}
+              style={style}
             />
 
             <p
@@ -205,14 +197,13 @@ export default function Input({
                     }
                   : {
                       position: "absolute",
-                      backgroundColor: "rgba(255, 255, 255, 0.8)",
+                      backgroundColor: "rgb(255, 255, 255)",
                       padding: "0px 5px",
                       boxSizing: "border-box",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                      width: "97%",
-                      textAlign: "end",
-                      left: "2px",
+                      width: "90%",
+                      textAlign: "start",
                       opacity: 1,
                       transition: "0.25s ease",
                     }

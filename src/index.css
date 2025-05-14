@@ -38,6 +38,7 @@ body {
     margin: 0;
     min-width: 320px;
     width: 100vw;
+    overflow: hidden;
     position: fixed;
   }
 }

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 export default function Sidebar({ style }) {
-  
+
   const location = useLocation();
   const [currentPath, setcurrentPath] = useState("documents");
   const [windowOpen, setWindowOpen] = useState(false);
@@ -12,6 +12,7 @@ export default function Sidebar({ style }) {
   useEffect(() => {
     // console.log(location.pathname.split('/')[2])
     setcurrentPath(location.pathname.split("/")[2]);
+    setWindowOpen(false)
   }, [location]);
 
   return (
