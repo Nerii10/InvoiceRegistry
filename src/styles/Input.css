@@ -2,6 +2,14 @@
   --custom-input-color: rgb(83, 83, 83);
 }
 
+.custom-input-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  text-overflow: ellipsis;
+}
+
 .custom-input {
   width: var(--input-width, 100%);
   max-width: var(--input-max-width, 100%);
@@ -20,6 +28,7 @@
   transition: 0.5s ease;
   text-overflow: ellipsis;
 }
+
 input[type="date"].custom-input {
   appearance: none;
   -webkit-appearance: none;
@@ -29,7 +38,6 @@ input[type="date"].custom-input {
   min-width: 0;
   flex-shrink: 1;
 }
-
 
 .custom-input-text {
   color: var(--custom-input-color);
@@ -41,6 +49,24 @@ input[type="date"].custom-input {
   align-items: center;
   gap: 5px;
   font-size: 15px;
+  position: absolute;
+  left: 0px;
+  text-overflow: ellipsis;
+  opacity: 1;
+  overflow: hidden;
+  width: 100%;
+  padding: 0px 10px;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: 0.25s ease;
+}
+
+.custom-input-text-active {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  left: 50px;
+  transition: 0.25s ease;
 }
 
 .custom-input:focus {
@@ -84,6 +110,7 @@ input[type="date"].custom-input {
   display: none;
 }
 
+/* BUTTONS */
 .custom-input.button {
   background-color: var(--background-color);
   border: 1px solid var(--borderColor, #ccc);
@@ -102,13 +129,25 @@ input[type="date"].custom-input {
   font-size: 13px;
 }
 
+
+.custom-input.button:disabled {
+  background-color: rgb(227, 227, 227);
+  cursor:not-allowed;
+}
+
+.custom-input.active-button:disabled {
+  background-color: rgb(85, 117, 157);
+  border-color: rgb(81, 84, 129);
+  cursor:not-allowed;
+}
+
 .custom-input.active-button {
   background-color: rgb(94, 166, 255);
   border-color: rgb(120, 128, 228);
   border-style: var(--border-style);
   gap: 5px;
   display: flex;
-  font-size: 12px;
+  font-size: 13px;
   justify-content: center;
   cursor: pointer;
   align-items: center;
@@ -116,4 +155,73 @@ input[type="date"].custom-input {
   padding: 0px 10px;
   overflow: hidden;
   color: rgb(255, 255, 255);
+}
+
+.custom-input-multiselect {
+  box-sizing: border-box;
+  width: var(--input-width, 100%);
+  max-width: var(--input-max-width, 100%);
+  cursor: pointer;
+  border: 1px solid var(--borderColor, #ccc);
+  border-radius: var(--border-radius, 6px);
+  color: var(--custom-input-color);
+  border-style: var(--border-style);
+  height: var(--height);
+  background-color: var(--background-color);
+  position: relative;
+  transition: 0.5s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.multiselect-icon{
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.multiselect-popup{
+  position: absolute;
+  background-color: var(--accentColor);
+  border: 1px var(--borderColor) solid;
+  border-radius: var(--border-radius);
+  z-index: 5;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+  top: 35px;
+  right: 0;
+  gap: 5px;
+}
+
+.multiselect-input{
+  background-color: var(--secondColor);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  color:black;
+  gap: 5px;
+  padding: 2px 5px;
+  box-sizing: border-box;
+  width: 100%;
+  transition: 0.2s ease;
+  cursor: pointer;
+}
+
+.multiselect-input.selected{
+  background-color: rgb(84, 155, 255);
+  color:rgb(255, 255, 255);
+}
+
+.multiselect-input-checkbox{
+  display: none;
 }

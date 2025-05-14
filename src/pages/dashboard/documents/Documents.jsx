@@ -19,40 +19,68 @@ import DocumentsDisplay from "./DocumentsDisplay.jsx";
 export default function Documents() {
   //States
   const [currentPage, setcurrentPage] = useState(1);
-  const [availablePages, setavailablePages] = useState([]);
+  const [availablePages, setavailablePages] = useState([{ value: 1 }]);
   const [viewMode, setviewMode] = useState("list");
   const [documentType, setdocumentType] = useState("invoices");
   const [search, setSearch] = useState("");
   const iconSize = 15;
+  const invoiceTableHeaders = [
+    "Invoice Number",
+    "Date of Issue",
+    "Due Date",
+    "User",
+    "Client",
+    "Status",
+    "Amount",
+  ];
 
-  //Hooks
+  // Hooks
   const { token } = useUser();
 
-  const { fetchDocs, data, loading, error } = useDocuments({
+  const { fetchDocs, data, loading } = useDocuments({
     token: token,
     type: documentType,
     page: currentPage,
     search: search,
   });
 
+  // Filters
+  const [filters, setFilters] = useState(() => {
+    try {
+      const stored = localStorage.getItem("filters");
+      return stored ? JSON.parse(stored) : invoiceTableHeaders;
+    } catch {
+      return invoiceTableHeaders;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("filters", JSON.stringify(filters));
+    } catch {
+      console.warn("Nie udało się zapisać ustawień filtrów");
+    }
+  }, [filters]);
+
   // PageOptions
   useEffect(() => {
-    setcurrentPage(data.page);
+    if (token) {
+      let options = [];
 
-    let options = [];
-
-    for (let i = 1; i <= Math.ceil(data.total / 50); i++) {
-      options.push({ value: i });
+      for (let i = 1; i <= Math.ceil(data.total / 50); i++) {
+        options.push({ value: i });
+      }
+      if (options.length == 0) {
+        options.push({ value: data?.page });
+      }
+      setavailablePages(options);
     }
-    if (options.length == 0) {
-      options.push({ value: data?.page });
-    }
-    setavailablePages(options);
   }, [data]);
 
   // FetchingData
   useEffect(() => {
     if (token) {
+      console.log("tw");
       fetchDocs();
     }
   }, [token, documentType, currentPage]);
@@ -67,6 +95,7 @@ export default function Documents() {
             width="30px"
             height="30px"
             value={currentPage}
+            disabled={loading}
             options={availablePages}
             setValue={(e) => {
               setcurrentPage(e);
@@ -80,6 +109,7 @@ export default function Documents() {
             width="fit-content"
             height="30px"
             borderRadius="10px"
+            disabled={loading}
             active={viewMode == "list"}
             onClick={() => {
               setviewMode("list");
@@ -92,6 +122,7 @@ export default function Documents() {
             active={viewMode == "blocks"}
             width="fit-content"
             height="30px"
+            disabled={loading}
             borderRadius="10px"
             onClick={() => {
               setviewMode("blocks");
@@ -102,6 +133,7 @@ export default function Documents() {
           <p style={{ margin: 0 }}>-</p>
           <Input
             type="button"
+            disabled={loading}
             width="fit-content"
             height="30px"
             borderRadius="10px"
@@ -114,6 +146,7 @@ export default function Documents() {
           </Input>
           <Input
             type="button"
+            disabled={loading}
             width="fit-content"
             height="30px"
             active={documentType == "clients"}
@@ -124,8 +157,18 @@ export default function Documents() {
           >
             Clients
           </Input>
+          <Input
+            width="50px"
+            setValue={setFilters}
+            value={filters}
+            height="30px"
+            borderRadius="10px"
+            type="multiselect"
+            options={invoiceTableHeaders}
+          ></Input>
         </section>
       </section>
+
       {/* Search */}
       <form
         className="documents-search"
@@ -159,12 +202,14 @@ export default function Documents() {
           Search
         </Input>
       </form>
+
       {/* Display */}
       <section className="documents-display">
         <DocumentsDisplay
           data={data}
           documentType={documentType}
           loading={loading}
+          filters={filters}
           total={data.total}
         />
       </section>

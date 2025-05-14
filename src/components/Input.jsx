@@ -1,5 +1,6 @@
+import { useState } from "react";
 import "../styles/Input.css";
-import { Upload } from "lucide-react";
+import { Upload, FunnelPlus } from "lucide-react";
 
 export default function Input({
   type = "text",
@@ -19,6 +20,7 @@ export default function Input({
   required = false,
   borderSide,
   customStyle,
+  disabled,
 }) {
   const style = {
     "--input-width": width,
@@ -72,6 +74,7 @@ export default function Input({
         className={
           active ? "custom-input active-button" : "custom-input button"
         }
+        disabled={disabled}
         onClick={onClick}
         style={style}
       >
@@ -96,12 +99,8 @@ export default function Input({
       return (
         <>
           <div
+            className="custom-input-container"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-              textOverflow: "ellipsis",
               width: width,
               height: height,
             }}
@@ -118,26 +117,8 @@ export default function Input({
             />
 
             <p
-              className="custom-input-text"
-              style={
-                value
-                  ? {
-                      position: "absolute",
-                      left: "50px",
-                      opacity: 0,
-                      transition: "0.25s ease",
-                    }
-                  : {
-                      position: "absolute",
-                      left: "0px",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      width: "100%",
-                      padding: "0px 10px",
-                      boxSizing: "border-box",
-                      opacity: 1,
-                      transition: "0.25s ease",
-                    }
+              className={
+                value ? "custom-input-text-active" : "custom-input-text"
               }
             >
               {label}
@@ -164,12 +145,8 @@ export default function Input({
       return (
         <>
           <div
+            className="custom-input-container"
             style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              position: "relative",
-              textOverflow: "ellipsis",
               width: width,
               height: height,
             }}
@@ -186,7 +163,9 @@ export default function Input({
             />
 
             <p
-              className="custom-input-text"
+              className={
+                value ? "custom-input-text-active" : "custom-input-text"
+              }
               style={
                 value
                   ? {
@@ -199,6 +178,7 @@ export default function Input({
                       position: "absolute",
                       backgroundColor: "rgb(255, 255, 255)",
                       padding: "0px 5px",
+                      left: "2px",
                       boxSizing: "border-box",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -215,5 +195,50 @@ export default function Input({
         </>
       );
     }
+  }
+
+  if (type === "multiselect") {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleOption = (val) => {
+      if (value.includes(val)) {
+        setValue(value.filter((v) => v !== val)); 
+      } else {
+        setValue([...value, val]); 
+      }
+    };
+
+    return (
+      <div className="custom-input-multiselect" style={style}>
+        <div
+          className="multiselect-icon"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <FunnelPlus />
+        </div>
+
+        {isOpen && (
+          <div className="multiselect-popup">
+            <p style={{textAlign:"center", width:"100%", margin:5}}>Filter Table</p>
+            {options?.map((option, idx) => {
+              const val = option.value || option;
+              const label = option.label || val;
+
+              return (
+                <label className={value.includes(option) ? "multiselect-input selected" : "multiselect-input"} key={idx}>
+                  <input
+                    type="checkbox"
+                    className="multiselect-input-checkbox"
+                    checked={value.includes(val)}
+                    onChange={() => toggleOption(val)}
+                  />
+                  {label}
+                </label>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
   }
 }
