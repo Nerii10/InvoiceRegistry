@@ -49,8 +49,8 @@ export function CompanyProvider({ children }) {
       },
       body: JSON.stringify(unitData),
     });
-    fetchCompanyData();
     setLoading(false);
+    fetchCompanyData();
   };
 
   const moveUnit = async (unitData) => {
@@ -63,8 +63,8 @@ export function CompanyProvider({ children }) {
       },
       body: JSON.stringify(unitData),
     });
-    fetchCompanyData();
     setLoading(false);
+    fetchCompanyData();
   };
 
   const removeUnit = async (unitData) => {
@@ -78,8 +78,8 @@ export function CompanyProvider({ children }) {
       },
       body: JSON.stringify(unitData),
     });
-    fetchCompanyData();
     setLoading(false);
+    fetchCompanyData();
   };
 
   const leaveCompany = async (data) => {
@@ -93,8 +93,8 @@ export function CompanyProvider({ children }) {
       },
       body: JSON.stringify(data),
     });
-    fetchCompanyData();
     setLoading(false);
+    fetchCompanyData();
   };
 
   return (

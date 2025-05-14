@@ -102,7 +102,6 @@ export default function CompanyPanel({
               height="30px"
               type="button"
               borderRadius="0px"
-              disabled={loading}
               width="50%"
               borderStyle="none"
               onClick={() => {
@@ -117,7 +116,6 @@ export default function CompanyPanel({
               type="button"
               borderRadius="0px"
               width="50%"
-              disabled={loading}
               borderStyle="none"
               onClick={() => {
                 setSelectedAction("Move");
@@ -133,7 +131,6 @@ export default function CompanyPanel({
                 type="button"
                 borderRadius="0px"
                 width="50%"
-                disabled={loading}
                 borderStyle="none"
                 onClick={() => {
                   setSelectedAction("Remove");

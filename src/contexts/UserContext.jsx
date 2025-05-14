@@ -3,7 +3,6 @@ import { jwtDecode } from "jwt-decode";
 import { LogIn, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/UserContext.css";
-import { useCompany } from "../hooks/useCompanyaaa";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -144,6 +143,7 @@ export function UserProvider({ children }) {
       value={{
         token,
         user,
+        loading,
         authMessage,
         API_URL,
         register,

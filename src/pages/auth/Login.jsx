@@ -60,7 +60,6 @@ export default function Login({ setAction }) {
             setUserData((prev) => ({ ...prev, username: e }));
           }}
         ></Input>
-
         <Input
           type="password"
           customStyle={{ textAlign: "center" }}
@@ -77,7 +76,12 @@ export default function Login({ setAction }) {
 
         <div className="auth-buttons">
           <div className="auth-button">
-            <Input disabled={loading} type="submit" className="auth-button-submit" active={true}>
+            <Input
+              disabled={loading}
+              type="submit"
+              className="auth-button-submit"
+              active={true}
+            >
               <LogIn /> Login
             </Input>
           </div>
@@ -86,7 +90,6 @@ export default function Login({ setAction }) {
             <hr />
             <p>or</p>
           </div>
-
           <div className="auth-button auth-button-google">
             <GoogleLoginButton />
             <p
