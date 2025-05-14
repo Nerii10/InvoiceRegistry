@@ -93,5 +93,15 @@
 .sidebar-footer{
     position: absolute;
     text-align: center;
+    padding: 10px 0px;
+    border-top: 1px rgb(255, 255, 255) solid;
+    background-color: rgba(163, 169, 255, 0.344);
+    width: 100%;
     bottom: 0px;
+}
+
+
+.sidebar-footer a{
+    color: white;
+    text-decoration: none;
 }
