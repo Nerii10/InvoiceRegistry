@@ -3,18 +3,21 @@ import { File, Upload, UserCircle, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-export default function Sidebar() {
+export default function Sidebar({style}) {
 
   const location = useLocation();
   const [currentPath,setcurrentPath] = useState('documents')
-
+  const [windowOpen, setWindowOpen] = useState(false)
   useEffect(()=>{
     // console.log(location.pathname.split('/')[2])
     setcurrentPath(location.pathname.split('/')[2])
   },[location])
 
   return (
-    <aside className="sidebar">
+    <aside className={style == 'desktop' ? "sidebar" : style == 'mobile' && windowOpen ? "sidebar-mobile-open" : "sidebar-mobile-closed"}>
+      {style == 'mobile' &&
+      <button className="sidebar-mobile-button" onClick={()=>{setWindowOpen(o=>!o)}}>{">"}</button>
+      }
       <section className="sidebar-header">
         <h1>Dashboard</h1>
       </section>

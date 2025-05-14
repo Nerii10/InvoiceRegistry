@@ -6,6 +6,37 @@
     flex-shrink: 0;
 }
 
+.sidebar-mobile-open{
+    background-color: rgb(10, 29, 63);
+    color:white;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.sidebar-mobile-closed{
+    background-color: rgb(10, 29, 63);
+    color:rgba(255, 255, 255, 0);
+    position: fixed;
+    height: 100%;
+    pointer-events: none;
+    width: 0%;
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.sidebar-mobile-button{
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    right: 10px;
+    position: absolute;
+    transform: translate(0%, -50%);
+}
+
 .sidebar-header{
     width: 100%;
     text-align: center;
