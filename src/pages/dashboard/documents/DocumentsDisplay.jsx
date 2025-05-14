@@ -67,6 +67,7 @@ export default function DocumentsDisplay({
                 ))}
               </Reorder.Group>
             </thead>
+            
             <tbody>
               {data?.invoices?.map((invoice, index) => (
                 <tr key={index}>

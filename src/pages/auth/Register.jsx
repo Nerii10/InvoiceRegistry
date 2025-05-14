@@ -7,7 +7,7 @@ import { Lock, UserRound, Mail } from "lucide-react";
 
 export default function Register({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
-  const { register , authMessage } = useUser();
+  const { register, authMessage } = useUser();
 
   return (
     <section className="login-wrapper">
@@ -24,6 +24,7 @@ export default function Register({ setAction }) {
       >
         <Input
           type="text"
+          required={true}
           customStyle={{ textAlign: "center" }}
           label={
             <>
@@ -37,8 +38,9 @@ export default function Register({ setAction }) {
         ></Input>
 
         <Input
-          type="text"
+          type="password"
           customStyle={{ textAlign: "center" }}
+          required={true}
           label={
             <>
               <Lock /> Password
@@ -51,7 +53,8 @@ export default function Register({ setAction }) {
         ></Input>
 
         <Input
-          type="text"
+          type="email"
+          required={true}
           customStyle={{ textAlign: "center" }}
           label={
             <>
@@ -93,7 +96,7 @@ export default function Register({ setAction }) {
         className="login-feedback"
         style={{
           "--info-color":
-          authMessage.type == "error"
+            authMessage.type == "error"
               ? "rgb(255, 128, 128)"
               : "rgb(4, 172, 32)",
         }}

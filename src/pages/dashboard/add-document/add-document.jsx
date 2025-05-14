@@ -17,12 +17,14 @@ import { Upload, Plus } from "lucide-react";
 import { useCreateDocument } from "../../../hooks/useCreateDocument";
 import { useOcr } from "../../../hooks/useOcr.js";
 import { useUser } from "../../../contexts/UserContext";
+import { useCompany } from "../../../contexts/CompanyContext.jsx";
 import InvoiceForm from "./invoice/InvoiceForm.jsx";
 
 export default function AddDocument() {
   //States
   const [currentFile, setCurrentFile] = useState(null);
   const [invoiceData, setInvoiceData] = useState(null);
+  const [fileURL, setFileURL] = useState(null);
 
   //Hooks
   const { token, user } = useUser();
@@ -31,15 +33,32 @@ export default function AddDocument() {
     token: token,
   });
 
+  const { data: companyData } = useCompany();
+
   const { ocrFile, data, loading: ocrLoading } = useOcr({ token });
 
   useEffect(() => {
     setError(null);
   }, [ocrLoading]);
 
+  useEffect(() => {
+    console.log(currentFile);
+  }, [currentFile]);
+
+  const noCompany = companyData?.unitsData?.length !== 0 || true;
+
   return (
     <>
-      <ErrorPopup error={error} />
+      <ErrorPopup
+        error={
+          noCompany
+            ? error
+            : {
+                message:
+                  "No company found. Please create one before adding documents.",
+              }
+        }
+      />
       <DashboardPageWrapper maxWidth={"1250px"}>
         <Loader
           loading={loading || ocrLoading}
@@ -62,6 +81,7 @@ export default function AddDocument() {
           <InvoiceForm
             user={user}
             ocrData={data}
+            companyData={companyData}
             setInvoiceData={setInvoiceData}
           ></InvoiceForm>
 
@@ -74,17 +94,38 @@ export default function AddDocument() {
                 console.log(e);
                 setCurrentFile(e);
                 ocrFile(e);
+                const url = URL.createObjectURL(e);
+                setFileURL(url);
               }}
               width="fit-content"
               borderRadius="10px"
             ></Input>
 
-            <Input type="submit" width="fit-content" borderRadius="10px">
+            <Input
+              type="submit"
+              disabled={noCompany}
+              width="fit-content"
+              borderRadius="10px"
+            >
               Save Invoice
             </Input>
           </section>
         </form>
       </DashboardPageWrapper>
+      <br></br>
+      <br></br>
+      <div className="add-document-frame">
+        {fileURL && (
+          <iframe
+            src={fileURL}
+            width="100%"
+            height="100%"
+            style={{ borderRadius: "var(--borderRadius)", border: "none" }}
+            title="Podgląd PDF-a"
+          />
+        )}
+      </div>
+      <br></br>
     </>
   );
 }

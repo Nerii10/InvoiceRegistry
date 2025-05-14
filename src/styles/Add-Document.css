@@ -52,3 +52,15 @@
   width: 100%;
   border-bottom: 1px var(--borderColor) solid;
 }
+
+.add-document-frame{
+  width: 100%;
+  max-width: 1250px;
+  height: 100%;
+  border:1px var(--borderColor) dashed;
+  padding: 15px;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: var(--borderRadius);
+  flex-shrink: 0;
+}

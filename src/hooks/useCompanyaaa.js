@@ -11,15 +11,14 @@ export function useCompany({ token }) {
 
   async function fetchCompanyData() {
     if (token) {
-
-      if(!data) {
+      if (!data) {
         setLoading(true);
       }
-      
+
       setError(null);
 
       try {
-        console.log('Trying to fetch company data')
+        console.log("Trying to fetch company data");
         const url = new URL(`${API_URL}/myCompany`);
         const response = await fetch(url, {
           method: "POST",
@@ -30,7 +29,7 @@ export function useCompany({ token }) {
         });
         const result = await response.json();
         console.log(result, "- result useCompany");
-        setData(result);
+        setData({ ...result }); 
         setLoading(false);
         setError(null);
         setTotal(result.total);
@@ -56,10 +55,7 @@ export function useCompany({ token }) {
       if (!response.ok) {
         throw new Error("Failed to create unit");
       }
-
-      setTimeout(() => {
-        fetchCompanyData();
-      }, 1000);
+      fetchCompanyData();
     } catch (err) {
       setTimeout(() => {
         setError(err);
@@ -109,7 +105,7 @@ export function useCompany({ token }) {
   }
 
   async function leaveCompany(data) {
-    console.log("leaving")
+    console.log("leaving");
     try {
       const response = await fetch(`${API_URL}/unit/leave`, {
         method: "UPDATE",
@@ -133,5 +129,15 @@ export function useCompany({ token }) {
     fetchCompanyData();
   }, [token]);
 
-  return { newUnit, moveUnit, removeUnit, leaveCompany, data, total, loading, error };
+  return {
+    newUnit,
+    moveUnit,
+    removeUnit,
+    leaveCompany,
+    fetchCompanyData,
+    data,
+    total,
+    loading,
+    error,
+  };
 }

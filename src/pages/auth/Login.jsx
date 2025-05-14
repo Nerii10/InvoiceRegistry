@@ -20,7 +20,11 @@ function GoogleLoginButton() {
 
   return (
     <div onClick={() => login()} className="google-login-button">
-      <img src="/InvoiceRegistry/google-logo.webp" alt="Google" className="google-logo" />
+      <img
+        src="/InvoiceRegistry/google-logo.webp"
+        alt="Google"
+        className="google-logo"
+      />
       <p>Login with google</p>
     </div>
   );
@@ -58,7 +62,7 @@ export default function Login({ setAction }) {
         ></Input>
 
         <Input
-          type="text"
+          type="password"
           customStyle={{ textAlign: "center" }}
           label={
             <>
@@ -101,7 +105,7 @@ export default function Login({ setAction }) {
         className="login-feedback"
         style={{
           "--info-color":
-          authMessage.type == "error"
+            authMessage.type == "error"
               ? "rgb(255, 128, 128)"
               : "rgb(4, 172, 32)",
         }}

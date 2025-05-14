@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import { LogIn, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import "../styles/UserContext.css";
+import { useCompany } from "../hooks/useCompanyaaa";
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
@@ -26,6 +27,8 @@ export function UserProvider({ children }) {
       }
     }
   }, []);
+
+  
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -161,7 +164,8 @@ export function UserStatus({ user }) {
       <div className="navbar-user">
         <div
           onClick={() => {
-            user ? logout() : navigate("/signin");
+            if (user) logout();
+            navigate("/signin");
           }}
           className="navbar-user-data"
         >

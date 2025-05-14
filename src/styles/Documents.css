@@ -53,6 +53,7 @@
   color: rgb(25, 25, 25);
   background-color: var(--secondColor);
   font-weight: 200;
+  cursor: pointer;
 }
 
 .documents-display-table td,
@@ -101,3 +102,4 @@
 .invoice-status.pending {
   background-color: rgb(230, 173, 255);
 }
+

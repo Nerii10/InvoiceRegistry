@@ -3,7 +3,12 @@ import Input from "../../../../components/Input";
 import { Upload, Plus } from "lucide-react";
 import RenderInputs from "../../../../components/RenderInputs";
 
-export default function InvoiceForm({ user, ocrData, setInvoiceData }) {
+export default function InvoiceForm({
+  user,
+  ocrData,
+  setInvoiceData,
+  companyData,
+}) {
   const today = new Date().toISOString().split("T")[0];
 
   //Invoice data
@@ -85,22 +90,22 @@ export default function InvoiceForm({ user, ocrData, setInvoiceData }) {
     [
       {
         type: "text",
-        label: "Client name",
-        value: user?.firm_name,
+        label: "Company name",
+        value: companyData?.me?.companyName || "No company Name",
         width: "100%",
         borderRadius: borderRadius,
       },
       {
         type: "text",
-        label: "Client name",
-        value: user?.firm_nip,
+        label: "Company NIP",
+        value: companyData?.me?.companyNip || "No company Nip",
         width: "100%",
         borderRadius: borderRadius,
       },
       {
         type: "text",
-        label: "Client name",
-        value: user?.firm_address,
+        label: "Company Address",
+        value: companyData?.me?.companyAddress|| "No company Address",
         width: "100%",
         borderRadius: borderRadius,
       },

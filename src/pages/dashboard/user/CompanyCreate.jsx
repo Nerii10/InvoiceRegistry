@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Input from "../../../components/Input";
-import { useCompany } from "../../../hooks/useCompany";
 import { useUser } from "../../../contexts/UserContext";
+import { useCompany } from "../../../contexts/CompanyContext";
 
 export default function CompanySetup() {
   const [selectedCompanyTab, setSelectedCompanyTab] = useState("new");
@@ -25,7 +25,7 @@ export default function CompanySetup() {
 
   const { token } = useUser();
   const { newUnit } = useCompany({ token });
-
+  
   return (
     <section>
       {/* Empty‑state header */}

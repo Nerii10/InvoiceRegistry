@@ -83,7 +83,12 @@ export default function Input({
     );
   }
 
-  if (type === "text") {
+  if (
+    type === "text" ||
+    type == "password" ||
+    type == "number" ||
+    type == "email"
+  ) {
     if (!label) {
       return (
         <input
@@ -202,9 +207,9 @@ export default function Input({
 
     const toggleOption = (val) => {
       if (value.includes(val)) {
-        setValue(value.filter((v) => v !== val)); 
+        setValue(value.filter((v) => v !== val));
       } else {
-        setValue([...value, val]); 
+        setValue([...value, val]);
       }
     };
 
@@ -219,13 +224,22 @@ export default function Input({
 
         {isOpen && (
           <div className="multiselect-popup">
-            <p style={{textAlign:"center", width:"100%", margin:5}}>Filter Table</p>
+            <p style={{ textAlign: "center", width: "100%", margin: 5 }}>
+              Filter Table
+            </p>
             {options?.map((option, idx) => {
               const val = option.value || option;
               const label = option.label || val;
 
               return (
-                <label className={value.includes(option) ? "multiselect-input selected" : "multiselect-input"} key={idx}>
+                <label
+                  className={
+                    value.includes(option)
+                      ? "multiselect-input selected"
+                      : "multiselect-input"
+                  }
+                  key={idx}
+                >
                   <input
                     type="checkbox"
                     className="multiselect-input-checkbox"

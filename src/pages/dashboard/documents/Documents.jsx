@@ -9,12 +9,13 @@ import Input from "../../../components/Input";
 import DashboardPageWrapper from "../DashboardPageWrapper";
 
 //Icons
-import { LayoutPanelTop, AlignJustify } from "lucide-react";
+import { LayoutPanelTop, AlignJustify, Plus, Link } from "lucide-react";
 
 //Hooks
 import { useDocuments } from "../../../hooks/useDocuments";
 import { useUser } from "../../../contexts/UserContext.jsx";
 import DocumentsDisplay from "./DocumentsDisplay.jsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Documents() {
   //States
@@ -33,6 +34,7 @@ export default function Documents() {
     "Status",
     "Amount",
   ];
+  const navigate = useNavigate();
 
   // Hooks
   const { token } = useUser();
@@ -177,6 +179,16 @@ export default function Documents() {
           fetchDocs();
         }}
       >
+        <Input
+          type="button"
+          width="50px"
+          borderRadius="0px"
+          onClick={()=>{navigate('/dashboard/add-document')}}
+          borderStyle="none"
+          customStyle={{borderRight:"1px var(--borderColor) solid"}}
+        >
+          <Plus />
+        </Input>
         <div style={{ borderRight: "1px var(--borderColor) solid", flex: 1 }}>
           <Input
             type="text"
