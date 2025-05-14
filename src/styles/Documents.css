@@ -26,7 +26,6 @@
   display: flex;
   justify-content: end;
   align-items: center;
-  flex: 1;
 }
 
 .documents-search {
@@ -103,3 +102,14 @@
   background-color: rgb(230, 173, 255);
 }
 
+
+@media only screen and (max-width: 700px){
+  .documents-controls-right {
+    gap: 10px;
+    display: flex;
+    border-radius: 10px;
+    box-sizing: border-box;
+    justify-content: start;
+    align-items: center;
+  }
+}
