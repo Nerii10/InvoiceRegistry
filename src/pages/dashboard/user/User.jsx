@@ -34,8 +34,8 @@ export default function User() {
           <motion.div
             className="exit-popup-wrapper"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            animate={{ opacity: 1, pointerEvents:'all' }}
+            exit={{ opacity: 0, pointerEvents:'none' }}
             transition={{
               delay: showExitPopup ? 0 : 2,
               type: "tween",
@@ -74,7 +74,7 @@ export default function User() {
                   ? "Are you sure you want to delete the organization? This action will permanently remove all invoices and data associated with your company."
                   : "Are you sure you want to leave the organization? You will lose access to all units and invoices associated with this company."}
               </p>
-
+              <hr style={{width:"90%", border:"1px gray dashed"}}></hr>
               <div className="exit-poput-buttons">
                 <Input
                   onClick={() => {
@@ -82,7 +82,7 @@ export default function User() {
                   }}
                   width="45%"
                   maxWidth="125px"
-                  borderRadius="10px"
+                  borderRadius="20px"
                   height="50px"
                   type="button"
                 >
@@ -91,11 +91,11 @@ export default function User() {
                 <Input
                   width="45%"
                   maxWidth="125px"
-                  borderRadius="10px"
+                  borderRadius="20px"
                   customStyle={{
                     color: "white",
-                    border: "1px rgb(195, 75, 75) solid",
-                    backgroundColor: "rgb(255, 124, 124)",
+                    border: "1px rgb(107, 30, 30) solid",
+                    backgroundColor: "rgb(219, 62, 62)",
                   }}
                   height="50px"
                   type="button"

@@ -71,14 +71,13 @@
 .notification-container {
   position: relative;
   scrollbar-width: none;
-  max-height: 95dvh;    
-  overflow: auto; 
+  max-height: 95dvh;
+  overflow: auto;
   display: flex;
   flex-direction: column-reverse;
   align-items: flex-end;
   width: 100%;
 }
-
 
 .notification-message {
   position: absolute;
@@ -97,10 +96,10 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   pointer-events: all;
   user-select: none;
-  -webkit-user-select: none; 
+  -webkit-user-select: none;
   color: rgb(50, 172, 50);
-  -moz-user-select: none;  
-  -ms-user-select: none;   
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .notification-error {
@@ -121,9 +120,9 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   pointer-events: all;
   user-select: none;
-  -webkit-user-select: none; 
-  -moz-user-select: none;  
-  -ms-user-select: none;   
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* scrollowany panel */
@@ -132,5 +131,46 @@
   height: 400px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
+}
+
+.notification-clear-button-container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  padding: 10px 10px;
+  justify-content: end;
+  align-items: center;
+  height: 60px;
+}
+
+.notification-clear-button-container-empty {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  display: none;
+  padding: 0px;
+  justify-content: end;
+  align-items: center;
+  height: 0px;
+}
+
+.Notifications {
+  margin: 0;
+}
+
+.notification-clear-button {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px var(--borderColor) solid;
   gap: 10px;
 }

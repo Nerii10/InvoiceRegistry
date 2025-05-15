@@ -5,7 +5,7 @@
   z-index: 4;
   margin: 0;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.129);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
@@ -17,8 +17,8 @@
   margin-top: 45%;
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
-  border: 1px var(--borderColor) solid;
-  max-width: 500px;
+  border: 1px rgba(0, 0, 0, 0.755) solid;
+  max-width: 400px;
   height: fit-content;
 }
 
@@ -26,7 +26,7 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: red;
+    background-color: rgb(255, 0, 0);
     width: 20px;
     height: 20px;
 }
@@ -48,5 +48,4 @@
   padding: 20px;
   font-size: 15px;
   box-sizing: border-box;
-  border-bottom: 1px var(--borderColor) solid;
 }

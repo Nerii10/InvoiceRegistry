@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "../styles/ErrorPopup.css";
 import { AnimatePresence, motion } from "framer-motion";
 import { nanoid } from "nanoid";
-import { X } from "lucide-react";
+import { CircleX, X } from "lucide-react";
 
 export function Notification({
   content,
@@ -38,7 +38,7 @@ export function Notification({
           scale: clamp(1 - index * 0.1, 0, 1),
           marginBottom: (index + 1) * 10 + "px",
           filter: "blur(2px)",
-          zIndex: allNotifications?.length - index,
+          zIndex: allNotifications?.length - index + 2,
         }}
         animate={
           !isExpanded
@@ -49,13 +49,13 @@ export function Notification({
                 filter: "blur(0px)",
                 height: "100px",
                 flexShrink: 0,
-                marginBottom: index * 120 + 15 + "px",
+                marginBottom: index * 120 + 55 + "px",
               }
             : {
                 position: "absolute",
                 opacity: 1 - index * 0.3,
                 height: "100px",
-                filter: `blur(${index}px)`,
+                filter: `blur(${index * 2}px)`,
                 flexShrink: 0,
                 scale: clamp(1 - index * 0.1, 0, 1),
                 marginBottom: (index + 1) * 10 + "px",
@@ -80,10 +80,10 @@ export function Notification({
               ? type === "error"
                 ? "close-button-error"
                 : "close-button-success"
-              : "notification-error"
+              : "close-button-error"
           }
         >
-          <X size={15} />
+          <X size={15} stroke="white" />
         </div>
       </motion.div>
 
@@ -131,6 +131,15 @@ export default function MessagePopup({ message, loading }) {
         onMouseEnter={() => setIsExpanded(false)}
         onMouseLeave={() => setIsExpanded(true)}
       >
+        <motion.div className={allNotifications.length == 0 ? "notification-clear-button-container-empty"  : "notification-clear-button-container"}
+        initial={{opacity:0}}
+        animate={isExpanded ? {opacity:0} : {opacity:1}}
+        transition={{type:'spring', damping:23}}
+        >
+          <button className="notification-clear-button">
+            <CircleX stroke="black"  onClick={()=>{setAllNotifications([])}}/>
+          </button>
+        </motion.div>
         <AnimatePresence initial={false}>
           {visibleNotifications?.map(({ id, content, type }, index) => (
             <Notification
