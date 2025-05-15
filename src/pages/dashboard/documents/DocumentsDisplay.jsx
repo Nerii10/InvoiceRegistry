@@ -1,27 +1,27 @@
 import Loader from "../../../components/Loader.jsx";
 import { X, Check, ClockAlert } from "lucide-react";
-import { Reorder } from "framer-motion";
+import { Reorder, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
-function DocumentStateDispaly({ invoice }) {
-  const icon_size = 15;
+function DocumentStateDisplay({ invoice }) {
+  const iconSize = 15;
   if (invoice.status) {
     return (
       <p className="invoice-status paid">
-        <Check size={icon_size} />
+        <Check size={iconSize} />
       </p>
     );
   } else {
     if (new Date(invoice.due_date) < new Date()) {
       return (
         <p className="invoice-status late">
-          <X size={icon_size} />
+          <X size={iconSize} />
         </p>
       );
     } else {
       return (
         <p className="invoice-status pending">
-          <ClockAlert size={icon_size} />
+          <ClockAlert size={iconSize} />
         </p>
       );
     }
@@ -43,137 +43,145 @@ export default function DocumentsDisplay({
 
   return (
     <>
-      <table className="documents-display-table">
-        <Loader loading={loading} onlyLoader={true}></Loader>
+      <Loader loading={loading} onlyLoader />
 
-        {documentType == "invoices" && (
+      <table className="documents-display-table">
+        {documentType === "invoices" && (
           <>
             <thead>
               <Reorder.Group
                 axis="x"
-                values={filters || []}
+                values={filters}
                 onReorder={setFilters}
                 as="tr"
               >
-                {filters?.map((filter) => (
+                {filters.map((filter) => (
                   <Reorder.Item
                     as="th"
                     key={filter}
                     value={filter}
-                    className="cursor-grab"
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
                   >
                     {filter}
                   </Reorder.Item>
                 ))}
               </Reorder.Group>
             </thead>
-            
+
             <tbody>
-              {data?.invoices?.map((invoice, index) => (
-                <tr key={index}>
-                  {filters?.map((filter) => {
-                    if (filter === "Invoice Number") {
-                      return <td key={filter}>{invoice.invoice_number}</td>;
-                    }
-                    if (filter === "Date of Issue") {
-                      return (
-                        <td key={filter}>
-                          {new Date(invoice.issue_date).toLocaleDateString()}
-                        </td>
-                      );
-                    }
-                    if (filter === "Due Date") {
-                      return (
-                        <td key={filter}>
-                          {new Date(invoice.due_date).toLocaleDateString()}
-                        </td>
-                      );
-                    }
-                    if (filter === "User") {
-                      return <td key={filter}>{invoice.username}</td>;
-                    }
-                    if (filter === "Client") {
-                      return <td key={filter}>{invoice.receiver_name}</td>;
-                    }
-                    if (filter === "Amount") {
-                      return (
-                        <td key={filter}>
-                          {invoice.services.length !== 0
-                            ? Number(
-                                invoice.services.reduce(
-                                  (total, value) => total + value.price,
-                                  0
-                                )
-                              ).toFixed(2) + " zł"
-                            : "-"}
-                        </td>
-                      );
-                    }
-                    if (filter === "Status") {
-                      return (
-                        <td key={filter}>
+              {data?.invoices?.map((invoice, rowIndex) => (
+                <motion.tr key={rowIndex} layout>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Invoice Number":
+                        cell = invoice.invoice_number;
+                        break;
+                      case "Date of Issue":
+                        cell = new Date(
+                          invoice.issue_date
+                        ).toLocaleDateString();
+                        break;
+                      case "Due Date":
+                        cell = new Date(invoice.due_date).toLocaleDateString();
+                        break;
+                      case "User":
+                        cell = invoice.username;
+                        break;
+                      case "Client":
+                        cell = invoice.receiver_name;
+                        break;
+                      case "Amount":
+                        cell =
+                          invoice.services.length !== 0
+                            ? invoice.services.reduce(
+                                (sum, srv) => sum + srv.price,
+                                0
+                              ) + " zł"
+                            : "-";
+                        break;
+                      case "Status":
+                        cell = (
                           <div className="invoice-status-container">
-                            <DocumentStateDispaly invoice={invoice} />
+                            <DocumentStateDisplay invoice={invoice} />
                           </div>
-                        </td>
-                      );
+                        );
+                        break;
+                      default:
+                        cell = null;
                     }
-                    return null;
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
                   })}
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </>
         )}
 
-        {documentType == "clients" && (
+        {documentType === "clients" && (
           <>
             <thead>
-              <tr>
-                <th>Client</th>
-                <th>Address</th>
-                <th>Nip</th>
-              </tr>
+              <Reorder.Group
+                axis="x"
+                values={filters}
+                onReorder={setFilters}
+                as="tr"
+              >
+                {filters.map((filter) => (
+                  <Reorder.Item
+                    as="th"
+                    key={filter}
+                    value={filter}
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
+                  >
+                    {filter}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
             </thead>
+
             <tbody>
-              {data?.clients?.map((client, index) => (
-                <tr key={index}>
-                  <td>{client.name}</td>
-                  <td>{client.address}</td>
-                  <td>{client.nip}</td>
-                </tr>
+              {data?.clients?.map((client, idx) => (
+                <motion.tr key={idx} layout whileHover={{ scale: 1.01 }}>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Client":
+                        cell = client.name;
+                        break;
+                      case "Address":
+                        cell = client.address;
+                        break;
+                      case "Nip":
+                        cell = client.nip;
+                        break;
+                      default:
+                        cell = null;
+                    }
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
+                  })}
+                </motion.tr>
               ))}
             </tbody>
           </>
         )}
       </table>
 
-      {loading && (
-        <p
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            color: "transparent",
-          }}
-        >
-          -
-        </p>
-      )}
+      {loading && <p className="empty-row"> </p>}
 
-      {!loading && total == 0 && (
-        <p
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          No results
-        </p>
-      )}
+      {!loading && total === 0 && <p className="no-results">No results</p>}
     </>
   );
 }

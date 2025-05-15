@@ -1,29 +1,43 @@
+import { useState } from "react";
 import Input from "./Input";
 
-export default function RenderInputs({data, className }) {
-  return data?.map((section, index) => {
+export default function RenderInputs({
+  form = false,
+  data = [],
+  formClassName = "",
+  className = "",
+  onSubmit,
+  formStyle,
+}) {
+  const [submitted, setSubmitted] = useState(false);
+
+  const content = data.map((section, sectionIndex) => (
+    <div className={className} key={sectionIndex}>
+      {section.map((input, inputIndex) => (
+        <Input
+          validated={submitted}
+          key={input.key || `${sectionIndex}-${inputIndex}`}
+          {...input}
+        />
+      ))}
+    </div>
+  ));
+
+  if (form) {
     return (
-      <div key={index} className={className}>
-        {section.map((input) => {
-          return (
-            <Input
-              type={input.type}
-              borderStyle={input.borderStyle}
-              width={input.width}
-              disabled={input.disabled}
-              label={input.label}
-              required={input.required}
-              value={input.value}
-              setValue={input.setValue}
-              borderRadius={input.borderRadius}
-              options={input.options}
-              onClick={input.onClick}
-              customStyle={input.customStyle}
-              children={input.children}
-            ></Input>
-          );
-        })}
-      </div>
+      <form
+        style={formStyle}
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit?.();
+          setSubmitted(true);
+        }}
+        className={formClassName}
+      >
+        {content}
+      </form>
     );
-  });
+  }
+
+  return content;
 }

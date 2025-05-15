@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Input from "../../../components/Input";
 import DashboardPageWrapper from "../DashboardPageWrapper";
 import Loader from "../../../components/Loader";
-import ErrorPopup from "../../../components/ErrorPopup.jsx";
+import MessagePopup from "../../../components/MessagePopup.jsx";
 
 //Styles
 import "../../../styles/Add-Document.css";
@@ -29,42 +29,50 @@ export default function AddDocument() {
   //Hooks
   const { token, user } = useUser();
 
-  const { createDocument, loading, error, setError } = useCreateDocument({
+  const { createDocument, message, setMessage, loading } = useCreateDocument({
     token: token,
   });
 
-  const { data: companyData } = useCompany();
+  const { data: companyData, loading: companyLoading } = useCompany();
 
   const { ocrFile, data, loading: ocrLoading } = useOcr({ token });
 
   useEffect(() => {
-    setError(null);
+    setMessage(null);
   }, [ocrLoading]);
 
-  useEffect(() => {
-    console.log(currentFile);
-  }, [currentFile]);
+  const Company = companyData?.me?.companyRootId == null ? false : true;
 
-  const Company = companyData?.me?.userUnit == null ? false : true;
-  console.log(Company);
-  console.log(companyData);
   return (
     <>
-      <ErrorPopup
-        error={
-          Company
-            ? error
+      {/* <MessagePopup
+        message={
+          !companyLoading &&
+          (Company
+            ? message
             : {
                 message:
                   "No company found. Please create one before adding documents.",
-              }
+                type:"error"
+              })
         }
+        loading={loading}
+      /> */}
+
+      <MessagePopup
+        message={{
+          message:
+            "No company found. Please create one before adding documents.",
+          type: "error",
+        }}
+        loading={loading}
       />
       <DashboardPageWrapper maxWidth={"1250px"}>
         <Loader
           loading={loading || ocrLoading}
-          error={error}
+          error={message?.type == "error"}
           size={30}
+          position={"center"}
           color={"black"}
         ></Loader>
         <form
@@ -91,6 +99,7 @@ export default function AddDocument() {
             <Input
               type="file"
               label={"Scan File"}
+              disabled={loading}
               setValue={(e) => {
                 console.log(e);
                 setCurrentFile(e);
@@ -104,7 +113,7 @@ export default function AddDocument() {
 
             <Input
               type="submit"
-              disabled={!Company}
+              disabled={loading || !Company}
               width="fit-content"
               borderRadius="10px"
             >

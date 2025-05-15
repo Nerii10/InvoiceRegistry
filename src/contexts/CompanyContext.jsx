@@ -7,95 +7,99 @@ export function CompanyProvider({ children }) {
   const { token, API_URL } = useUser();
   const [data, setData] = useState(null);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
 
-  const fetchCompanyData = async () => {
-    if (!token) return;
-
-    setLoading(true);
-    setError(null);
-
+  const callApi = async ({ url, method, body }) => {
     try {
-      const response = await fetch(`${API_URL}/myCompany`, {
-        method: "POST",
+      setLoading(true);
+
+      const response = await fetch(`${API_URL}${url}`, {
+        method,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: body ? JSON.stringify(body) : undefined,
       });
 
-      const result = await response.json();
-      setData(result);
-      setTotal(result.total);
+      const responseData = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        if (url != "/myCompany") {
+          const errMsg = responseData.message || "Server error";
+          setMessage({ message: errMsg, type: responseData.type || "error" });
+          console.log({ message: errMsg, type: responseData.type || "error" });
+        }
+        return { ok: false };
+      }
+
+      if (url != "/myCompany") {
+        const successMsg = responseData.message || "Operation successful";
+        setMessage({ message: successMsg, type: responseData.type || "message" });
+        console.log({ message: successMsg, type: responseData.type || "message" });
+      }
+
+      return { ok: true, data: responseData };
     } catch (err) {
-      setError(err);
+      setMessage({ message: err.message || "Network error", type: "error" });
+      return { ok: false };
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchCompanyData();
-  }, [token]);
+  const fetchCompanyData = async () => {
+    if (!token) return;
+    const { ok, data: result } = await callApi({
+      url: "/myCompany",
+      method: "POST",
+    });
+    if (ok) {
+      setData(result);
+      setTotal(result.total);
+    }
+  };
 
   const newUnit = async (unitData) => {
-    setLoading(true);
-    await fetch(`${API_URL}/unit/new`, {
+    const { ok } = await callApi({
+      url: "/unit/new",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(unitData),
+      body: unitData,
     });
-    setLoading(false);
-    fetchCompanyData();
+    if (ok) await fetchCompanyData();
   };
 
   const moveUnit = async (unitData) => {
-    setLoading(true);
-    await fetch(`${API_URL}/unit/move`, {
+    const { ok } = await callApi({
+      url: "/unit/move",
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(unitData),
+      body: unitData,
     });
-    setLoading(false);
-    fetchCompanyData();
+    if (ok) await fetchCompanyData();
   };
 
   const removeUnit = async (unitData) => {
-    setLoading(true);
-
-    await fetch(`${API_URL}/unit/remove`, {
+    const { ok } = await callApi({
+      url: "/unit/remove",
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(unitData),
+      body: unitData,
     });
-    setLoading(false);
-    fetchCompanyData();
+    if (ok) await fetchCompanyData();
   };
 
   const leaveCompany = async (data) => {
-    setLoading(true);
-
-    await fetch(`${API_URL}/unit/leave`, {
-      method: "PATCH", // Zakładam że to PATCH a nie UPDATE
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
+    const { ok } = await callApi({
+      url: "/unit/leave",
+      method: "POST",
+      body: data,
     });
-    setLoading(false);
-    fetchCompanyData();
+    if (ok) await fetchCompanyData();
   };
+
+  useEffect(() => {
+    fetchCompanyData();
+  }, [token]);
 
   return (
     <CompanyContext.Provider
@@ -103,7 +107,7 @@ export function CompanyProvider({ children }) {
         data,
         total,
         loading,
-        error,
+        message,
         fetchCompanyData,
         newUnit,
         moveUnit,

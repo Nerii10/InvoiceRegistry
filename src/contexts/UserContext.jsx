@@ -35,6 +35,7 @@ export function UserProvider({ children }) {
   };
 
   const register = async (credentials) => {
+    setLoading(true);
     try {
       const response = await fetch(`${API_URL}/register`, {
         method: "POST",
@@ -55,6 +56,7 @@ export function UserProvider({ children }) {
           message: data.error || "Wystąpił błąd podczas rejestracji.",
           type: "error",
         });
+        setLoading(false);
       }
     } catch (err) {
       console.log(err);
@@ -62,6 +64,7 @@ export function UserProvider({ children }) {
         message: "Wystąpił błąd podczas łączenia z serwerem.",
         type: "error",
       });
+      setLoading(false);
     }
   };
 

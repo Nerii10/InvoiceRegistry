@@ -1,7 +1,13 @@
 import { useState } from "react";
 import "../styles/Tree.css";
 import { motion } from "framer-motion";
-import { ChevronDown, ChevronRight, UserRound, ShieldUser, Crown } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  UserRound,
+  ShieldUser,
+  Crown,
+} from "lucide-react";
 
 function RenderTreeNodes({ node, level = 0, usersData }) {
   const [isOpen, setIsOpen] = useState(level == 0 ? true : false);
@@ -13,8 +19,11 @@ function RenderTreeNodes({ node, level = 0, usersData }) {
       {/* Name */}
       <div
         onClick={() => {
-          if(node?.children?.length > 0 || (usersData.some((u) => u.unit_id == node.id))){
-            setIsOpen((o) => !o)
+          if (
+            node?.children?.length > 0 ||
+            usersData.some((u) => u.unit_id == node.id)
+          ) {
+            setIsOpen((o) => !o);
           }
         }}
         className={level == 0 ? "tree-input-name-header" : "tree-input-name"}
@@ -52,19 +61,18 @@ function RenderTreeNodes({ node, level = 0, usersData }) {
         {usersData
           .filter((u) => u.unit_id === node.id)
           .map((user) => {
-              return (
-                <a className="tree-input-children-user">
-                  {user.type == 'admin' ?
+            return (
+              <a className="tree-input-children-user">
+                {user.type == "admin" ? (
                   <ShieldUser />
-                  :
-                  user.type == 'owner' ?
+                ) : user.type == "owner" ? (
                   <Crown />
-                  :
+                ) : (
                   <UserRound />
-                  }
-                  {user.name}
-                </a>
-              );
+                )}
+                {user.name}
+              </a>
+            );
           })}
         {node?.children?.map((child) => (
           <RenderTreeNodes

@@ -13,6 +13,7 @@ import Home from "./pages/home/Home";
 
 // Styles
 import "./App.css";
+import TEST from "./pages/test";
 
 export default function App() {
   const { user } = useUser();
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="user" element={<User />} />
         </Route>
         <Route path="*" element={<Home />} />
+        <Route path="/test" element={<TEST />} />
       </Routes>
     </div>
   );

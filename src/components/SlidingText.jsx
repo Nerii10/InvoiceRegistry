@@ -10,7 +10,7 @@ export default function SlidingText({ inputs }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1 >= max ? 0 : prev + 1));
-    }, 2500);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [max]);
@@ -23,13 +23,13 @@ export default function SlidingText({ inputs }) {
   },[current])
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" >
       <motion.span
         key={inputs[current]}
-        initial={{ filter:"blur(5px)", opacity: 0, y: 25, width: width}}
-        animate={{ filter:"blur(0px)",opacity: 1, y: 0, width: "fit-content"}}
-        exit={{ filter:"blur(5px)", opacity: 0, y: -25 }}
-        transition={{ type:"spring", damping:23 }}
+        initial={{ filter:"blur(2px)", opacity: 0, y: 25, width:width}}
+        animate={{ filter:"blur(0px)",opacity: 1, y: 0,width:'fit-content'}}
+        exit={{ filter:"blur(2px)", opacity: 0, y: -25}}
+        transition={{ type:"spring", damping:10 }}
         ref={spanRef}
         style={{
           display: "inline-block",

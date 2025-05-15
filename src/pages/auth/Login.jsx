@@ -2,7 +2,7 @@ import Input from "../../components/Input";
 import RenderInputs from "../../components/RenderInputs";
 import { LogIn } from "lucide-react";
 import { useGoogleLogin } from "@react-oauth/google";
-import { useState } from "react";
+import { Children, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { Lock, UserRound } from "lucide-react";
 
@@ -34,58 +34,66 @@ export default function Login({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
   const { login, authMessage, loading } = useUser();
 
+  const loginInputs = [
+    [
+      {
+        type: "text",
+        required: true,
+        customStyle: { textAlign: "center" },
+        label: (
+          <>
+            <UserRound /> Login
+          </>
+        ),
+        value: userData.username,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, username: e }));
+        },
+      },
+      {
+        type: "password",
+        customStyle: { textAlign: "center" },
+        required: true,
+        label: (
+          <>
+            <Lock /> Password
+          </>
+        ),
+        value: userData.password,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, password: e }));
+        },
+      },
+      {
+        type: "submit",
+        customStyle: { textAlign: "center" },
+        active: true,
+        disabled: loading,
+        children: (
+          <>
+            <LogIn /> Login
+          </>
+        ),
+      },
+    ],
+  ];
+
   return (
     <section className="login-wrapper">
       <div className="header">
         <h2>Login</h2>
       </div>
 
-      <form
-        className="inputs"
-        onSubmit={(e) => {
-          e.preventDefault();
-          login(userData);
-        }}
-      >
-        <Input
-          type="text"
-          customStyle={{ textAlign: "center" }}
-          label={
-            <>
-              <UserRound /> Login
-            </>
-          }
-          value={userData.username}
-          setValue={(e) => {
-            setUserData((prev) => ({ ...prev, username: e }));
-          }}
-        ></Input>
-        <Input
-          type="password"
-          customStyle={{ textAlign: "center" }}
-          label={
-            <>
-              <Lock /> Password
-            </>
-          }
-          value={userData.password}
-          setValue={(e) => {
-            setUserData((prev) => ({ ...prev, password: e }));
-          }}
-        ></Input>
+      <RenderInputs
+        form={true}
+        onSubmit={() =>login(userData)}
+        formStyle={{width:"100%"}}
+        className={"inputs"}
+        data={loginInputs}
+      />
 
+      <div className="inputs">
         <div className="auth-buttons">
-          <div className="auth-button">
-            <Input
-              disabled={loading}
-              type="submit"
-              className="auth-button-submit"
-              active={true}
-            >
-              <LogIn /> Login
-            </Input>
-          </div>
-
           <div className="auth-divider">
             <hr />
             <p>or</p>
@@ -102,7 +110,7 @@ export default function Login({ setAction }) {
             </p>
           </div>
         </div>
-      </form>
+      </div>
 
       <div
         className="login-feedback"

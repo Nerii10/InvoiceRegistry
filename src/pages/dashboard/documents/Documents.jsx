@@ -1,5 +1,6 @@
 //Lib
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 //Styles
 import "../../../styles/Documents.css";
@@ -86,6 +87,16 @@ export default function Documents() {
       fetchDocs();
     }
   }, [token, documentType, currentPage]);
+
+  const buttonVariants = {
+    initial: { scale: 1, opacity: 1 },
+    hover: { scale: 1.1, transition: { duration: 0.15 } },
+    tap: { scale: 0.95 },
+    active: {
+      backgroundColor: "var(--activeButtonBg, #4ade80)",
+      color: "var(--activeButtonColor, #065f46)",
+    },
+  };
 
   return (
     <DashboardPageWrapper maxWidth={"1250px"}>
@@ -183,9 +194,11 @@ export default function Documents() {
           type="button"
           width="50px"
           borderRadius="0px"
-          onClick={()=>{navigate('/dashboard/add-document')}}
+          onClick={() => {
+            navigate("/dashboard/add-document");
+          }}
           borderStyle="none"
-          customStyle={{borderRight:"1px var(--borderColor) solid"}}
+          customStyle={{ borderRight: "1px var(--borderColor) solid" }}
         >
           <Plus />
         </Input>

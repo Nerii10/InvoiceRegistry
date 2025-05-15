@@ -4,7 +4,6 @@ import { Upload, Plus } from "lucide-react";
 import RenderInputs from "../../../../components/RenderInputs";
 
 export default function InvoiceForm({
-  user,
   ocrData,
   setInvoiceData,
   companyData,

@@ -42,6 +42,9 @@ export default function Input({
         onChange={(e) => setValue(e.target.value)}
         style={style}
       >
+        <option value="" hidden>
+          {label || "Select"}
+        </option>
         {options &&
           options?.map((option, idx) => (
             <option key={idx} value={option.value || option}>

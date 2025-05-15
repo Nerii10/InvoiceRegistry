@@ -11,7 +11,7 @@ export default function CompanyPanel({
   newUnit,
   moveUnit,
   removeUnit,
-  leaveCompany,
+  setShowExitPopup,
   loading,
 }) {
   //Admin
@@ -24,13 +24,19 @@ export default function CompanyPanel({
   const [newUnitData, setNewUnitData] = useState({ name: null, parent: null });
 
   //Popup
-  const [showExitPopup, setShowExitPopup] = useState(false);
-
+  const accessedUnits = company?.unitsData.filter((u) =>
+    company?.access?.units?.includes(u.id)
+  );
+  const accessedUsers = company?.usersData.filter((u) =>
+    company?.access?.users?.includes(u.user_id)
+  );
+  console.log({ accessedUnits, accessedUsers });
+  console.log(company);
   return (
     <section>
       {/* Empty‑state header */}
       <section className="add-document-header">
-        <p>{company?.me?.companyName}</p>
+        <p>{company?.me?.companyCode}</p>
 
         <Input
           onClick={() => {
@@ -44,52 +50,8 @@ export default function CompanyPanel({
         </Input>
       </section>
 
-      {/* Popup */}
-      <AnimatePresence mode="wait">
-        {showExitPopup && (
-          <motion.div
-            className="exit-popup-wrapper"
-            initial={{ scale: 0 }}
-            animate={showExitPopup && { scale: 1 }}
-            exit={{ scale: 0 }}
-          >
-            <p className="exit-popup-text">
-              {company?.me?.userType === "owner"
-                ? "Are you sure you want to delete the organization? This action will permanently remove all invoices and data associated with your company."
-                : "Are you sure you want to leave the organization? You will lose access to all units and invoices associated with this company."}
-            </p>
-
-            <div className="exit-poput-button">
-              <Input
-                onClick={() => {
-                  setShowExitPopup((o) => !o);
-                }}
-                width="45%"
-                maxWidth="200px"
-                borderRadius="50px"
-                height="50px"
-                type="button"
-              >
-                No, Keep my company
-              </Input>
-              <Input
-                width="45%"
-                maxWidth="200px"
-                borderRadius="50px"
-                height="50px"
-                type="button"
-                onClick={() => {
-                  leaveCompany();
-                }}
-              >
-                Im sure, delete my company
-              </Input>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* TO MA BYC KOMPONENT - Company unit manager */}
+      {/* Admin i user */}
       {(company?.me?.userType == "admin" ||
         company?.me?.userType == "owner") && (
         <section>
@@ -124,6 +86,7 @@ export default function CompanyPanel({
               Move
             </Input>
 
+            {/* Tylko owner */}
             {company?.me?.userType == "owner" && (
               <Input
                 active={selectedAction == "Remove"}
@@ -144,6 +107,10 @@ export default function CompanyPanel({
           {selectedAction == "New" && (
             <div>
               <RenderInputs
+                form={true}
+                onSubmit={() => {
+                  newUnit(newUnitData);
+                }}
                 data={[
                   [
                     {
@@ -153,21 +120,22 @@ export default function CompanyPanel({
                       },
                       borderRadius: "0px",
                       label: "New Unit Name",
+                      required: true,
                       borderStyle: "none",
                       value: newUnitData.name,
                     },
                     {
                       type: "select",
                       borderRadius: "0px",
-                      label: "New Unit Name",
+                      required: true,
                       customStyle: {
                         border: "none",
                         borderLeft: "1px var(--borderColor) solid",
                       },
                       value: newUnitData.parent,
+                      label: "Select Parent Unit",
                       options: [
-                        { value: "", label: "Select Unit" }, // domyślna pozycja
-                        ...(company?.unitsData?.map((unit) => ({
+                        ...(accessedUnits?.map((unit) => ({
                           // rozłóż dynamiczne opcje
                           value: unit.id,
                           label: unit.name,
@@ -180,15 +148,12 @@ export default function CompanyPanel({
                   ],
                   [
                     {
-                      type: "button",
+                      type: "submit",
                       borderRadius: "0px",
                       label: "New Unit Name",
                       borderStyle: "none",
                       disabled: loading,
                       children: "Add",
-                      onClick: () => {
-                        newUnit(newUnitData);
-                      },
                     },
                   ],
                 ]}
@@ -200,6 +165,10 @@ export default function CompanyPanel({
           {selectedAction == "Move" && (
             <div>
               <RenderInputs
+                form={true}
+                onSubmit={() => {
+                  moveUnit(selectedUserData);
+                }}
                 data={[
                   [
                     {
@@ -208,14 +177,14 @@ export default function CompanyPanel({
                         setSelectedUserData((prev) => ({ ...prev, unit: e }));
                       },
                       borderRadius: "0px",
+                      label: "Select Unit",
+                      required: true,
                       options: [
-                        { value: "", label: "Select unit" },
-                        ...(company?.unitsData?.map((unit) => ({
+                        ...(accessedUnits?.map((unit) => ({
                           value: unit.id,
                           label: unit.name,
                         })) || []),
                       ],
-                      label: "Select Unit",
                       borderStyle: "none",
                       value: selectedUserData.unit,
                     },
@@ -226,13 +195,13 @@ export default function CompanyPanel({
                       },
                       borderRadius: "0px",
                       options: [
-                        { value: "", label: "Select User" },
-                        ...(company?.usersData?.map((user) => ({
+                        ...(accessedUsers?.map((user) => ({
                           value: user.user_id,
                           label: user.name,
                         })) || []),
                       ],
-                      label: "Select Unit",
+                      label: "Select User",
+                      required: true,
                       customStyle: {
                         border: "none",
                         borderLeft: "1px var(--borderColor) solid",
@@ -243,14 +212,11 @@ export default function CompanyPanel({
 
                   [
                     {
-                      type: "button",
+                      type: "submit",
                       borderRadius: "0px",
                       disabled: loading,
                       customStyle: {
                         border: "none",
-                      },
-                      onClick: () => {
-                        moveUnit(selectedUserData);
                       },
                       children: "Move",
                     },
@@ -264,6 +230,10 @@ export default function CompanyPanel({
           {selectedAction == "Remove" && (
             <div>
               <RenderInputs
+                form={true}
+                onSubmit={() => {
+                  removeUnit({ selectedUnitData });
+                }}
                 data={[
                   [
                     {
@@ -280,17 +250,17 @@ export default function CompanyPanel({
                       },
                       borderRadius: "0px",
                       options: [
-                        { value: "", label: "Select unit or user" },
-                        ...(company?.usersData?.map((user) => ({
+                        ...(accessedUsers?.map((user) => ({
                           value: `user-${user.user_id}`,
                           label: `${user.name} - ${user.type}`,
                         })) || []),
-                        ...(company?.unitsData?.map((unit) => ({
+                        ...(accessedUnits?.map((unit) => ({
                           value: `unit-${unit.id}`,
                           label: `${unit.name} - unit`,
                         })) || []),
                       ],
-                      label: "Select Unit Or User",
+                      label: "Select unit or user",
+                      required: true,
                       borderStyle: "none",
                       value: selectedUnitData
                         ? selectedUnitData.user_id
@@ -301,14 +271,11 @@ export default function CompanyPanel({
                   ],
                   [
                     {
-                      type: "button",
+                      type: "submit",
                       borderRadius: "0px",
                       disabled: loading,
                       width: "100%",
                       borderStyle: "none",
-                      onClick: () => {
-                        removeUnit({ selectedUnitData });
-                      },
                       children: "Remove",
                     },
                   ],

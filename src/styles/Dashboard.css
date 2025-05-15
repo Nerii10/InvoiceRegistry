@@ -25,6 +25,7 @@
     overflow: auto;
     padding: 15px;
     box-sizing: border-box;
+    position: relative;
 }
 
 .dashboard-wrapper{

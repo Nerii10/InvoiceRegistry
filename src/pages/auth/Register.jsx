@@ -1,13 +1,91 @@
 import Input from "../../components/Input";
 import RenderInputs from "../../components/RenderInputs";
 import { LogIn } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { Lock, UserRound, Mail } from "lucide-react";
 
 export default function Register({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
-  const { register, authMessage } = useUser();
+  const { register, authMessage, loading } = useUser();
+  const [message, setMessage] = useState(authMessage);
+
+  useEffect(() => {
+    setMessage(authMessage);
+  }, [authMessage]);
+
+  const loginInputs = [
+    [
+      {
+        type: "text",
+        required: true,
+        customStyle: { textAlign: "center" },
+        label: (
+          <>
+            <UserRound /> Login
+          </>
+        ),
+        value: userData.username,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, username: e }));
+        },
+      },
+      {
+        type: "password",
+        required: true,
+        customStyle: { textAlign: "center" },
+        label: (
+          <>
+            <Lock /> Password
+          </>
+        ),
+        value: userData.password,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, password: e }));
+        },
+      },
+      {
+        type: "password",
+        required: true,
+        customStyle: { textAlign: "center" },
+        label: (
+          <>
+            <Lock /> Confirm Password
+          </>
+        ),
+        value: userData.confirmedPassword,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, confirmedPassword: e }));
+        },
+      },
+      {
+        type: "email",
+        required: true,
+        customStyle: { textAlign: "center" },
+        label: (
+          <>
+            <Mail /> Email
+          </>
+        ),
+        value: userData.email,
+        setValue: (e) => {
+          setUserData((prev) => ({ ...prev, email: e }));
+        },
+      },
+      {
+        type: "submit",
+        customStyle: { textAlign: "center" },
+        className: "auth-button-submit",
+        active: true,
+        disabled: loading,
+        children: (
+          <>
+            <LogIn /> Register
+          </>
+        ),
+      },
+    ],
+  ];
 
   return (
     <section className="login-wrapper">
@@ -15,93 +93,54 @@ export default function Register({ setAction }) {
         <h2>Register</h2>
       </div>
 
-      <form
-        className="inputs"
-        onSubmit={(e) => {
-          e.preventDefault();
-          register(userData);
+      <RenderInputs
+        onSubmit={() => {
+          if (!userData.password || !userData.confirmedPassword) {
+            setMessage({
+              message: "Wprowadź i potwierdź hasło.",
+              type: "error",
+            });
+          } else if (userData.password !== userData.confirmedPassword) {
+            setMessage({
+              message: "Hasła nie pasują do siebie.",
+              type: "error",
+            });
+          } else {
+            register(userData);
+          }
         }}
-      >
-        <Input
-          type="text"
-          required={true}
-          customStyle={{ textAlign: "center" }}
-          label={
-            <>
-              <UserRound /> Login
-            </>
-          }
-          value={userData.username}
-          setValue={(e) => {
-            setUserData((prev) => ({ ...prev, username: e }));
-          }}
-        ></Input>
+        form={true}
+        formStyle={{ width: "100%" }}
+        className={"inputs"}
+        data={loginInputs}
+      ></RenderInputs>
 
-        <Input
-          type="password"
-          customStyle={{ textAlign: "center" }}
-          required={true}
-          label={
-            <>
-              <Lock /> Password
-            </>
-          }
-          value={userData.password}
-          setValue={(e) => {
-            setUserData((prev) => ({ ...prev, password: e }));
-          }}
-        ></Input>
-
-        <Input
-          type="email"
-          required={true}
-          customStyle={{ textAlign: "center" }}
-          label={
-            <>
-              <Mail /> Email
-            </>
-          }
-          value={userData.email}
-          setValue={(e) => {
-            setUserData((prev) => ({ ...prev, email: e }));
-          }}
-        ></Input>
-
-        <div className="auth-buttons">
-          <div className="auth-button">
-            <Input type="submit" className="auth-button-submit" active={true}>
-              <LogIn /> Register
-            </Input>
-          </div>
-
-          <div className="auth-divider">
-            <hr />
-            <p>or</p>
-          </div>
-
-          <div className="auth-button auth-button-google">
-            <p
-              onClick={() => {
-                setAction("login");
-              }}
-              style={{ textAlign: "center", color: "gray", cursor: "pointer" }}
-            >
-              Have an account? Login!
-            </p>
-          </div>
+      <div>
+        <div className="auth-divider">
+          <hr />
+          <p>or</p>
         </div>
-      </form>
+
+        <div className="auth-button auth-button-google">
+          <p
+            onClick={() => {
+              setAction("login");
+            }}
+            style={{ textAlign: "center", color: "gray", cursor: "pointer" }}
+          >
+            Have an account? Login!
+          </p>
+        </div>
+      </div>
 
       <div
         className="login-feedback"
         style={{
           "--info-color":
-            authMessage.type == "error"
-              ? "rgb(255, 128, 128)"
-              : "rgb(4, 172, 32)",
+            message.type == "error" ? "rgb(255, 128, 128)" : "rgb(4, 172, 32)",
         }}
       >
-        {authMessage.message || ""}
+        {message.message || ""}
       </div>
     </section>
   );

@@ -61,6 +61,10 @@ input[type="date"].custom-input {
   transition: 0.25s ease;
 }
 
+.custom-input.validated-text{
+  border: 1px red solid;
+}
+
 .custom-input-text-active {
   position: absolute;
   pointer-events: none;

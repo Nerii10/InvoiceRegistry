@@ -20,7 +20,7 @@
     margin: 0;
 }
 
-.close-button {
+.close-button-error {
     position: absolute;
     top: -5px;
     left: -5px;
@@ -32,6 +32,23 @@
     align-items: center;
     padding: 0;
     background-color: red;
+    border: none;
+    border-radius: 50%;
+}
+
+.close-button-success {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    color:rgb(29, 58, 29);
+    background-color: rgb(0, 241, 37);
     border: none;
     border-radius: 50%;
 }

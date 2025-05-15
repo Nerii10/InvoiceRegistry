@@ -6,7 +6,7 @@ import { Loader as LoadingCircle, Check, X } from "lucide-react";
 import "../styles/Loader.css";
 import { useEffect, useState } from "react";
 
-export default function Loader({ loading, error, size, color, onlyLoader }) {
+export default function Loader({ loading, error, size, color, onlyLoader, position }) {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
@@ -25,6 +25,10 @@ export default function Loader({ loading, error, size, color, onlyLoader }) {
     exit: { scale: 0.9, opacity: 0 },
   };
 
+  const style = {
+    "--position": position || "start"
+  }
+
   return (
     <div>
       <AnimatePresence mode="wait">
@@ -35,6 +39,7 @@ export default function Loader({ loading, error, size, color, onlyLoader }) {
             animate="animate"
             exit="exit"
             variants={variants}
+            style={style}
             transition={{ type: "tween", duration: 0.5, ease: "circInOut" }}
           >
             {status === "loading" && (
@@ -83,6 +88,7 @@ export default function Loader({ loading, error, size, color, onlyLoader }) {
           <motion.section
             className="loader-wrapper-only-loader"
             initial="initial"
+            style={style}
             animate="animate"
             exit="exit"
             variants={variants}
