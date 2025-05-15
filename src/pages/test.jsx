@@ -1,137 +1,107 @@
-import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 
-const notificationStyle = {
-  backgroundColor: "wheat",
-  padding: "20px 10px",
-  boxSizing: "border-box",
-  borderRadius: "50px",
-};
+function RollingDigit({ prevDigit, digit, speed }) {
+  const [sequence, setSequence] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const motionValue = useMotionValue(prevDigit);
+  const direction = (digit - prevDigit + 10) % 10 <= 5 ? 1 : -1;
 
-const buttonStyle = {
-  backgroundColor: "black",
-  padding: "20px 10px",
-  fontSize: "20px",
-  borderRadius: "50px",
-  color: "white",
-};
+  useEffect(() => {
+    const newSequence = [];
+    let current = prevDigit;
+    while (current !== digit) {
+      newSequence.push(current);
+      current = (current + direction + 10) % 10;
+    }
+    newSequence.push(digit);
+    setSequence(newSequence);
+    setCurrentIndex(0);
+    motionValue.set(prevDigit);
 
-export function Notification({
-  id,
-  text,
-  index,
-  expanded,
-  notifications,
-  onClose,
-}) {
+    newSequence.forEach((num, index) => {
+      setTimeout(() => {
+        motionValue.set(num);
+      }, index * speed);
+    });
+
+    const interval = setInterval(() => {
+      setCurrentIndex((i) => {
+        if (i + 1 < newSequence.length) {
+          return i + 1;
+        } else {
+          clearInterval(interval);
+          return i;
+        }
+      });
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [prevDigit, digit, motionValue, direction, speed]);
+
   return (
-    <motion.div
-      layout
-      key={id}
-      style={{
-        ...notificationStyle,
-        zIndex: notifications.length - index,
-        width: "90%",
-        whiteSpace: "nowrap",
-        overflow: "auto",
-        position: "absolute",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-      initial={{
-        opacity: 1 - index * 0.3,
-        scale: 1 - index * 0.1,
-        marginTop: (index + 1) * -10 + "px",
-      }}
-      animate={
-        !expanded
-          ? { marginTop: (index + 1) * -150 + "px", opacity: 1, scale: 1 }
-          : {
-              marginTop: (index + 1) * -10 + "px",
-              opacity: 1 - index * 0.3,
-              scale: 1 - index * 0.1,
-            }
-      }
-      exit={{
-        opacity: 1 - index * 0.3,
-        scale: 1 - index * 0.1,
-        marginTop: (index + 1) * -10 + "px",
-      }}
-      transition={{ type: "spring", damping: 11 + index * 1 }}
-    >
-      <span>{text}</span>
-      <button onClick={() => onClose(id)} style={{ marginLeft: "20px" }}>
-        ❌
-      </button>
-    </motion.div>
+    <div style={{ position: "relative", width: "35px", height: "1em", display: "inline-block", textAlign: "center" }}>
+      <AnimatePresence mode="sync" initial={false}>
+        <motion.span
+          key={sequence[currentIndex]}
+          initial={{ y: direction * 50 + "%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={{ y: -direction * 50 + "%", opacity: 0 }}
+          transition={{ type: "tween", duration: speed / 500 }}
+          style={{ position: "absolute", width: "100%", left: 0 }}
+        >
+          {sequence[currentIndex]}
+        </motion.span>
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function AnimatedNumber({ value }) {
+  const digits = value.toString().split("");
+  const prevDigitsRef = useRef(digits);
+  const lastChangeTimeRef = useRef(Date.now());
+  const [speed, setSpeed] = useState(150);
+
+  const maxLen = Math.max(prevDigitsRef.current.length, digits.length);
+  const prevDigits = [...prevDigitsRef.current];
+  while (prevDigits.length < maxLen) prevDigits.unshift("0");
+  while (digits.length < maxLen) digits.unshift("0");
+
+  useEffect(() => {
+    const now = Date.now();
+    const delta = now - lastChangeTimeRef.current;
+    lastChangeTimeRef.current = now;
+
+    const newSpeed = Math.min(300, Math.max(50, delta / 2));
+    setSpeed(newSpeed);
+
+    prevDigitsRef.current = digits;
+  }, [digits]);
+
+  return (
+    <div style={{ display: "flex", justifyContent: "center", gap: "0.1em", fontSize: "72px", fontFamily: "monospace" }}>
+      {digits.map((digit, i) => (
+        <RollingDigit key={i} prevDigit={parseInt(prevDigits[i])} digit={parseInt(digit)} speed={speed} />
+      ))}
+    </div>
   );
 }
 
 export default function TEST() {
-  const [notifications, setNotifications] = useState([
-    "Nowa wiadomość od Karolina: 'Hej, co robisz dziś wieczorem?'",
-    "Twoje zamówienie #48293 zostało wysłane",
-    "Przypomnienie: Wizyta u dentysty jutro o 14:00",
-    "Nowe logowanie na Twoje konto z urządzenia iPhone 15 Pro",
-    "Aktualizacja dostępna: Zainstaluj najnowszą wersję systemu",
-    "Spotkanie 'Projekt Zespół' rozpoczyna się za 15 minut",
-    "Spotify: Nowy album 'The Weeknd' już dostępny",
-    "Bateria jest na poziomie 15%. Podłącz ładowarkę",
-    "Alert pogodowy: Silny wiatr w Twoim rejonie",
-    "Zdjęcie zostało pomyślnie przesłane do iCloud",
-  ]);
-
-  const [expanded, setExpanded] = useState(false);
-  const [displayed, setDisplayed] = useState([]);
-
-  useEffect(() => {
-    if (expanded) {
-      setDisplayed(notifications.slice(0, 4));
-    } else {
-      setDisplayed(notifications);
-    }
-  }, [expanded, notifications]);
-
-  const handleClose = (id) => {
-    setNotifications((prev) => prev.filter((n) => n.id !== id));
-  };
-
-  const notifiContainer = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    position: "relative",
-    width: "100%",
-    zIndex: 1,
-  };
+  const [number, setNumber] = useState(0);
 
   return (
-    <div style={notifiContainer}>
-      <button
-        style={buttonStyle}
-        onClick={() => {
-          setExpanded((prev) => !prev);
-        }}
-      >
-        {expanded ? "Pokaż wszystkie" : "Zwiń"}
-      </button>
-
-      <div style={{position:"fixed",width:"400px",bottom:"50px", right:"10px"}}>
-        <AnimatePresence mode="popLayout">
-          {displayed.map((notifi, index) => (
-            <Notification
-              key={notifi}
-              id={notifi}
-              text={notifi}
-              index={index}
-              expanded={expanded}
-              notifications={notifications}
-              onClose={handleClose}
-            />
-          ))}
-        </AnimatePresence>
-      </div>
+    <div style={{ padding: "50px", textAlign: "center" }}>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        value={number}
+        onChange={(e) => setNumber(parseInt(e.target.value))}
+        style={{ width: "300px", marginBottom: "40px" }}
+      />
+      <AnimatedNumber value={number} />
     </div>
   );
 }
