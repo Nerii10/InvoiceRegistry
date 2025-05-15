@@ -7,17 +7,51 @@ import {
   MousePointer2,
   Sparkles,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useUser } from "../../contexts/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import SlidingText from "../../components/SlidingText.jsx";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const iconSize = 30;
-
+  const imageRef = useRef();
+  const containerRef = useRef();
   const navigate = useNavigate();
   const { token } = useUser();
+
+  function useIsMobile(breakpoint = 700) {
+    const [isMobile, setIsMobile] = useState(
+      () => window.innerWidth <= breakpoint
+    );
+
+    useEffect(() => {
+      const onResize = () => {
+        setIsMobile(window.innerWidth <= breakpoint);
+        console.log("window.innerWidth", window.innerWidth);
+      };
+
+      window.addEventListener("resize", onResize);
+      // od razu wywołaj, żeby złapać wartość przy mount
+      onResize();
+
+      return () => {
+        window.removeEventListener("resize", onResize);
+      };
+    }, [breakpoint]);
+
+    return isMobile;
+  }
+  const isMobile = useIsMobile(700);
+  const { scrollYProgress } = useScroll({
+    ...(isMobile ? { container: containerRef } : {}),
+    target: imageRef,
+    offset: ["start end", "start center"],
+  });
+
+  const blur = useTransform(scrollYProgress, [0, 1], [-0.5, 1]);
+  const perspective = useTransform(scrollYProgress, [0, 1], ["250px", "300px"]);
+  const rotateX = useTransform(scrollYProgress, [0, 1], ["20deg", "0deg"]);
 
   const animationVariant = {
     hidden: {
@@ -34,8 +68,15 @@ export default function Home() {
     },
   };
 
+  useEffect(() => {
+    const unsub = scrollYProgress.on("change", (v) => {
+      console.log(v);
+    });
+    return () => unsub();
+  }, [scrollYProgress]);
+
   return (
-    <main className="home-page-wrapper">
+    <main className="home-page-wrapper" ref={containerRef}>
       <main className="home-page">
         {/* Navbar */}
         <header className="home-page-navbar">
@@ -81,8 +122,11 @@ export default function Home() {
         >
           <div className="container hero__content">
             <div className="hero__text">
-        
-        <motion.h1 className="hero__title">Manage invoices <SlidingText inputs={['faster', 'better', 'easier']} /> than ever.</motion.h1>
+              <motion.h1 className="hero__title">
+                Manage invoices{" "}
+                <SlidingText inputs={["faster", "better", "easier"]} /> than
+                ever.
+              </motion.h1>
               <p className="hero__subtitle">
                 A simple and secure application to register and keep track of
                 invoices and structure of your company.
@@ -197,7 +241,10 @@ export default function Home() {
                 managers.
               </p>
             </div>
-            <div className="about__image">
+            <motion.div
+              className="about__image"
+              style={{ perspective: perspective }}
+            >
               {/* Illustration placeholder */}
               <motion.div
                 style={{ position: "absolute", width: "fit-content" }}
@@ -211,11 +258,13 @@ export default function Home() {
               >
                 <MousePointer2 />
               </motion.div>
-              <img
+              <motion.img
+                ref={imageRef}
+                style={{ opacity: blur, rotateX }}
                 src="/InvoiceRegistry/placeholder.png"
                 alt="Team collaboration illustration"
               />
-            </div>
+            </motion.div>
 
             <section className="cta">
               <div className="container cta__content">
