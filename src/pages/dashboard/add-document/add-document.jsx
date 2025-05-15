@@ -41,11 +41,11 @@ export default function AddDocument() {
     setMessage(null);
   }, [ocrLoading]);
 
-  const Company = companyData?.me?.companyRootId == null ? false : true;
-
+  const Company =  companyData ? true : companyLoading ? null : false;
+  console.log(Company)
   return (
     <>
-      {/* <MessagePopup
+      <MessagePopup
         message={
           !companyLoading &&
           (Company
@@ -53,20 +53,12 @@ export default function AddDocument() {
             : {
                 message:
                   "No company found. Please create one before adding documents.",
-                type:"error"
+                type: "error",
               })
         }
-        loading={loading}
-      /> */}
-
-      <MessagePopup
-        message={{
-          message:
-            "No company found. Please create one before adding documents.",
-          type: "error",
-        }}
-        loading={loading}
+        loading={companyLoading}
       />
+
       <DashboardPageWrapper maxWidth={"1250px"}>
         <Loader
           loading={loading || ocrLoading}

@@ -1,49 +1,169 @@
 import { useState, useEffect } from "react";
 import "../styles/ErrorPopup.css";
-import { X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { nanoid } from "nanoid";
+import { X } from "lucide-react";
 
-export default function MessagePopup({ message, loading }) {
-  const [showMessage, setShowMessage] = useState(false);
-  const location = useLocation();
-  const closePopup = () => {
-    setShowMessage(false);
-  };
+export function Notification({
+  content,
+  type,
+  index,
+  isExpanded,
+  setIsExpanded,
+  setAllNotifications,
+  id,
+  allNotifications,
+}) {
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
-  useEffect(() => {
-    setShowMessage(true);
-  }, [message]);
-
-  useEffect(() => {
-    setShowMessage(false);
-  }, [location]);
+  function handleRemoveNotification(notificationId) {
+    setAllNotifications((prev) =>
+      prev.filter((notif) => notif.id !== notificationId)
+    );
+  }
 
   return (
-    <AnimatePresence mode="wait">
-      {showMessage && !loading && message && (
-        <motion.div
-          className="error-popup-container"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={message && { scale: 1, opacity: 1 }}
-          transition={{ type: "tween", ease: "circInOut", duration: 0.5 }}
-          exit={{ scale: 0.8, opacity: 0 }}
-        >
-          <div className="error-popup">
-            <p className="error-message">{message?.message || "no message"}</p>
-            <button
-              onClick={closePopup}
-              className={
-                message?.type == "error"
-                  ? "close-button-error"
-                  : "close-button-success"
+    <>
+      <motion.div
+        className={
+          type
+            ? type === "error"
+              ? "notification-error"
+              : "notification-message"
+            : "notification-error"
+        }
+        initial={{
+          position: "absolute",
+          opacity: 1 - index * 0.3,
+          scale: clamp(1 - index * 0.1, 0, 1),
+          marginBottom: (index + 1) * 10 + "px",
+          filter: "blur(2px)",
+          zIndex: allNotifications?.length - index,
+        }}
+        animate={
+          !isExpanded
+            ? {
+                opacity: 1,
+                scale: 1,
+                position: "absolute",
+                filter: "blur(0px)",
+                height: "100px",
+                flexShrink: 0,
+                marginBottom: index * 120 + 15 + "px",
               }
-            >
-              <X size={15} />
-            </button>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+            : {
+                position: "absolute",
+                opacity: 1 - index * 0.3,
+                height: "100px",
+                filter: `blur(${index}px)`,
+                flexShrink: 0,
+                scale: clamp(1 - index * 0.1, 0, 1),
+                marginBottom: (index + 1) * 10 + "px",
+                zIndex: allNotifications?.length - index,
+              }
+        }
+        exit={{
+          position: "absolute",
+          opacity: 0,
+          filter: "blur(2px)",
+          scale: clamp(1 - index * 0.1, 0, 1),
+          marginBottom: (index + 1) * 10 + "px",
+          zIndex: -10,
+        }}
+        transition={{ type: "spring", damping: 20 }}
+      >
+        {content}
+        <div
+          onClick={() => handleRemoveNotification(id)}
+          className={
+            type
+              ? type === "error"
+                ? "close-button-error"
+                : "close-button-success"
+              : "notification-error"
+          }
+        >
+          <X size={15} />
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ height: "0px" }}
+        exit={{ height: "0px" }}
+        animate={{ height: isExpanded ? "0px" : "120px" }}
+        style={{
+          position: "static",
+          width: "50%",
+          flexShrink: 0,
+        }}
+        transition={{ type: "spring", damping: 20 }}
+      />
+    </>
+  );
+}
+
+export default function MessagePopup({ message, loading }) {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [allNotifications, setAllNotifications] = useState([]);
+  const [visibleNotifications, setVisibleNotifications] = useState([]);
+
+  useEffect(() => {
+    if (isExpanded) {
+      setVisibleNotifications(allNotifications.slice(0, 4));
+    } else {
+      setVisibleNotifications(allNotifications);
+    }
+  }, [isExpanded, allNotifications]);
+
+  useEffect(() => {
+    if (message?.message) {
+      setAllNotifications((prev) => [
+        { id: nanoid(), content: message.message, type: message?.type },
+        ...prev,
+      ]);
+    }
+  }, [message]);
+
+  return (
+    <motion.div className="notification-wrapper">
+      <motion.div
+        className="notification-container"
+        onMouseEnter={() => setIsExpanded(false)}
+        onMouseLeave={() => setIsExpanded(true)}
+      >
+        <AnimatePresence initial={false}>
+          {visibleNotifications?.map(({ id, content, type }, index) => (
+            <Notification
+              id={id}
+              key={id}
+              content={content}
+              type={type}
+              setAllNotifications={setAllNotifications}
+              index={index}
+              isExpanded={isExpanded}
+              setIsExpanded={setIsExpanded}
+              allNotifications={allNotifications}
+            />
+          ))}
+        </AnimatePresence>
+        <motion.div
+          initial={{ height: "140px" }}
+          exit={{ height: "140px" }}
+          animate={{
+            height: isExpanded
+              ? allNotifications.length != 0
+                ? "140px"
+                : "0px"
+              : "0px",
+          }}
+          style={{
+            position: "static",
+            width: "50%",
+            flexShrink: 0,
+          }}
+          transition={{ type: "spring", damping: 20 }}
+        />
+      </motion.div>
+    </motion.div>
   );
 }

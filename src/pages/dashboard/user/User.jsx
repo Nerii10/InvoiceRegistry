@@ -101,6 +101,7 @@ export default function User() {
                   type="button"
                   onClick={() => {
                     leaveCompany();
+                    setShowExitPopup(false);
                   }}
                 >
                   Im sure, delete my company
