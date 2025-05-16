@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 export default function SlidingText({ inputs }) {
   const max = inputs.length;
   const [current, setCurrent] = useState(0);
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(100);
   const [height, setHeight] = useState(0);
   const spanRef = useRef(null);
 
@@ -29,18 +29,18 @@ export default function SlidingText({ inputs }) {
       {/* Text */}
       <motion.div
         style={{
-          display: "flex",
+          display: "inline-flex",
           justifyContent: "center",
           alignItems: "center",
           perspective: "300px",
           width: width,
-          transition: "width 0.5s ease",
+          transition:'width 0.5s ease'
         }}
-        initial={{ position: "absolute", height: "0px" }}
-        animate={{ position: "relative", height: height }}
+        initial={{  height: "0px" }}
+        animate={{ height: height }}
         transition={{ type: "spring", damping: 23 }}
       >
-        <AnimatePresence mode="popLayout">
+        <AnimatePresence mode="sync">
           <motion.span
             key={inputs[current]}
             initial={{

@@ -126,6 +126,7 @@ export default function Home({ isMobile }) {
                 <SlidingText inputs={["faster", "better", "easier"]} /> than
                 ever.
               </motion.h1>
+
               <p className="hero__subtitle">
                 A simple and secure application to register and keep track of
                 invoices and structure of your company.
