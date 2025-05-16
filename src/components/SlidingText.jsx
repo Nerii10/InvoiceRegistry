@@ -25,58 +25,73 @@ export default function SlidingText({ inputs }) {
   }, [current]);
 
   return (
-    <motion.div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        perspective: "300px",
-        width: width,
-        transition: "width 0.5s ease",
-      }}
-      initial={{ position: "absolute", height: "0px" }}
-      animate={{ position: "relative", height: height }}
-      transition={{ type: "spring", damping: 23 }}
-    >
-      <AnimatePresence mode="popLayout">
-        <motion.span
-          key={inputs[current]}
-          initial={{
-            filter: "blur(10px)",
-            opacity: 0,
-            y: -30,
-            rotateX: "30deg",
-          }}
-          animate={{
-            filter: "blur(0px)",
-            position: "absolute",
-            opacity: 1,
-            rotateX: "0deg",
-            y: 0,
-          }}
-          exit={{
-            filter: "blur(10px)",
-            opacity: -25,
-            y: 30,
-            rotateX: "-30deg",
-          }}
-          transition={{ type: "spring", damping: 22 }}
-          ref={spanRef}
-          style={{
-            padding: 0,
-            height: "fit-content",
-            left: 0,
-            margin: 0,
-            display: "inline-block",
-            background:
-              "linear-gradient(to right, rgb(131, 25, 244), rgb(43, 156, 255))",
-            backgroundClip: "text",
-            color: "transparent",
-          }}
-        >
-          {inputs[current]}
-        </motion.span>
-      </AnimatePresence>
-    </motion.div>
+    <>
+      {/* Text */}
+      <motion.div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          perspective: "300px",
+          width: width,
+          transition: "width 0.5s ease",
+        }}
+        initial={{ position: "absolute", height: "0px" }}
+        animate={{ position: "relative", height: height }}
+        transition={{ type: "spring", damping: 23 }}
+      >
+        <AnimatePresence mode="popLayout">
+          <motion.span
+            key={inputs[current]}
+            initial={{
+              filter: "blur(10px)",
+              opacity: 0,
+              y: -30,
+              rotateX: "30deg",
+            }}
+            animate={{
+              filter: "blur(0px)",
+              position: "absolute",
+              opacity: 1,
+              rotateX: "0deg",
+              y: 0,
+            }}
+            exit={{
+              filter: "blur(10px)",
+              opacity: -25,
+              y: 30,
+              rotateX: "-30deg",
+            }}
+            transition={{ type: "spring", damping: 22 }}
+            style={{
+              padding: 0,
+              height: "fit-content",
+              left: 0,
+              margin: 0,
+              display: "inline-block",
+              background:
+                "linear-gradient(to right, rgb(131, 25, 244), rgb(43, 156, 255))",
+              backgroundClip: "text",
+              color: "transparent",
+            }}
+          >
+            {inputs[current]}
+          </motion.span>
+        </AnimatePresence>
+      </motion.div>
+
+      {/* Ref */}
+      <span
+        ref={spanRef}
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          whiteSpace: "nowrap",
+          pointerEvents: "none",
+        }}
+      >
+        {inputs[current]}
+      </span>
+    </>
   );
 }
