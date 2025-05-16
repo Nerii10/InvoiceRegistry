@@ -2,26 +2,28 @@ import { useState } from "react";
 import "../styles/Input.css";
 import { Upload, FunnelPlus } from "lucide-react";
 
-export default function Input({
-  type = "text",
-  value,
-  setValue,
-  options,
-  onClick,
-  children,
-  active,
-  label,
-  width = "100%",
-  maxWidth = "100%",
-  height = "40px",
-  borderRadius = "var(--borderRadius)",
-  backgroundColor = "var(--accentColor)",
-  borderStyle = "solid",
-  required = false,
-  borderSide,
-  customStyle,
-  disabled,
-}) {
+export default function Input(props) {
+  const {
+    type = "text",
+    value,
+    setValue,
+    options,
+    onClick,
+    children,
+    active,
+    label,
+    width = "100%",
+    maxWidth = "100%",
+    height = "40px",
+    borderRadius = "var(--borderRadius)",
+    backgroundColor = "var(--accentColor)",
+    borderStyle = "solid",
+    required = false,
+    borderSide,
+    customStyle,
+    disabled,
+  } = props;
+
   const style = {
     "--input-width": width,
     "--input-max-width": maxWidth,
@@ -33,7 +35,24 @@ export default function Input({
     ...(customStyle || {}),
   };
 
-  if (type === "select") {
+  // === SELECT ===
+  if (type === "select") return renderSelect();
+
+  // === FILE ===
+  if (type === "file") return renderFile();
+
+  // === BUTTON ===
+  if (type === "button" || type === "submit") return renderButton();
+
+  // === MULTISELECT ===
+  if (type === "multiselect") return renderMultiSelect();
+
+  // === TEXT / EMAIL / PASSWORD / DATE / NUMBER ===
+  return renderTextOrDate();
+
+  // === Subcomponents ===
+
+  function renderSelect() {
     return (
       <select
         required={required}
@@ -45,17 +64,16 @@ export default function Input({
         <option value="" hidden>
           {label || "Select"}
         </option>
-        {options &&
-          options?.map((option, idx) => (
-            <option key={idx} value={option.value || option}>
-              {option.label || option.value}
-            </option>
-          ))}
+        {options?.map((option, idx) => (
+          <option key={idx} value={option.value || option}>
+            {option.label || option.value}
+          </option>
+        ))}
       </select>
     );
   }
 
-  if (type === "file") {
+  function renderFile() {
     return (
       <label className="custom-input-file-wrapper" style={style}>
         <Upload className="upload-icon" />
@@ -70,10 +88,10 @@ export default function Input({
     );
   }
 
-  if (type == "button" || type == "submit") {
+  function renderButton() {
     return (
       <button
-        type={`${type}`}
+        type={type}
         className={
           active ? "custom-input active-button" : "custom-input button"
         }
@@ -86,126 +104,58 @@ export default function Input({
     );
   }
 
-  if (
-    type === "text" ||
-    type == "password" ||
-    type == "number" ||
-    type == "email"
-  ) {
-    if (!label) {
-      return (
-        <input
-          type={type}
-          className="custom-input text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          style={style}
-          required={required}
-        />
-      );
-    } else {
-      return (
-        <>
-          <div
-            className="custom-input-container"
-            style={{
-              width: width,
-              height: height,
-            }}
-          >
-            <input
-              type={type}
-              className="custom-input text"
-              value={value}
-              required={required}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              style={style}
-            />
+  function renderTextOrDate() {
+    const inputElement = (
+      <input
+        type={type}
+        className="custom-input text"
+        value={value}
+        required={required}
+        onChange={(e) => setValue(e.target.value)}
+        style={style}
+      />
+    );
 
-            <p
-              className={
-                value ? "custom-input-text-active" : "custom-input-text"
-              }
-            >
-              {label}
-            </p>
-          </div>
-        </>
-      );
-    }
+    if (!label) return inputElement;
+
+    const labelStyle =
+      type === "date"
+        ? value
+          ? {
+              position: "absolute",
+              right: "50px",
+              opacity: 0,
+              transition: "0.25s ease",
+            }
+          : {
+              position: "absolute",
+              backgroundColor: "white",
+              padding: "0px 5px",
+              left: "2px",
+              boxSizing: "border-box",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              width: "90%",
+              textAlign: "start",
+              opacity: 1,
+              transition: "0.25s ease",
+            }
+        : undefined;
+
+    return (
+      <div className="custom-input-container" style={{ width, height }}>
+        {inputElement}
+        <p
+          className={value ? "custom-input-text-active" : "custom-input-text"}
+          style={labelStyle}
+        >
+          {label}
+        </p>
+      </div>
+    );
   }
 
-  if (type == "date") {
-    if (!label) {
-      return (
-        <input
-          type={type}
-          required={required}
-          className="custom-input text"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          style={style}
-        />
-      );
-    } else {
-      return (
-        <>
-          <div
-            className="custom-input-container"
-            style={{
-              width: width,
-              height: height,
-            }}
-          >
-            <input
-              type={type}
-              required={required}
-              className="custom-input"
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              style={style}
-            />
-
-            <p
-              className={
-                value ? "custom-input-text-active" : "custom-input-text"
-              }
-              style={
-                value
-                  ? {
-                      position: "absolute",
-                      right: "50px",
-                      opacity: 0,
-                      transition: "0.25s ease",
-                    }
-                  : {
-                      position: "absolute",
-                      backgroundColor: "rgb(255, 255, 255)",
-                      padding: "0px 5px",
-                      left: "2px",
-                      boxSizing: "border-box",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      width: "90%",
-                      textAlign: "start",
-                      opacity: 1,
-                      transition: "0.25s ease",
-                    }
-              }
-            >
-              {label}
-            </p>
-          </div>
-        </>
-      );
-    }
-  }
-
-  if (type === "multiselect") {
+  function renderMultiSelect() {
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleOption = (val) => {

@@ -102,7 +102,7 @@ export function Notification({
   );
 }
 
-export default function MessagePopup({ message, loading }) {
+export default function MessagePopup({ message }) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [allNotifications, setAllNotifications] = useState([]);
   const [visibleNotifications, setVisibleNotifications] = useState([]);
@@ -131,13 +131,23 @@ export default function MessagePopup({ message, loading }) {
         onMouseEnter={() => setIsExpanded(false)}
         onMouseLeave={() => setIsExpanded(true)}
       >
-        <motion.div className={allNotifications.length == 0 ? "notification-clear-button-container-empty"  : "notification-clear-button-container"}
-        initial={{opacity:0}}
-        animate={isExpanded ? {opacity:0} : {opacity:1}}
-        transition={{type:'spring', damping:23}}
+        <motion.div
+          className={
+            allNotifications.length == 0
+              ? "notification-clear-button-container-empty"
+              : "notification-clear-button-container"
+          }
+          initial={{ opacity: 0 }}
+          animate={isExpanded ? { opacity: 0 } : { opacity: 1 }}
+          transition={{ type: "spring", damping: 23 }}
         >
           <button className="notification-clear-button">
-            <CircleX stroke="black"  onClick={()=>{setAllNotifications([])}}/>
+            <CircleX
+              stroke="black"
+              onClick={() => {
+                setAllNotifications([]);
+              }}
+            />
           </button>
         </motion.div>
         <AnimatePresence initial={false}>

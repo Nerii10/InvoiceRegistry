@@ -30,11 +30,7 @@ function RenderTreeNodes({ node, level = 0, usersData }) {
       >
         {node?.children?.length > 0 ||
         usersData.some((u) => u.unit_id == node.id) ? (
-          isOpen == true ? (
-            <ChevronDown />
-          ) : (
-            <ChevronRight />
-          )
+          <ChevronDown style={{ rotate: isOpen ? "0deg" : "-90deg", transition:"0.25s ease"}} />
         ) : (
           ""
         )}{" "}
@@ -56,7 +52,7 @@ function RenderTreeNodes({ node, level = 0, usersData }) {
             ? { width: "100%", height: "fit-content" }
             : { width: "100%", height: "0px" }
         }
-        transition={{ type: "tween", duration: 0.2, ease: "easeInOut" }}
+        transition={{ type: "tween", duration: 0.25, ease: "easeInOut" }}
       >
         {usersData
           .filter((u) => u.unit_id === node.id)

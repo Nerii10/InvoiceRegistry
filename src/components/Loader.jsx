@@ -1,4 +1,4 @@
-// Libs
+// Motion
 import { motion, AnimatePresence } from "framer-motion";
 // Icons
 import { Loader as LoadingCircle, Check, X } from "lucide-react";
@@ -6,7 +6,14 @@ import { Loader as LoadingCircle, Check, X } from "lucide-react";
 import "../styles/Loader.css";
 import { useEffect, useState } from "react";
 
-export default function Loader({ loading, error, size, color, onlyLoader, position }) {
+export default function Loader({
+  loading,
+  error,
+  size,
+  color,
+  onlyLoader,
+  position,
+}) {
   const [status, setStatus] = useState("idle");
 
   useEffect(() => {
@@ -26,8 +33,8 @@ export default function Loader({ loading, error, size, color, onlyLoader, positi
   };
 
   const style = {
-    "--position": position || "start"
-  }
+    "--position": position || "start",
+  };
 
   return (
     <div>

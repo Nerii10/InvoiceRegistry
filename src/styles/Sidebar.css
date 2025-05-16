@@ -14,7 +14,7 @@
   width: 100%;
   z-index: 20;
   overflow: hidden;
-  transition: 0.2s ease-in-out;
+  transition: 0.4s cubic-bezier(0.5, 0.82, 0.165, 1);
   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
@@ -27,7 +27,7 @@
   z-index: 20;
   overflow: hidden;
   flex-shrink: 0;
-  transition: 0.2s ease-in-out;
+  transition: 0.4s cubic-bezier(0.5, 0.82, 0.165, 1);
   clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
 }
 

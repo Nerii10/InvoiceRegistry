@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Input from "./Input";
 
 export default function RenderInputs({
@@ -9,16 +8,10 @@ export default function RenderInputs({
   onSubmit,
   formStyle,
 }) {
-  const [submitted, setSubmitted] = useState(false);
-
   const content = data.map((section, sectionIndex) => (
     <div className={className} key={sectionIndex}>
       {section.map((input, inputIndex) => (
-        <Input
-          validated={submitted}
-          key={input.key || `${sectionIndex}-${inputIndex}`}
-          {...input}
-        />
+        <Input key={input.key || `${sectionIndex}-${inputIndex}`} {...input} />
       ))}
     </div>
   ));
@@ -30,7 +23,6 @@ export default function RenderInputs({
         onSubmit={(e) => {
           e.preventDefault();
           onSubmit?.();
-          setSubmitted(true);
         }}
         className={formClassName}
       >

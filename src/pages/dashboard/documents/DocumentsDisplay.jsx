@@ -179,9 +179,9 @@ export default function DocumentsDisplay({
         )}
       </table>
 
-      {loading && <p className="empty-row"> </p>}
+      {loading && <p className="empty-row">e</p>}
 
-      {!loading && total === 0 && <p className="no-results">No results</p>}
+      <p className="no-results">{!loading ? total === 0 && "No results" : ""}</p>
     </>
   );
 }

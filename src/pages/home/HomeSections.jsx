@@ -283,6 +283,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
       {sections.map((section, index) => {
         return section.scrollable == true ? (
           <ScrollableContainer
+            style={{width:"100%"}}
             isMobile={isMobile}
             key={index}
             containerRef={containerRef}

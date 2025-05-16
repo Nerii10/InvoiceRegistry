@@ -7,7 +7,7 @@ export function CompanyProvider({ children }) {
   const { token, API_URL } = useUser();
   const [data, setData] = useState(null);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
 
   const callApi = async ({ url, method, body }) => {
