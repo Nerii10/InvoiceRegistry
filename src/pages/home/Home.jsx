@@ -1,3 +1,4 @@
+//Style + icons
 import "../../styles/Home.css";
 import {
   Newspaper,
@@ -7,51 +8,25 @@ import {
   MousePointer2,
   Sparkles,
 } from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useUser } from "../../contexts/UserContext.jsx";
-import { useNavigate } from "react-router-dom";
-import SlidingText from "../../components/SlidingText.jsx";
-import { useEffect, useRef, useState } from "react";
 
-export default function Home() {
+//Lib
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+//My Hooks
+import { useUser } from "../../contexts/UserContext.jsx";
+
+//Components
+import SlidingText from "../../components/SlidingText.jsx";
+import ScrollableContainer from "../../components/ScrollableContainer.jsx";
+
+export default function Home({ isMobile }) {
   const iconSize = 30;
-  const imageRef = useRef();
   const containerRef = useRef();
   const navigate = useNavigate();
   const { token } = useUser();
-
-  function useIsMobile(breakpoint = 700) {
-    const [isMobile, setIsMobile] = useState(
-      () => window.innerWidth <= breakpoint
-    );
-
-    useEffect(() => {
-      const onResize = () => {
-        setIsMobile(window.innerWidth <= breakpoint);
-        console.log("window.innerWidth", window.innerWidth);
-      };
-
-      window.addEventListener("resize", onResize);
-      // od razu wywołaj, żeby złapać wartość przy mount
-      onResize();
-
-      return () => {
-        window.removeEventListener("resize", onResize);
-      };
-    }, [breakpoint]);
-
-    return isMobile;
-  }
-  const isMobile = useIsMobile(700);
-  const { scrollYProgress } = useScroll({
-    ...(isMobile ? { container: containerRef } : {}),
-    target: imageRef,
-    offset: ["start end", "start center"],
-  });
-
-  const blur = useTransform(scrollYProgress, [0, 1], [-0.5, 1]);
-  const perspective = useTransform(scrollYProgress, [0, 1], ["250px", "300px"]);
-  const rotateX = useTransform(scrollYProgress, [0, 1], ["20deg", "0deg"]);
+  const [isReady, setIsReady] = useState(false);
 
   const animationVariant = {
     hidden: {
@@ -68,12 +43,36 @@ export default function Home() {
     },
   };
 
+  const features = [
+    {
+      icon: <Network size={iconSize} />,
+      title: "Company Structure",
+      description:
+        "Assign users to departments and view structured invoice access.",
+    },
+    {
+      icon: <UserCog size={iconSize} />,
+      title: "Client Management",
+      description:
+        "Easily manage clients and assign them to specific invoices.",
+    },
+    {
+      icon: <CalendarClock size={iconSize} />,
+      title: "Smart Calendar",
+      description: "Stay on top of deadlines and payment dates.",
+    },
+    {
+      icon: <Newspaper size={iconSize} />,
+      title: "Invoice Tracking",
+      description: "Track and manage your invoices in real time.",
+    },
+  ];
+
   useEffect(() => {
-    const unsub = scrollYProgress.on("change", (v) => {
-      console.log(v);
-    });
-    return () => unsub();
-  }, [scrollYProgress]);
+    if (containerRef) {
+      setIsReady(true);
+    }
+  }, [containerRef]);
 
   return (
     <main className="home-page-wrapper" ref={containerRef}>
@@ -165,124 +164,178 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Features Section */}
-        <motion.section
-          className="features"
-          variants={animationVariant}
-          initial="hidden"
-          animate="visible"
-          transition={{ type: "spring", damping: 23, delay: 0.4 }}
-          viewport={{ once: true }}
-        >
-          <div className="container">
-            <h2 className="section-title">Key Features</h2>
-            <p className="section-subtitle">
-              Powerful tools to improve your invoicing process
-            </p>
-            <div className="features__grid">
-              <article className="feature-card">
-                <div className="feature-card__icon">
-                  <Newspaper size={iconSize} />
-                </div>
-                <h3 className="feature-card__title">Invoice Tracking</h3>
-                <p className="feature-card__text">
-                  Track and manage your invoices in real time.
-                </p>
-              </article>
-              <article className="feature-card">
-                <div className="feature-card__icon">
-                  <Network size={iconSize} />
-                </div>
-                <h3 className="feature-card__title">Company Structure</h3>
-                <p className="feature-card__text">
-                  Assign users to departments and view structured invoice
-                  access.
-                </p>
-              </article>
-              <article className="feature-card">
-                <div className="feature-card__icon">
-                  <UserCog size={iconSize} />
-                </div>
-                <h3 className="feature-card__title">Client Management</h3>
-                <p className="feature-card__text">
-                  Easily manage clients and assign them to specific invoices.
-                </p>
-              </article>
-              <article className="feature-card">
-                <div className="feature-card__icon">
-                  <CalendarClock size={iconSize} />
-                </div>
-                <h3 className="feature-card__title">Smart Calendar</h3>
-                <p className="feature-card__text">
-                  Stay on top of deadlines and payment dates.
-                </p>
-              </article>
-            </div>
-          </div>
-        </motion.section>
+        {/* Scrollable Content */}
+        {isReady && (
+          <>
+            {/* Features Section */}
 
-        {/* About Section */}
-        <motion.section
-          className="home-about"
-          variants={animationVariant}
-          initial="hidden"
-          animate="visible"
-          viewport={{ once: true }}
-          transition={{ type: "spring", damping: 23, delay: 0.8 }}
-        >
-          <div className="container about__content">
-            <div className="about__text">
-              <h2 className="section-title">
-                Built for teams, designed for control.
-              </h2>
-              <p className="about__description">
-                Invoxly gives your team full control over document flow across
-                units and departments. Designed for accountants, loved by
-                managers.
-              </p>
-            </div>
-            <motion.div
-              className="about__image"
-              style={{ perspective: perspective }}
+            <ScrollableContainer
+              isMobile={isMobile}
+              containerRef={containerRef}
             >
-              {/* Illustration placeholder */}
-              <motion.div
-                style={{ position: "absolute", width: "fit-content" }}
-                animate={{ x: ["-20vw", "-18vw"], y: ["10vh", "11vh"] }}
-                transition={{
-                  type: "spring",
-                  damping: 50,
-                  repeat: Infinity,
-                  repeatType: "mirror",
-                }}
-              >
-                <MousePointer2 />
-              </motion.div>
-              <motion.img
-                ref={imageRef}
-                style={{ opacity: blur, rotateX }}
-                src="/InvoiceRegistry/placeholder.png"
-                alt="Team collaboration illustration"
-              />
-            </motion.div>
+              <motion.section className="features" viewport={{ once: true }}>
+                <div className="container">
+                  <h2 className="section-title">Key Features</h2>
+                  <p className="section-subtitle">
+                    Powerful tools to improve your invoicing process
+                  </p>
+                  <div className="features__grid">
+                    {features.map((feature) => (
+                      <ScrollableContainer
+                        style={{ height: "100%" }}
+                        isMobile={isMobile}
+                        containerRef={containerRef}
+                      >
+                        <article className="feature-card">
+                          <div className="feature-card__icon">
+                            {feature.icon}
+                          </div>
+                          <h3 className="feature-card__title">
+                            {feature.title}
+                          </h3>
+                          <p className="feature-card__text">
+                            {feature.description}
+                          </p>
+                        </article>
+                      </ScrollableContainer>
+                    ))}
+                  </div>
+                </div>
+              </motion.section>
+            </ScrollableContainer>
 
-            <section className="cta">
-              <div className="container cta__content">
-                <h2 className="section-title">
-                  Ready to streamline your invoicing?
-                </h2>
-                <button
-                  onClick={() => {
-                    navigate("/auth");
-                  }}
-                  className="hero__btn--primary"
-                >
-                  Create your free account
-                </button>
-              </div>
-            </section>
-          </div>
-        </motion.section>
+            {/* About Section */}
+
+            <ScrollableContainer
+              isMobile={isMobile}
+              containerRef={containerRef}
+            >
+              <motion.section className="home-about">
+                <div className="container about__content">
+                  <div className="about__text">
+                    <h2 className="section-title">
+                      Built for teams, designed for control.
+                    </h2>
+                    <p className="about__description">
+                      Invoxly gives your team full control over document flow
+                      across units and departments. Designed for accountants,
+                      loved by managers.
+                    </p>
+                  </div>
+                  <motion.div className="about__image">
+                    {/* Illustration placeholder */}
+                    <motion.div
+                      style={{ position: "absolute", width: "fit-content" }}
+                      animate={{ x: ["-20vw", "-18vw"], y: ["10vh", "11vh"] }}
+                      transition={{
+                        type: "spring",
+                        damping: 50,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                      }}
+                    >
+                      <MousePointer2 />
+                    </motion.div>
+                    <motion.img
+                      src="/InvoiceRegistry/company.png"
+                      alt="Team collaboration illustration"
+                    />
+                  </motion.div>
+                </div>
+              </motion.section>
+            </ScrollableContainer>
+
+            {/* Document review section */}
+
+            <ScrollableContainer
+              isMobile={isMobile}
+              containerRef={containerRef}
+            >
+              <motion.section className="home-about">
+                <div className="container about__content">
+                  <div className="about__text">
+                    <h2 className="section-title">Powerful Document Review</h2>
+                    <p className="about__description">
+                      Browse and filter invoices in seconds, search by client
+                      name, invoice number or date range, and customize exactly
+                      which fields you want to see for a streamlined workflow.
+                    </p>
+                  </div>
+                  <motion.div className="about__image">
+                    {/* Illustration placeholder */}
+                    <motion.div
+                      style={{ position: "absolute", width: "fit-content" }}
+                      animate={{ x: ["-20vw", "-18vw"], y: ["10vh", "11vh"] }}
+                      transition={{
+                        type: "spring",
+                        damping: 50,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                      }}
+                    ></motion.div>
+                    <motion.img
+                      src="/InvoiceRegistry/documents.png"
+                      alt="Team collaboration illustration"
+                    />
+                  </motion.div>
+                </div>
+              </motion.section>
+            </ScrollableContainer>
+
+            {/* Document scan section */}
+
+            <ScrollableContainer
+              isMobile={isMobile}
+              containerRef={containerRef}
+            >
+              <motion.section className="home-about">
+                <div className="container about__content">
+                  <div className="about__text">
+                    <h2 className="section-title">
+                      Effortless Document Scanning
+                    </h2>
+                    <p className="about__description">
+                      Invoxly lets you quickly scan, upload, and organize your
+                      documents in just a few clicks, no extra hardware needed.
+                    </p>
+                  </div>
+                  <motion.div className="about__image">
+                    {/* Illustration placeholder */}
+                    <motion.div
+                      style={{ position: "absolute", width: "fit-content" }}
+                      animate={{ x: ["-20vw", "-18vw"], y: ["10vh", "11vh"] }}
+                      transition={{
+                        type: "spring",
+                        damping: 50,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                      }}
+                    ></motion.div>
+                    <motion.img
+                      src="/InvoiceRegistry/document-add.png"
+                      alt="Team collaboration illustration"
+                    />
+                  </motion.div>
+                  <section className="cta">
+                    <div className="container cta__content">
+                      <h2 className="section-title">
+                        Ready to streamline your invoicing?
+                      </h2>
+                      <button
+                        onClick={() => {
+                          navigate("/auth");
+                        }}
+                        className="hero__btn--primary"
+                      >
+                        Create your free account
+                      </button>
+                    </div>
+                  </section>
+                </div>
+              </motion.section>
+            </ScrollableContainer>
+          </>
+        )}
 
         {/* Footer */}
         <footer className="home-footer">

@@ -1,7 +1,7 @@
 // Frameworks
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "./contexts/UserContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Pages
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -20,6 +20,21 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 700);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   useEffect(() => {
     const stored = localStorage.getItem("token");
     if (stored) {
@@ -37,13 +52,13 @@ export default function App() {
     <div className="website">
       <Routes>
         <Route path="/auth" element={<Auth />} />
-        <Route path="/dashboard" element={<Dashboard />}>
+        <Route path="/dashboard" element={<Dashboard isMobile={isMobile} />}>
           <Route index element={<Documents />} />
           <Route path="documents" element={<Documents />} />
           <Route path="add-document" element={<AddDocument />} />
           <Route path="user" element={<User />} />
         </Route>
-        <Route path="*" element={<Home />} />
+        <Route path="*" element={<Home isMobile={isMobile} />} />
         <Route path="/test" element={<TEST />} />
       </Routes>
     </div>
