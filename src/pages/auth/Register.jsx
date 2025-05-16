@@ -1,10 +1,18 @@
+//Components
 import Input from "../../components/Input";
 import RenderInputs from "../../components/RenderInputs";
-import { LogIn } from "lucide-react";
-import { useEffect, useState } from "react";
+import MessagePopup from "../../components/MessagePopup";
+
+//Hooks
 import { useUser } from "../../contexts/UserContext";
-import { Lock, UserRound, Mail } from "lucide-react";
+
+//Icons
+import { LogIn, Lock, UserRound, Mail } from "lucide-react";
+
+//React
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+
 export default function Register({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
   const { register, authMessage, loading } = useUser();
@@ -133,15 +141,7 @@ export default function Register({ setAction }) {
         </div>
       </div>
 
-      <div
-        className="login-feedback"
-        style={{
-          "--info-color":
-            message.type == "error" ? "rgb(255, 128, 128)" : "rgb(4, 172, 32)",
-        }}
-      >
-        {message.message || ""}
-      </div>
+      <MessagePopup message={message} />
     </section>
   );
 }

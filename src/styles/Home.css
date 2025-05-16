@@ -215,7 +215,7 @@
   display: flex;
   position: relative;
   justify-content: center;
-  align-items: start;
+  align-items: center;
 }
 
 .about__image img {

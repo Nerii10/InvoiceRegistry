@@ -1,11 +1,18 @@
+//Components
 import Input from "../../components/Input";
 import RenderInputs from "../../components/RenderInputs";
-import { LogIn } from "lucide-react";
+import MessagePopup from "../../components/MessagePopup";
+
+//Hooks
+import { useUser } from "../../contexts/UserContext";
+
+//Icons
+import { LogIn, Lock, UserRound } from "lucide-react";
+
+//React
+import { motion } from "framer-motion";
 import { useGoogleLogin } from "@react-oauth/google";
 import { Children, useState } from "react";
-import { useUser } from "../../contexts/UserContext";
-import { Lock, UserRound } from "lucide-react";
-import { motion } from "framer-motion";
 
 function GoogleLoginButton() {
   const { loginGoogle } = useUser();
@@ -113,17 +120,7 @@ export default function Login({ setAction }) {
         </div>
       </div>
 
-      <div
-        className="login-feedback"
-        style={{
-          "--info-color":
-            authMessage.type == "error"
-              ? "rgb(255, 128, 128)"
-              : "rgb(4, 172, 32)",
-        }}
-      >
-        {authMessage.message || ""}
-      </div>
+      <MessagePopup message={authMessage} />
     </section>
   );
 }

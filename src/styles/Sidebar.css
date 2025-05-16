@@ -1,107 +1,106 @@
-.sidebar{
-    background-color: rgb(10, 29, 63);
-    color:white;
-    position: relative;
-    width: 200px;
-    flex-shrink: 0;
+.sidebar {
+  background-color: rgb(10, 29, 63);
+  color: white;
+  position: relative;
+  width: 200px;
+  flex-shrink: 0;
 }
 
-.sidebar-mobile-open{
-    background-color: rgb(10, 29, 63);
-    color:white;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: 20;
-    overflow: hidden;
-    transition: 0.2s ease-in-out;
-    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+.sidebar-mobile-open {
+  background-color: rgb(10, 29, 63);
+  color: white;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  overflow: hidden;
+  transition: 0.2s ease-in-out;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
 }
 
-.sidebar-mobile-closed{
-    background-color: rgb(10, 29, 63);
-    color:white;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    z-index: 20;
-    overflow: hidden;
-    flex-shrink: 0;
-    transition: 0.2s ease-in-out;
-    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+.sidebar-mobile-closed {
+  background-color: rgb(10, 29, 63);
+  color: white;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  z-index: 20;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: 0.2s ease-in-out;
+  clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
 }
 
-.sidebar-mobile-button{
-    bottom: 10%;
-    width: 50px;
-    color: black;
-    background-color: rgb(255, 255, 255);
-    border: 2px rgb(105, 105, 105) solid;
-    height: 50px;
-    z-index: 25;
-    left: -5px;
-    border-top-right-radius: 50%;
-    border-bottom-right-radius: 50%;
-    position: fixed;
+.sidebar-mobile-button {
+  bottom: 10%;
+  width: 60px;
+  color: black;
+  background-color: rgb(255, 255, 255);
+  border: 2px rgb(105, 105, 105) solid;
+  height: 60px;
+  z-index: 25;
+  left: -5px;
+  border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
+  position: fixed;
 }
 
-.sidebar-header{
-    width: 100%;
-    text-align: center;
-    height: 60px;
+.sidebar-header {
+  width: 100%;
+  text-align: center;
+  height: 60px;
 }
 
-.sidebar-navigation{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0px 15px;
+.sidebar-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0px 15px;
 }
 
-.sidebar-input{
-    color: white;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    font-size: 20px;
-    padding: 5px 10px;
-    border: 1px rgba(255, 255, 255, 0) solid;
-    box-sizing: border-box;
-    gap: 10px;
-    text-decoration: none;
-    transition: 0.2s ease;
+.sidebar-input {
+  color: white;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  font-size: 20px;
+  padding: 5px 10px;
+  border: 1px rgba(255, 255, 255, 0) solid;
+  box-sizing: border-box;
+  gap: 10px;
+  text-decoration: none;
+  transition: 0.2s ease;
 }
 
-.sidebar-input-active{
-    color: white;
-    display: flex;
-    justify-content: start;
-    background-color: rgba(255, 255, 255, 0.201);
-    border-radius: 10px;
-    border: 1px rgba(255, 255, 255, 0.184) solid;
-    padding: 5px 10px;
-    box-sizing: border-box;
-    align-items: center;
-    font-size: 20px;
-    gap: 10px;
-    text-decoration: none;
-    transition: 0.2s ease;
+.sidebar-input-active {
+  color: white;
+  display: flex;
+  justify-content: start;
+  background-color: rgba(255, 255, 255, 0.201);
+  border-radius: 10px;
+  border: 1px rgba(255, 255, 255, 0.184) solid;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  align-items: center;
+  font-size: 20px;
+  gap: 10px;
+  text-decoration: none;
+  transition: 0.2s ease;
 }
 
-.sidebar-footer{
-    position: absolute;
-    text-align: center;
-    padding: 10px 0px;
-    border-top: 1px rgb(255, 255, 255) solid;
-    background-color: rgba(163, 169, 255, 0.344);
-    width: 100%;
-    bottom: 0px;
+.sidebar-footer {
+  position: absolute;
+  text-align: center;
+  padding: 10px 0px;
+  border-top: 1px rgb(255, 255, 255) solid;
+  background-color: rgba(163, 169, 255, 0.344);
+  width: 100%;
+  bottom: 0px;
 }
 
-
-.sidebar-footer a{
-    color: white;
-    text-decoration: none;
+.sidebar-footer a {
+  color: white;
+  text-decoration: none;
 }
