@@ -34,9 +34,9 @@ export default function SlidingText({ inputs }) {
           alignItems: "center",
           perspective: "300px",
           width: width,
-          transition:'width 0.5s ease'
+          transition: "width 0.5s ease",
         }}
-        initial={{  height: "0px" }}
+        initial={{ height: "0px" }}
         animate={{ height: height }}
         transition={{ type: "spring", damping: 23 }}
       >
@@ -46,21 +46,24 @@ export default function SlidingText({ inputs }) {
             initial={{
               filter: "blur(10px)",
               opacity: 0,
-              y: -30,
-              rotateX: "30deg",
+              y: -15,
+              scale: 0.8,
+              rotateX: "90deg",
             }}
             animate={{
               filter: "blur(0px)",
               position: "absolute",
               opacity: 1,
+              scale: 1,
               rotateX: "0deg",
               y: 0,
             }}
             exit={{
               filter: "blur(10px)",
               opacity: -25,
-              y: 30,
-              rotateX: "-30deg",
+              y: 15,
+              rotateX: "-90deg",
+              scale: 0.8,
             }}
             transition={{ type: "spring", damping: 22 }}
             style={{
