@@ -4,7 +4,7 @@ import { LogIn } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { Lock, UserRound, Mail } from "lucide-react";
-
+import { motion } from "framer-motion";
 export default function Register({ setAction }) {
   const [userData, setUserData] = useState({ username: null, password: null });
   const { register, authMessage, loading } = useUser();

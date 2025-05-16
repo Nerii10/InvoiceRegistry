@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import "../../styles/Dashboard.css";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
-import { useEffect, useState } from "react";
 
 export default function Dashboard({ isMobile }) {
   return (

@@ -5,6 +5,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { Children, useState } from "react";
 import { useUser } from "../../contexts/UserContext";
 import { Lock, UserRound } from "lucide-react";
+import { motion } from "framer-motion";
 
 function GoogleLoginButton() {
   const { loginGoogle } = useUser();
@@ -86,8 +87,8 @@ export default function Login({ setAction }) {
 
       <RenderInputs
         form={true}
-        onSubmit={() =>login(userData)}
-        formStyle={{width:"100%"}}
+        onSubmit={() => login(userData)}
+        formStyle={{ width: "100%" }}
         className={"inputs"}
         data={loginInputs}
       />

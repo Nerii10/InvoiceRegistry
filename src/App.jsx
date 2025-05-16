@@ -14,6 +14,7 @@ import Home from "./pages/home/Home";
 // Styles
 import "./App.css";
 import TEST from "./pages/test";
+import { AnimatePresence } from "framer-motion";
 
 export default function App() {
   const { user } = useUser();
@@ -49,7 +50,7 @@ export default function App() {
   }, [location, user]);
 
   return (
-    <div className="website">
+    <div className="website" mode="sync">
       <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard isMobile={isMobile} />}>

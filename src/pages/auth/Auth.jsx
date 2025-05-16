@@ -2,13 +2,29 @@ import { useState } from "react";
 import "../../styles/Auth.css";
 import Login from "./Login";
 import Register from "./Register";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Auth() {
   const [action, setAction] = useState("login");
 
   return (
-    <section className="auth-wrapper">
-      {action == "login" ? <Login setAction={setAction}/> : <Register setAction={setAction}/>}
-    </section>
+    <motion.section className="auth-wrapper">
+      <AnimatePresence>
+        <motion.div
+          key={action}
+          style={{ position: "absolute" }}
+          initial={{ scale: 0, opacity: 0, filter: "blur(5px)" }}
+          animate={{ scale: 1, opacity: 1, filter: "blur(0px)" }}
+          exit={{ scale: 0, opacity: 0, filter: "blur(5px)" }}
+          transition={{ type: "spring", damping: 15 }}
+        >
+          {action == "login" ? (
+            <Login setAction={setAction} />
+          ) : (
+            <Register setAction={setAction} />
+          )}
+        </motion.div>
+      </AnimatePresence>
+    </motion.section>
   );
 }
