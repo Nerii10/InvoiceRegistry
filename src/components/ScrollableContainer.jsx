@@ -41,11 +41,11 @@ export default function ScrollableContainer({
 
   return (
     <motion.div
-      style={{ ...style, perspective: "500px", position: "relative" }}
+      style={{ ...style, flexShrink: 0, perspective: "500px", position: "relative" }}
       ref={contentRef}
     >
       <motion.div
-        style={{ flexShrink: 0, ...style, scale, rotateX, y, opacity }}
+        style={{ width:"100%", height:"100%", scale, rotateX, y, opacity }}
       >
         {children}
       </motion.div>
