@@ -161,6 +161,28 @@ input[type="date"].custom-input {
   color: rgb(255, 255, 255);
 }
 
+
+.custom-input.active2-button:disabled {
+  background-color: rgb(85, 117, 157);
+  border-color: rgb(81, 84, 129);
+  cursor:not-allowed;
+}
+
+.custom-input.active2-button {
+  border:none;
+  border-bottom:3px rgb(75, 129, 255) solid;
+  gap: 5px;
+  display: flex;
+  font-size: 13px;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 0px 10px;
+  overflow: hidden;
+  transition: 0.25s ease;
+}
+
 .custom-input-multiselect {
   box-sizing: border-box;
   width: var(--input-width, 100%);

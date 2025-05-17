@@ -35,6 +35,8 @@ export default function Documents() {
     "Status",
     "Amount",
   ];
+  const clientTableHeaders = ["Name", "Address", "NIP"];
+
   const navigate = useNavigate();
 
   // Hooks
@@ -48,22 +50,39 @@ export default function Documents() {
   });
 
   // Filters
-  const [filters, setFilters] = useState(() => {
+  const [invoiceFilters, setInvoiceFilters] = useState(() => {
     try {
-      const stored = localStorage.getItem("filters");
+      const stored = localStorage.getItem("invoiceFilters");
       return stored ? JSON.parse(stored) : invoiceTableHeaders;
     } catch {
       return invoiceTableHeaders;
     }
   });
 
+  const [clientFilters, setClientFilters] = useState(() => {
+    try {
+      const stored = localStorage.getItem("clientFilters");
+      return stored ? JSON.parse(stored) : clientFilters;
+    } catch {
+      return clientTableHeaders;
+    }
+  });
+
   useEffect(() => {
     try {
-      localStorage.setItem("filters", JSON.stringify(filters));
+      localStorage.setItem("invoiceFilters", JSON.stringify(invoiceFilters));
     } catch {
       console.warn("Nie udało się zapisać ustawień filtrów");
     }
-  }, [filters]);
+  }, [invoiceFilters]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("clientFilters", JSON.stringify(clientFilters));
+    } catch {
+      console.warn("Nie udało się zapisać ustawień filtrów");
+    }
+  }, [clientFilters]);
 
   // PageOptions
   useEffect(() => {
@@ -87,16 +106,6 @@ export default function Documents() {
       fetchDocs();
     }
   }, [token, documentType, currentPage]);
-
-  const buttonVariants = {
-    initial: { scale: 1, opacity: 1 },
-    hover: { scale: 1.1, transition: { duration: 0.15 } },
-    tap: { scale: 0.95 },
-    active: {
-      backgroundColor: "var(--activeButtonBg, #4ade80)",
-      color: "var(--activeButtonColor, #065f46)",
-    },
-  };
 
   return (
     <DashboardPageWrapper maxWidth={"1250px"}>
@@ -172,12 +181,18 @@ export default function Documents() {
           </Input>
           <Input
             width="50px"
-            setValue={setFilters}
-            value={filters}
+            setValue={
+              documentType == "invoices" ? setInvoiceFilters : setClientFilters
+            }
+            value={documentType == "invoices" ? invoiceFilters : clientFilters}
             height="30px"
             borderRadius="10px"
             type="multiselect"
-            options={invoiceTableHeaders}
+            options={
+              documentType == "invoices"
+                ? invoiceTableHeaders
+                : clientTableHeaders
+            }
           ></Input>
         </section>
       </section>
@@ -234,7 +249,7 @@ export default function Documents() {
           data={data}
           documentType={documentType}
           loading={loading}
-          filters={filters}
+          filters={documentType == "invoices" ? invoiceFilters : clientFilters}
           total={data.total}
         />
       </section>

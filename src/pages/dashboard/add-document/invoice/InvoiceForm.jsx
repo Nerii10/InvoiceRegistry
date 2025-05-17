@@ -3,11 +3,7 @@ import Input from "../../../../components/Input";
 import { Upload, Plus } from "lucide-react";
 import RenderInputs from "../../../../components/RenderInputs";
 
-export default function InvoiceForm({
-  ocrData,
-  setInvoiceData,
-  companyData,
-}) {
+export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   const today = new Date().toISOString().split("T")[0];
 
   //Invoice data
@@ -104,7 +100,7 @@ export default function InvoiceForm({
       {
         type: "text",
         label: "Company Address",
-        value: companyData?.me?.companyAddress|| "No company Address",
+        value: companyData?.me?.companyAddress || "No company Address",
         width: "100%",
         borderRadius: borderRadius,
       },

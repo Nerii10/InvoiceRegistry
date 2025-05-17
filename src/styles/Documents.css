@@ -41,23 +41,6 @@
   width: 100%;
 }
 
-
-
-.documents-display::-webkit-scrollbar {
-  height: 20px;
-  width: 50px;
-}
-
-.documents-display::-webkit-scrollbar-thumb {
-  background-color: #1b1b1b11; 
-  border-radius: 0px;
-  border: 2px rgba(0, 0, 0, 0.557) dashed;
-}
-
-.documents-display::-webkit-scrollbar-thumb:hover {
-  border: 2px rgb(55, 164, 247) dashed;
-}
-
 .documents-display-table {
   width: 100%;
   -webkit-overflow-scrolling: touch; 

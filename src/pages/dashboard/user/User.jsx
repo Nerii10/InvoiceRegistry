@@ -5,12 +5,9 @@ import CompanyCreate from "./CompanyCreate.jsx";
 import CompanyPanel from "./CompanyPanel.jsx";
 import { useCompany } from "../../../contexts/CompanyContext.jsx";
 import MessagePopup from "../../../components/MessagePopup.jsx";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Input from "../../../components/Input.jsx";
-
-
-
 
 export default function User() {
   const {
@@ -28,14 +25,14 @@ export default function User() {
   return (
     <>
       <MessagePopup message={message} loading={loading} />
-      
+
       <AnimatePresence mode="wait">
         {showExitPopup && (
           <motion.div
             className="exit-popup-wrapper"
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1, pointerEvents:'all' }}
-            exit={{ opacity: 0, pointerEvents:'none' }}
+            animate={{ opacity: 1, pointerEvents: "all" }}
+            exit={{ opacity: 0, pointerEvents: "none" }}
             transition={{
               delay: showExitPopup ? 0 : 2,
               type: "tween",
@@ -74,7 +71,7 @@ export default function User() {
                   ? "Are you sure you want to delete the organization? This action will permanently remove all invoices and data associated with your company."
                   : "Are you sure you want to leave the organization? You will lose access to all units and invoices associated with this company."}
               </p>
-              <hr style={{width:"90%", border:"1px gray dashed"}}></hr>
+              <hr style={{ width: "90%", border: "1px gray dashed" }}></hr>
               <div className="exit-poput-buttons">
                 <Input
                   onClick={() => {

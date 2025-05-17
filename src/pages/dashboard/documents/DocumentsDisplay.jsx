@@ -36,7 +36,6 @@ export default function DocumentsDisplay({
   total,
 }) {
   const [filters, setFilters] = useState(initialFilters);
-
   useEffect(() => {
     setFilters(initialFilters);
   }, [initialFilters]);
@@ -120,6 +119,8 @@ export default function DocumentsDisplay({
                   })}
                 </motion.tr>
               ))}
+
+            
             </tbody>
           </>
         )}
@@ -154,13 +155,13 @@ export default function DocumentsDisplay({
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {
-                      case "Client":
+                      case "Name":
                         cell = client.name;
                         break;
                       case "Address":
                         cell = client.address;
                         break;
-                      case "Nip":
+                      case "NIP":
                         cell = client.nip;
                         break;
                       default:
@@ -181,7 +182,9 @@ export default function DocumentsDisplay({
 
       {loading && <p className="empty-row">e</p>}
 
-      <p className="no-results">{!loading ? total === 0 && "No results" : ""}</p>
+      <p className="no-results">
+        {!loading ? total === 0 && "No results" : ""}
+      </p>
     </>
   );
 }

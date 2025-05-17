@@ -11,6 +11,7 @@ export default function Input(props) {
     onClick,
     children,
     active,
+    activeStyle,
     label,
     width = "100%",
     maxWidth = "100%",
@@ -93,7 +94,13 @@ export default function Input(props) {
       <button
         type={type}
         className={
-          active ? "custom-input active-button" : "custom-input button"
+          activeStyle != 1
+            ? active
+              ? "custom-input active-button"
+              : "custom-input button"
+            : active
+            ? "custom-input active2-button"
+            : "custom-input button"
         }
         disabled={disabled}
         onClick={onClick}

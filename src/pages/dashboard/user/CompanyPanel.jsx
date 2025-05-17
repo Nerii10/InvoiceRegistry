@@ -1,10 +1,9 @@
-import { Children, useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "../../../components/Input";
 import Tree from "../../../components/Tree";
 import "../../../styles/User.css";
 
-import { X } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import RenderInputs from "../../../components/RenderInputs";
 export default function CompanyPanel({
   company,
@@ -50,8 +49,7 @@ export default function CompanyPanel({
         </Input>
       </section>
 
-      {/* TO MA BYC KOMPONENT - Company unit manager */}
-      {/* Admin i user */}
+      {/* Admin / Owner */}
       {(company?.me?.userType == "admin" ||
         company?.me?.userType == "owner") && (
         <section>
@@ -62,10 +60,11 @@ export default function CompanyPanel({
             <Input
               active={selectedAction == "New"}
               height="30px"
+              activeStyle="1"
               type="button"
               borderRadius="0px"
-              width="50%"
               borderStyle="none"
+              width="50%"
               onClick={() => {
                 setSelectedAction("New");
               }}
@@ -75,6 +74,7 @@ export default function CompanyPanel({
             <Input
               active={selectedAction == "Move"}
               height="30px"
+              activeStyle="1"
               type="button"
               borderRadius="0px"
               width="50%"
@@ -91,6 +91,7 @@ export default function CompanyPanel({
               <Input
                 active={selectedAction == "Remove"}
                 height="30px"
+              activeStyle="1"
                 type="button"
                 borderRadius="0px"
                 width="50%"
