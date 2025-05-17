@@ -16,6 +16,7 @@ export default function User() {
     message,
     newUnit,
     moveUnit,
+    promoteUnit,
     removeUnit,
     leaveCompany,
   } = useCompany();
@@ -126,6 +127,7 @@ export default function User() {
             moveUnit={moveUnit}
             loading={loading}
             removeUnit={removeUnit}
+            promoteUnit={promoteUnit}
             setShowExitPopup={setShowExitPopup}
             leaveCompany={leaveCompany}
           ></CompanyPanel>

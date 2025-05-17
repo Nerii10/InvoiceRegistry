@@ -23,6 +23,7 @@
   width: 100%;
   scrollbar-width: none;
   height: 100dvh;
+  gap: 10px;
   overflow: auto;
   padding: 15px;
   box-sizing: border-box;

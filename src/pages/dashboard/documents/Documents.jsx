@@ -10,7 +10,13 @@ import Input from "../../../components/Input";
 import DashboardPageWrapper from "../DashboardPageWrapper";
 
 //Icons
-import { LayoutPanelTop, AlignJustify, Plus, Link } from "lucide-react";
+import {
+  LayoutPanelTop,
+  AlignJustify,
+  Plus,
+  Link,
+  EllipsisVertical,
+} from "lucide-react";
 
 //Hooks
 import { useDocuments } from "../../../hooks/useDocuments";
@@ -114,7 +120,7 @@ export default function Documents() {
         <section className="documents-controls-left">
           <Input
             type="select"
-            width="30px"
+            width="auto"
             height="30px"
             value={currentPage}
             disabled={loading}
@@ -152,7 +158,9 @@ export default function Documents() {
           >
             <LayoutPanelTop size={iconSize} />
           </Input>
-          <p style={{ margin: 0 }}>-</p>
+          <p style={{ margin: 0, width:'0px', display:'flex', justifyContent:'center' }}>
+            <EllipsisVertical style={{flexShrink:0}} size={15} stroke="gray"/>
+          </p>
           <Input
             type="button"
             disabled={loading}
@@ -222,7 +230,8 @@ export default function Documents() {
             type="text"
             width="100%"
             value={search}
-            label={"..."}
+            activeTextHidden={true}
+            label={"Aa"}
             setValue={(e) => {
               setSearch(e);
             }}

@@ -10,6 +10,7 @@ export default function CompanyPanel({
   newUnit,
   moveUnit,
   removeUnit,
+  promoteUnit,
   setShowExitPopup,
   loading,
 }) {
@@ -18,6 +19,7 @@ export default function CompanyPanel({
   const [selectedUserData, setSelectedUserData] = useState({
     user: null,
     unit: null,
+    type: null,
   });
   const [selectedUnitData, setSelectedUnitData] = useState();
   const [newUnitData, setNewUnitData] = useState({ name: null, parent: null });
@@ -88,20 +90,37 @@ export default function CompanyPanel({
 
             {/* Tylko owner */}
             {company?.me?.userType == "owner" && (
-              <Input
-                active={selectedAction == "Remove"}
-                height="30px"
-              activeStyle="1"
-                type="button"
-                borderRadius="0px"
-                width="50%"
-                borderStyle="none"
-                onClick={() => {
-                  setSelectedAction("Remove");
-                }}
-              >
-                Remove
-              </Input>
+              <>
+                <Input
+                  active={selectedAction == "Remove"}
+                  height="30px"
+                  activeStyle="1"
+                  type="button"
+                  borderRadius="0px"
+                  width="50%"
+                  borderStyle="none"
+                  onClick={() => {
+                    setSelectedAction("Remove");
+                  }}
+                >
+                  Remove
+                </Input>
+
+                <Input
+                  active={selectedAction == "Promote"}
+                  height="30px"
+                  activeStyle="1"
+                  type="button"
+                  borderRadius="0px"
+                  width="50%"
+                  borderStyle="none"
+                  onClick={() => {
+                    setSelectedAction("Promote");
+                  }}
+                >
+                  Promote
+                </Input>
+              </>
             )}
           </section>
 
@@ -122,6 +141,7 @@ export default function CompanyPanel({
                       borderRadius: "0px",
                       label: "New Unit Name",
                       required: true,
+                      activeTextHidden: true,
                       borderStyle: "none",
                       value: newUnitData.name,
                     },
@@ -278,6 +298,67 @@ export default function CompanyPanel({
                       width: "100%",
                       borderStyle: "none",
                       children: "Remove",
+                    },
+                  ],
+                ]}
+                className={"add-document-inputrender-container"}
+              />
+            </div>
+          )}
+
+          {selectedAction == "Promote" && (
+            <div>
+              <RenderInputs
+                form={true}
+                onSubmit={() => {
+                  promoteUnit({ selectedUserData });
+                }}
+                data={[
+                  [
+                    {
+                      type: "select",
+                      setValue: (e) => {
+                        setSelectedUserData((prev) => ({ ...prev, user: e }));
+                      },
+                      borderRadius: "0px",
+                      options: [
+                        ...(accessedUsers?.map((user) => ({
+                          value: user.user_id,
+                          label: user.name,
+                        })) || []),
+                      ],
+                      label: "Select User",
+                      required: true,
+                      customStyle: {
+                        border: "none",
+                        borderLeft: "1px var(--borderColor) solid",
+                      },
+                      value: selectedUserData.user,
+                    },
+                    {
+                      type: "select",
+                      setValue: (e) => {
+                        setSelectedUserData((prev) => ({ ...prev, type: e }));
+                      },
+                      borderRadius: "0px",
+                      options: [{ value: "user" }, { value: "admin" }],
+                      label: "New Role",
+                      required: true,
+                      customStyle: {
+                        border: "none",
+                        borderLeft: "1px var(--borderColor) solid",
+                      },
+                      value: selectedUserData.type,
+                    },
+                  ],
+                  [
+                    {
+                      type: "submit",
+                      borderRadius: "0px",
+                      disabled: loading,
+                      width: "100%",
+                      borderStyle: "none",
+                      children: "Promote",
                     },
                   ],
                 ]}

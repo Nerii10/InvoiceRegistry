@@ -16,22 +16,26 @@ import { useUser } from "../../../contexts/UserContext";
 import { useCompany } from "../../../contexts/CompanyContext.jsx";
 import InvoiceForm from "./invoice/InvoiceForm.jsx";
 import RenderInputs from "../../../components/RenderInputs.jsx";
+import Input from "../../../components/Input.jsx";
+import ClientForm from "./client/clientForm.jsx";
 
 export default function AddDocument() {
   //States
   const [currentFile, setCurrentFile] = useState(null);
+  const [documentType, setDocumentType] = useState("Invoice");
   const [invoiceData, setInvoiceData] = useState(null);
+  const [clientData, setClientData] = useState(null);
   const [fileURL, setFileURL] = useState(null);
 
   //Hooks
   const { token, user } = useUser();
-  const { createDocument, message, loading } = useCreateDocument({
+  const { createDocument, addClient, message, loading } = useCreateDocument({
     token: token,
   });
   const { data: companyData, loading: companyLoading } = useCompany();
   const { ocrFile, data, loading: ocrLoading } = useOcr({ token });
   const Company = companyData ? true : companyLoading ? null : false;
-  
+
   const addDocumentSections = [
     <DashboardPageWrapper maxWidth={"1250px"}>
       <Loader
@@ -45,21 +49,47 @@ export default function AddDocument() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          createDocument({ invoiceData });
+          documentType == "Invoice"
+            ? createDocument({ invoiceData })
+            : addClient({ clientData });
         }}
       >
         {/* Header */}
         <section className="add-document-header">
           <p>Add Document</p>
+          <Input
+            type={"select"}
+            required={true}
+            width={"150px"}
+            borderRadius="10px"
+            label="Document Type"
+            value={documentType}
+            setValue={(e) => {
+              setDocumentType(e);
+            }}
+            options={[{ value: "Invoice" }, { value: "Client" }]}
+          />
         </section>
 
         {/* Form */}
-        <InvoiceForm
-          user={user}
-          ocrData={data}
-          companyData={companyData}
-          setInvoiceData={setInvoiceData}
-        ></InvoiceForm>
+        {documentType == "Invoice" ? (
+          <InvoiceForm
+            user={user}
+            ocrData={data}
+            companyData={companyData}
+            setInvoiceData={setInvoiceData}
+          ></InvoiceForm>
+        ) : documentType == "Client" ? (
+          <ClientForm
+            setClientData={setClientData}
+            clientData={clientData}
+            ocrData={data}
+          />
+        ) : (
+          <section className="add-document-content-wrapper">
+            <p>Select document type to continue</p>
+          </section>
+        )}
 
         {/* Controls */}
         <RenderInputs

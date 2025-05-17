@@ -36,8 +36,14 @@ export function CompanyProvider({ children }) {
 
       if (url != "/myCompany") {
         const successMsg = responseData.message || "Operation successful";
-        setMessage({ message: successMsg, type: responseData.type || "message" });
-        console.log({ message: successMsg, type: responseData.type || "message" });
+        setMessage({
+          message: successMsg,
+          type: responseData.type || "message",
+        });
+        console.log({
+          message: successMsg,
+          type: responseData.type || "message",
+        });
       }
 
       return { ok: true, data: responseData };
@@ -88,6 +94,15 @@ export function CompanyProvider({ children }) {
     if (ok) await fetchCompanyData();
   };
 
+  const promoteUnit = async (unitData) => {
+    const { ok } = await callApi({
+      url: "/unit/promote",
+      method: "PATCH",
+      body: unitData,
+    });
+    if (ok) await fetchCompanyData();
+  };
+
   const leaveCompany = async (data) => {
     const { ok } = await callApi({
       url: "/unit/leave",
@@ -96,6 +111,8 @@ export function CompanyProvider({ children }) {
     });
     if (ok) await fetchCompanyData();
   };
+
+  
 
   useEffect(() => {
     fetchCompanyData();
@@ -112,6 +129,7 @@ export function CompanyProvider({ children }) {
         newUnit,
         moveUnit,
         removeUnit,
+        promoteUnit,
         leaveCompany,
       }}
     >

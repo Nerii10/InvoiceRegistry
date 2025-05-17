@@ -37,6 +37,7 @@
 }
 .documents-display {
   overflow-x: auto;
+  scrollbar-width: none;
   overflow-y: hidden;
   width: 100%;
 }

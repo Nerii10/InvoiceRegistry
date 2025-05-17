@@ -47,6 +47,7 @@ export default function Login({ setAction }) {
       {
         type: "text",
         required: true,
+        activeTextHidden:true,
         customStyle: { textAlign: "center" },
         label: (
           <>
@@ -62,6 +63,7 @@ export default function Login({ setAction }) {
         type: "password",
         customStyle: { textAlign: "center" },
         required: true,
+        activeTextHidden:true,
         label: (
           <>
             <Lock /> Password

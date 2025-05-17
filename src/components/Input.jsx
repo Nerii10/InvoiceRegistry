@@ -22,6 +22,7 @@ export default function Input(props) {
     required = false,
     borderSide,
     customStyle,
+    activeTextHidden = false,
     disabled,
   } = props;
 
@@ -131,7 +132,6 @@ export default function Input(props) {
           ? {
               position: "absolute",
               right: "50px",
-              opacity: 0,
               transition: "0.25s ease",
             }
           : {
@@ -154,7 +154,18 @@ export default function Input(props) {
         {inputElement}
         <p
           className={value ? "custom-input-text-active" : "custom-input-text"}
-          style={labelStyle}
+          style={{
+            ...labelStyle,
+            ...(activeTextHidden
+              ? {
+                  "--custom-active-opacity": 0,
+                  "--custom-active-transform": " translateX(60px)",
+                }
+              : {
+                  "--custom-active-opacity": 0.3,
+                  "--custom-active-transform": "translateY(-25px)",
+                }),
+          }}
         >
           {label}
         </p>

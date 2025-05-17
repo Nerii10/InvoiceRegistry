@@ -63,5 +63,39 @@ export function useCreateDocument({ token }) {
     }
   }
 
-  return { createDocument, data, message, setMessage, loading };
+  async function addClient(client) {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_URL}/clients/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(client),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        let responseMessage = "Failed to create client.";
+
+        throw new Error(responseMessage);
+      }
+
+      setMessage({ message: "Successfully added client", type: "message" });
+      setTimeout(() => {
+        setData(responseData);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setTimeout(() => {
+        setLoading(false);
+        setMessage({ message: err.message, type: "error" });
+      }, 1000);
+    }
+  }
+
+  return { createDocument, addClient, setMessage, data, message, loading };
 }

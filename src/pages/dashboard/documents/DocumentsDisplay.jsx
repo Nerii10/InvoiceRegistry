@@ -119,8 +119,6 @@ export default function DocumentsDisplay({
                   })}
                 </motion.tr>
               ))}
-
-            
             </tbody>
           </>
         )}
@@ -151,7 +149,7 @@ export default function DocumentsDisplay({
 
             <tbody>
               {data?.clients?.map((client, idx) => (
-                <motion.tr key={idx} layout whileHover={{ scale: 1.01 }}>
+                <motion.tr key={idx} layout>
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {

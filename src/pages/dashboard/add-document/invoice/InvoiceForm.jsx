@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Input from "../../../../components/Input";
-import { Upload, Plus } from "lucide-react";
+import { Upload, Plus, X } from "lucide-react";
 import RenderInputs from "../../../../components/RenderInputs";
 
 export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
@@ -156,44 +156,48 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
                 className="add-document-input-container"
                 style={{ padding: "0px 15%" }}
               >
-                <Input
-                  type="text"
-                  width="100%"
-                  label="Service"
-                  value={service.name}
-                  setValue={(val) => {
-                    const updated = [...services];
-                    updated[index].name = val;
-                    setServices(updated);
-                  }}
-                  borderRadius="10px"
+                <RenderInputs
+                  className="add-document-input-container"
+                  data={[
+                    [
+                      {
+                        type: "text",
+                        width: "100%",
+                        label: "Service",
+                        value: service.name,
+                        setValue: (val) => {
+                          const updated = [...services];
+                          updated[index].name = val;
+                          setServices(updated);
+                        },
+                        borderRadius: "10px",
+                      },
+                      {
+                        type: "text",
+                        width: "100%",
+                        label: "Price",
+                        value: service.price,
+                        setValue: (val) => {
+                          const updated = [...services];
+                          updated[index].price = val;
+                          setServices(updated);
+                        },
+                        borderRadius: "10px",
+                      },
+                      {
+                        type: "button",
+                        width: "20%",
+                        borderRadius: "10px",
+                        onClick: () => {
+                          const updated = [...services];
+                          updated.splice(index, 1);
+                          setServices(updated);
+                        },
+                        children: <X size={20} />,
+                      },
+                    ],
+                  ]}
                 />
-
-                <Input
-                  type="text"
-                  width="100%"
-                  label="Price"
-                  value={service.price}
-                  setValue={(val) => {
-                    const updated = [...services];
-                    updated[index].price = val;
-                    setServices(updated);
-                  }}
-                  borderRadius="10px"
-                />
-
-                <Input
-                  type="button"
-                  width="20%"
-                  borderRadius="10px"
-                  onClick={() => {
-                    const updated = [...services];
-                    updated.splice(index, 1);
-                    setServices(updated);
-                  }}
-                >
-                  -
-                </Input>
               </div>
             );
           })}

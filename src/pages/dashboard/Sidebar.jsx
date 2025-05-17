@@ -1,99 +1,104 @@
 import "../../styles/Sidebar.css";
-import { File, Upload, UserCircle, Settings } from "lucide-react";
-import { useEffect, useState } from "react";
+import {
+  File,
+  Upload,
+  UserCircle,
+  Home,
+  ChevronRight,
+  ChevronLeft,
+} from "lucide-react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronRight, ChevronLeft } from "lucide-react";
-export default function Sidebar({ style }) {
 
-  const location = useLocation();
-  const [currentPath, setcurrentPath] = useState("documents");
-  const [windowOpen, setWindowOpen] = useState(false);
+const SIDEBAR_ITEMS = [
+  {
+    to: "/dashboard/documents",
+    icon: File,
+    label: "Documents",
+    path: "documents",
+  },
+  {
+    to: "/dashboard/add-document",
+    icon: Upload,
+    label: "New",
+    path: "add-document",
+  },
+  { to: "/dashboard/user", icon: UserCircle, label: "User", path: "user" },
+  { to: "/dashboard/settings", icon: Home, label: "Home", path: "settings" },
+];
+
+export default function Sidebar({ style = "desktop" }) {
+  const { pathname } = useLocation();
+  const [currentPath, setCurrentPath] = useState(() =>
+    getPathFromUrl(pathname)
+  );
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // console.log(location.pathname.split('/')[2])
-    setcurrentPath(location.pathname.split("/")[2]);
-    setWindowOpen(false)
-  }, [location]);
+    setCurrentPath(getPathFromUrl(pathname));
+    setIsOpen(false);
+  }, [pathname]);
+
+  const toggleOpen = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
+  // Wyrenderuj listę linków
+  const links = useMemo(
+    () =>
+      SIDEBAR_ITEMS.map(({ to, icon: Icon, label, path }) => (
+        <Link
+          key={path}
+          to={to}
+          className={`sidebar-input${currentPath === path ? "-active" : ""}`}
+        >
+          <Icon stroke="white" />
+          <span>{label}</span>
+        </Link>
+      )),
+    [currentPath]
+  );
+
+  const sidebarClass = useMemo(() => {
+    if (style === "desktop") return "sidebar";
+    return isOpen ? "sidebar-mobile-open" : "sidebar-mobile-closed";
+  }, [style, isOpen]);
 
   return (
     <>
-      {style == "mobile" && (
+      {style === "mobile" && (
         <button
           className="sidebar-mobile-button"
-          onClick={() => {
-            setWindowOpen((o) => !o);
-          }}
+          onClick={toggleOpen}
+          aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
         >
-          {windowOpen ? <ChevronLeft /> : <ChevronRight />}
+          {isOpen ? <ChevronLeft /> : <ChevronRight />}
         </button>
       )}
-      <aside
-        className={
-          style == "desktop"
-            ? "sidebar"
-            : style == "mobile" && windowOpen
-            ? "sidebar-mobile-open"
-            : "sidebar-mobile-closed"
-        }
-      >
-        <section className="sidebar-header">
-          <h1>Dashboard</h1>
-        </section>
+      <aside className={sidebarClass}>
+        <header className="sidebar-header">
+          <h3 className="sidebar-title">Dashboard</h3>
+        </header>
 
-        <nav className="sidebar-navigation">
-          <Link
-            to={"/dashboard/documents"}
-            className={
-              currentPath == "documents"
-                ? "sidebar-input-active"
-                : "sidebar-input"
-            }
+        <nav className="sidebar-navigation">{links}</nav>
+
+        <footer className="sidebar-footer">
+          <a
+            href="https://nerii.pl"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sidebar-footer-link"
           >
-            <File stroke="white" />
-            Documents
-          </Link>
-
-          <Link
-            to={"/dashboard/add-document"}
-            className={
-              currentPath == "add-document"
-                ? "sidebar-input-active"
-                : "sidebar-input"
-            }
-          >
-            <Upload stroke="white" />
-            New
-          </Link>
-
-          <Link
-            to={"/dashboard/user"}
-            className={
-              currentPath == "user" ? "sidebar-input-active" : "sidebar-input"
-            }
-          >
-            <UserCircle stroke="white" />
-            User
-          </Link>
-
-          <Link
-            to={"/dashboard/settings"}
-            className={
-              currentPath == "settings"
-                ? "sidebar-input-active"
-                : "sidebar-input"
-            }
-          >
-            <Settings stroke="white" />
-            Settings
-          </Link>
-        </nav>
-
-        <section className="sidebar-footer">
-          <a href="https://nerii.pl" target="_blank" rel="noopener noreferrer">
             &copy; 2025 nerii
           </a>
-        </section>
+        </footer>
       </aside>
     </>
   );
+}
+
+// Pomocnicza funkcja wydobywająca segment ścieżki
+function getPathFromUrl(pathname) {
+  const segments = pathname.split("/").filter(Boolean);
+  return segments[1] || "documents";
 }

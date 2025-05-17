@@ -25,6 +25,7 @@ export default function Register({ setAction }) {
   const loginInputs = [
     [
       {
+        activeTextHidden:true,
         type: "text",
         required: true,
         customStyle: { textAlign: "center" },
@@ -42,6 +43,7 @@ export default function Register({ setAction }) {
         type: "password",
         required: true,
         customStyle: { textAlign: "center" },
+        activeTextHidden:true,
         label: (
           <>
             <Lock /> Password
@@ -56,6 +58,7 @@ export default function Register({ setAction }) {
         type: "password",
         required: true,
         customStyle: { textAlign: "center" },
+        activeTextHidden:true,
         label: (
           <>
             <Lock /> Confirm Password
@@ -68,6 +71,7 @@ export default function Register({ setAction }) {
       },
       {
         type: "email",
+        activeTextHidden:true,
         required: true,
         customStyle: { textAlign: "center" },
         label: (
@@ -85,6 +89,7 @@ export default function Register({ setAction }) {
         customStyle: { textAlign: "center" },
         className: "auth-button-submit",
         active: true,
+        activeTextHidden:true,
         disabled: loading,
         children: (
           <>

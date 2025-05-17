@@ -6,10 +6,10 @@ export default function RenderInputs({
   formClassName = "",
   className = "",
   onSubmit,
-  formStyle,
+  style,
 }) {
   const content = data.map((section, sectionIndex) => (
-    <div className={className} key={sectionIndex}>
+    <div className={className} key={sectionIndex} style={style}>
       {section.map((input, inputIndex) => (
         <Input key={input.key || `${sectionIndex}-${inputIndex}`} {...input} />
       ))}
@@ -19,7 +19,7 @@ export default function RenderInputs({
   if (form) {
     return (
       <form
-        style={formStyle}
+        style={style}
         onSubmit={(e) => {
           e.preventDefault();
           onSubmit?.();

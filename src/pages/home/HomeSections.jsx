@@ -50,19 +50,22 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
       id: "teams",
       img: "/InvoiceRegistry/company.png",
       title: "Built for teams, designed for control.",
-      description: `Invoxly gives your team full control…`,
+      description:
+        "Invoxly gives your entire team granular access control, ensuring that each member sees exactly what they need—nothing more, nothing less.",
     },
     {
       id: "review",
       img: "/InvoiceRegistry/documents.png",
       title: "Powerful Document Review",
-      description: `Browse and filter invoices…`,
+      description:
+        "Browse, filter and annotate invoices in seconds. Smart search and tagging make finding any document effortless.",
     },
     {
       id: "scanning",
       img: "/InvoiceRegistry/document-add.png",
       title: "Effortless Document Scanning",
-      description: `Invoxly lets you quickly scan…`,
+      description:
+        "Scan invoices straight from your phone or desktop. Our OCR instantly captures key data and syncs it to your dashboard.",
     },
   ].map((section) => {
     // dla każdej sekcji dorzuć losowe przesunięcia
@@ -201,7 +204,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
               {features.map((feature, index) => (
                 <ScrollableContainer
                   key={index}
-                  style={{position:"relative"}}
+                  style={{ position: "relative" }}
                   isMobile={isMobile}
                   containerRef={containerRef}
                 >
@@ -283,7 +286,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
       {sections.map((section, index) => {
         return section.scrollable == true ? (
           <ScrollableContainer
-            style={{width:"100%"}}
+            style={{ width: "100%" }}
             isMobile={isMobile}
             key={index}
             containerRef={containerRef}
