@@ -201,7 +201,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
               {features.map((feature, index) => (
                 <ScrollableContainer
                   key={index}
-                  style={{ height: "100%" }}
+                  style={{position:"relative"}}
                   isMobile={isMobile}
                   containerRef={containerRef}
                 >
