@@ -191,7 +191,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
     //Features
     {
       section: (
-        <motion.section className="features">
+        <motion.section className="features" viewport={{ once: true }}>
           <div className="container">
             <h2 className="section-title">Key Features</h2>
             <p className="section-subtitle">
@@ -201,7 +201,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
               {features.map((feature, index) => (
                 <ScrollableContainer
                   key={index}
-                  style={{ position: "relative"}}
+                  style={{ height: "100%" }}
                   isMobile={isMobile}
                   containerRef={containerRef}
                 >
@@ -283,7 +283,7 @@ export const HomeSections = ({ isMobile, containerRef, token }) => {
       {sections.map((section, index) => {
         return section.scrollable == true ? (
           <ScrollableContainer
-            style={{ width: "100%" }}
+            style={{width:"100%"}}
             isMobile={isMobile}
             key={index}
             containerRef={containerRef}

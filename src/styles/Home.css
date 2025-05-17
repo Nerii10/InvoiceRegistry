@@ -15,7 +15,6 @@
   align-items: center;
   flex-direction: column;
   gap: 100px;
-  perspective: 500px;
 }
 
 .home-page-navbar {
@@ -79,6 +78,8 @@
   color: transparent;
   margin: 0;
 }
+
+
 
 .hero__text {
   display: flex;
@@ -146,7 +147,6 @@
 
 .feature-card {
   width: 200px;
-  height: 100%;
   border: 1px rgba(156, 156, 156, 0.527) solid;
   border-radius: 20px;
   flex-shrink: 0;
@@ -154,7 +154,6 @@
   flex-direction: column;
   text-align: center;
   padding: 20px 10px;
-  box-sizing: border-box;
   justify-content: start;
   align-items: center;
 }
@@ -295,7 +294,6 @@
 
   .feature-card {
     width: 180px;
-    height: 100%;
     border: 1px rgba(156, 156, 156, 0.527) solid;
     border-radius: 20px;
     display: flex;
