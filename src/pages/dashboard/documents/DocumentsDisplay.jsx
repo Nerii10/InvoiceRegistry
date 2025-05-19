@@ -9,49 +9,57 @@ export function DocumentStateDisplay({ invoice }) {
 
   if (!invoice) return null;
 
-  if (Number(invoice.amount) === 0) {
-    return (
-      <p className="invoice-status paid">
-        <Check size={iconSize} />
-      </p>
-    );
-  }
-
   const paid = Number(invoice.paid) || 0;
   const total = Number(invoice.amount) || 0;
   const dueDate = new Date(invoice.due_date);
   const now = new Date();
 
-  if (paid === 0) {
-    return (
-      <p className="invoice-status pending">
-        <ClockAlert size={iconSize} />
-      </p>
-    );
-  }
-
-  if (paid > 0 && paid < total) {
-    if (dueDate < now) {
-      return (
-        <p className="invoice-status late">
-          <X size={iconSize} />
-        </p>
-      );
-    } else {
-      return (
-        <p className="invoice-status pending-paid">
-          <ClockAlert size={iconSize} />
-        </p>
-      );
-    }
-  }
-
-  if (paid >= total) {
+  if (invoice.amount == "0") {
     return (
       <p className="invoice-status paid">
         <Check size={iconSize} />
       </p>
     );
+  } else {
+    if (paid === 0) {
+      if (dueDate < now) {
+        return (
+          <p className="invoice-status late">
+            <X size={iconSize} />
+          </p>
+        );
+      } else {
+        return (
+          <p className="invoice-status pending">
+            <ClockAlert size={iconSize} />
+          </p>
+        );
+      }
+    }
+
+    if (paid > 0 && paid < total) {
+      if (dueDate < now) {
+        return (
+          <p className="invoice-status late">
+            <X size={iconSize} />
+          </p>
+        );
+      } else {
+        return (
+          <p className="invoice-status pending-paid">
+            <ClockAlert size={iconSize} />
+          </p>
+        );
+      }
+    }
+
+    if (paid >= total) {
+      return (
+        <p className="invoice-status paid">
+          <Check size={iconSize} />
+        </p>
+      );
+    }
   }
 
   return null;
@@ -105,7 +113,8 @@ export default function DocumentsDisplay({
                           }))
                         }
                       >
-                        {filter} {sort.date == 'asc' ?  <ChevronUp /> : <ChevronDown />}
+                        {filter}{" "}
+                        {sort.date == "asc" ? <ChevronUp /> : <ChevronDown />}
                       </a>
                     ) : (
                       filter
@@ -148,7 +157,7 @@ export default function DocumentsDisplay({
                         cell =
                           invoice.services.length !== 0
                             ? invoice.services.reduce(
-                                (sum, srv) => sum + srv.price,
+                                (sum, srv) => Number(sum) + Number(srv.price),
                                 0
                               ) + " zł"
                             : "-";

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/Tree.css";
 import { motion } from "framer-motion";
 import { ChevronDown, UserRound, ShieldUser, Crown, Plus } from "lucide-react";
@@ -15,6 +15,14 @@ function RenderTreeNodes({
   const hasUsers = usersData.some((u) => u.unit_id === node.id);
   const [overflowVisible, setOverflowVisible] = useState(level === 0);
 
+  useEffect(() => {
+    if (node) {
+      if (!hasUsers) {
+        setIsOpen(false);
+      }
+    }
+  }, [node]);
+
   const variants = {
     closed: {
       width: "100%",
@@ -23,7 +31,7 @@ function RenderTreeNodes({
       transition: {
         type: "tween",
         duration: 0.25,
-       ease: "easeOut"
+        ease: "easeOut",
       },
     },
     open: {
@@ -45,15 +53,15 @@ function RenderTreeNodes({
     >
       {/* Nagłówek */}
       <div
-        onClick={() => {
-          if ((node.children?.length || hasUsers) > 0) {
-            setIsOpen((o) => !o);
-          }
-        }}
         className={level === 0 ? "tree-input-name-header" : "tree-input-name"}
       >
         {(node.children?.length || hasUsers) > 0 && (
           <ChevronDown
+            onClick={() => {
+              if ((node.children?.length || hasUsers) > 0) {
+                setIsOpen((o) => !o);
+              }
+            }}
             style={{
               rotate: isOpen ? "0deg" : "-90deg",
               transition: "0.25s ease",

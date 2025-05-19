@@ -31,7 +31,7 @@ export default function Documents() {
   const [viewMode, setviewMode] = useState("list");
   const [documentType, setdocumentType] = useState("invoices");
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState({date:"desc"});
+  const [sort, setSort] = useState({ date: "desc" });
   const iconSize = 15;
   const invoiceTableHeaders = [
     "Invoice Number",
@@ -43,7 +43,7 @@ export default function Documents() {
     "Amount",
   ];
   const clientTableHeaders = ["Name", "Address", "NIP"];
-
+  const [filters, setFilters] = useState();
   const navigate = useNavigate();
 
   // Hooks
@@ -54,10 +54,11 @@ export default function Documents() {
     type: documentType,
     page: currentPage,
     search: search,
-    sort: sort
+    sort: sort,
+    filters: filters,
   });
 
-  // Filters
+  // Displays
   const [invoiceFilters, setInvoiceFilters] = useState(() => {
     try {
       const stored = localStorage.getItem("invoiceFilters");
@@ -76,10 +77,6 @@ export default function Documents() {
     }
   });
 
-  useEffect(()=>{
-    console.log(sort)
-  },[sort])
-
   useEffect(() => {
     try {
       localStorage.setItem("invoiceFilters", JSON.stringify(invoiceFilters));
@@ -95,6 +92,45 @@ export default function Documents() {
       console.warn("Nie udało się zapisać ustawień filtrów");
     }
   }, [clientFilters]);
+
+  function exportToCSV(jsonData, filename = "data.csv") {
+    if (!jsonData.length) {
+      alert("Brak danych do eksportu");
+      return;
+    }
+
+    const keys = Object.keys(jsonData[0]);
+    const csvRows = [];
+
+    // nagłówek
+    csvRows.push(keys.join(","));
+
+    // wiersze
+    for (const row of jsonData) {
+      const values = keys.map((key) => {
+        let val = row[key] === null || row[key] === undefined ? "" : row[key];
+        // ucieczka cudzysłowów i przecinków
+        if (
+          typeof val === "string" &&
+          (val.includes(",") || val.includes('"'))
+        ) {
+          val = `"${val.replace(/"/g, '""')}"`;
+        }
+        return val;
+      });
+      csvRows.push(values.join(","));
+    }
+
+    const csvString = csvRows.join("\n");
+    const blob = new Blob([csvString], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   // PageOptions
   useEffect(() => {
@@ -117,11 +153,12 @@ export default function Documents() {
       console.log("tw");
       fetchDocs();
     }
-  }, [token, documentType, currentPage, sort]);
+  }, [token, documentType, currentPage, sort, filters]);
 
   return (
     <DashboardPageWrapper maxWidth={"1250px"}>
       {/* Controls */}
+      {/* <button onClick={()=>{exportToCSV(data.invoices)}}>EXPORT</button> */}
       <section className="documents-controls">
         <section className="documents-controls-left">
           <Input
@@ -164,8 +201,19 @@ export default function Documents() {
           >
             <LayoutPanelTop size={iconSize} />
           </Input>
-          <p style={{ margin: 0, width:'0px', display:'flex', justifyContent:'center' }}>
-            <EllipsisVertical style={{flexShrink:0}} size={15} stroke="gray"/>
+          <p
+            style={{
+              margin: 0,
+              width: "0px",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <EllipsisVertical
+              style={{ flexShrink: 0 }}
+              size={15}
+              stroke="gray"
+            />
           </p>
           <Input
             type="button"
@@ -208,6 +256,26 @@ export default function Documents() {
                 : clientTableHeaders
             }
           ></Input>
+          <Input
+            type="filter"
+            width="50px"
+            height="30px"
+            borderRadius="10px"
+            options={[
+              {
+                type: "select",
+                label: "Status - All",
+                options: [
+                  { value: "Ongoing", label: "Ongoing" },
+                  { value: "Late", label: "Late" },
+                  { value: "Paid", label: "Paid" },
+                ],
+                value: filters?.status,
+                setValue: (val) =>
+                  setFilters((prev) => ({ ...prev, status: val })),
+              },
+            ]}
+          />
         </section>
       </section>
 
@@ -224,9 +292,9 @@ export default function Documents() {
           width="50px"
           borderRadius="0px"
           onClick={() => {
-            documentType == 'invoices' ?
-            navigate("/dashboard/add-document?document") :
-            navigate("/dashboard/add-document?client");
+            documentType == "invoices"
+              ? navigate("/dashboard/add-document?document")
+              : navigate("/dashboard/add-document?client");
           }}
           borderStyle="none"
           customStyle={{ borderRight: "1px var(--borderColor) solid" }}

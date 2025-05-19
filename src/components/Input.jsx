@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/Input.css";
-import { Upload, FunnelPlus } from "lucide-react";
+import { Upload, FunnelPlus, Eye } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function Input(props) {
   const {
@@ -50,6 +51,9 @@ export default function Input(props) {
 
   // === MULTISELECT ===
   if (type === "multiselect") return renderMultiSelect();
+
+  // === FILTER ===
+  if (type === "filter") return renderFilter();
 
   // === TEXT / EMAIL / PASSWORD / DATE / NUMBER ===
   return renderTextOrDate();
@@ -119,7 +123,7 @@ export default function Input(props) {
       <input
         type={type}
         max={max}
-        step={'0.01'}
+        step={"0.01"}
         min={min}
         className="custom-input text"
         value={value}
@@ -195,14 +199,16 @@ export default function Input(props) {
           className="multiselect-icon"
           onClick={() => setIsOpen((prev) => !prev)}
         >
-          <FunnelPlus />
+          <Eye />
         </div>
 
         {isOpen && (
-          <div className="multiselect-popup">
-            <p style={{ textAlign: "center", width: "100%", margin: 5 }}>
-              Filter Table
-            </p>
+          <motion.div
+            className="multiselect-popup"
+            onHoverEnd={() => {
+              setIsOpen(false);
+            }}
+          >
             {options?.map((option, idx) => {
               const val = option.value || option;
               const label = option.label || val;
@@ -226,7 +232,45 @@ export default function Input(props) {
                 </label>
               );
             })}
-          </div>
+          </motion.div>
+        )}
+      </div>
+    );
+  }
+
+  function renderFilter() {
+    const [isOpen, setIsOpen] = useState(false);
+
+    const toggleOption = (val) => {
+      if (value.includes(val)) {
+        setValue(value.filter((v) => v !== val));
+      } else {
+        setValue([...value, val]);
+      }
+    };
+
+    return (
+      <div className="custom-input-multiselect" style={style}>
+        <div
+          className="multiselect-icon"
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          <FunnelPlus />
+        </div>
+
+        {isOpen && (
+          <motion.div
+            className="multiselect-popup"
+            onHoverEnd={() => {
+              setIsOpen(false);
+            }}
+          >
+            {options?.map((option, idx) => {
+              return(
+                <Input {...option} borderRadius={"10px"} />
+              )
+            })}
+          </motion.div>
         )}
       </div>
     );
