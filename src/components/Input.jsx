@@ -24,6 +24,8 @@ export default function Input(props) {
     customStyle,
     activeTextHidden = false,
     disabled,
+    max,
+    min,
   } = props;
 
   const style = {
@@ -116,6 +118,9 @@ export default function Input(props) {
     const inputElement = (
       <input
         type={type}
+        max={max}
+        step={'0.01'}
+        min={min}
         className="custom-input text"
         value={value}
         required={required}

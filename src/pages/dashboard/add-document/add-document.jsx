@@ -18,15 +18,9 @@ import InvoiceForm from "./invoice/InvoiceForm.jsx";
 import RenderInputs from "../../../components/RenderInputs.jsx";
 import Input from "../../../components/Input.jsx";
 import ClientForm from "./client/clientForm.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function AddDocument() {
-  //States
-  const [currentFile, setCurrentFile] = useState(null);
-  const [documentType, setDocumentType] = useState("Invoice");
-  const [invoiceData, setInvoiceData] = useState(null);
-  const [clientData, setClientData] = useState(null);
-  const [fileURL, setFileURL] = useState(null);
-
   //Hooks
   const { token, user } = useUser();
   const { createDocument, addClient, message, loading } = useCreateDocument({
@@ -35,6 +29,14 @@ export default function AddDocument() {
   const { data: companyData, loading: companyLoading } = useCompany();
   const { ocrFile, data, loading: ocrLoading } = useOcr({ token });
   const Company = companyData ? true : companyLoading ? null : false;
+  const { search } = useLocation();
+  const navigate = useNavigate();
+  //States
+  const [currentFile, setCurrentFile] = useState(null);
+  const [documentType, setDocumentType] = useState("Invoice");
+  const [invoiceData, setInvoiceData] = useState(null);
+  const [clientData, setClientData] = useState(null);
+  const [fileURL, setFileURL] = useState(null);
 
   const addDocumentSections = [
     <DashboardPageWrapper maxWidth={"1250px"}>
@@ -115,7 +117,7 @@ export default function AddDocument() {
                 disabled: loading || !Company,
                 width: "fit-content",
                 borderRadius: "10px",
-                children: "Save Invoice",
+                children: `Save ${documentType}`,
               },
             ],
           ]}
@@ -153,8 +155,17 @@ export default function AddDocument() {
   ];
 
   useEffect(() => {
-    console.log(companyLoading);
-  }, [companyLoading]);
+    if (search == "?client") {
+      setDocumentType("Client");
+    }
+    if (search == "?invoice") {
+      setDocumentType("Invoice");
+    }
+  }, []);
+
+  useEffect(() => {
+    navigate(`?client${documentType.toLowerCase()}`);
+  }, [documentType]);
 
   return <>{addDocumentSections.map((section) => section)}</>;
 }

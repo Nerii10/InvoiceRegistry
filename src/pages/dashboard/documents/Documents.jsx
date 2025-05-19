@@ -218,7 +218,9 @@ export default function Documents() {
           width="50px"
           borderRadius="0px"
           onClick={() => {
-            navigate("/dashboard/add-document");
+            documentType == 'invoices' ?
+            navigate("/dashboard/add-document?document") :
+            navigate("/dashboard/add-document?client");
           }}
           borderStyle="none"
           customStyle={{ borderRight: "1px var(--borderColor) solid" }}

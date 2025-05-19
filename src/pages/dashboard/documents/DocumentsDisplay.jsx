@@ -2,17 +2,36 @@ import Loader from "../../../components/Loader.jsx";
 import { X, Check, ClockAlert } from "lucide-react";
 import { Reorder, motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function DocumentStateDisplay({ invoice }) {
+export function DocumentStateDisplay({ invoice }) {
   const iconSize = 15;
-  if (invoice.status) {
+
+  if (!invoice) return null;
+
+  if (Number(invoice.amount) === 0) {
     return (
       <p className="invoice-status paid">
         <Check size={iconSize} />
       </p>
     );
-  } else {
-    if (new Date(invoice.due_date) < new Date()) {
+  }
+
+  const paid = Number(invoice.amount_paid) || 0;
+  const total = Number(invoice.amount) || 0;
+  const dueDate = new Date(invoice.due_date);
+  const now = new Date();
+
+  if (paid === 0) {
+    return (
+      <p className="invoice-status pending">
+        <ClockAlert size={iconSize} />
+      </p>
+    );
+  }
+
+  if (paid > 0 && paid < total) {
+    if (dueDate < now) {
       return (
         <p className="invoice-status late">
           <X size={iconSize} />
@@ -26,6 +45,16 @@ function DocumentStateDisplay({ invoice }) {
       );
     }
   }
+
+  if (paid >= total) {
+    return (
+      <p className="invoice-status paid">
+        <Check size={iconSize} />
+      </p>
+    );
+  }
+
+  return null;
 }
 
 export default function DocumentsDisplay({
@@ -35,6 +64,7 @@ export default function DocumentsDisplay({
   filters: initialFilters,
   total,
 }) {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState(initialFilters);
   useEffect(() => {
     setFilters(initialFilters);
@@ -71,7 +101,13 @@ export default function DocumentsDisplay({
 
             <tbody>
               {data?.invoices?.map((invoice, rowIndex) => (
-                <motion.tr key={rowIndex} layout>
+                <motion.tr
+                  key={rowIndex}
+                  onClick={() => {
+                    navigate(`/dashboard/invoice/${invoice.id}`);
+                  }}
+                  layout
+                >
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {
@@ -149,7 +185,13 @@ export default function DocumentsDisplay({
 
             <tbody>
               {data?.clients?.map((client, idx) => (
-                <motion.tr key={idx} layout>
+                <motion.tr
+                  onClick={() => {
+                    navigate("dashboard/invoice");
+                  }}
+                  key={idx}
+                  layout
+                >
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {

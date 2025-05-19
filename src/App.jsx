@@ -15,6 +15,7 @@ import Home from "./pages/home/Home";
 import "./App.css";
 import TEST from "./pages/test";
 import { AnimatePresence } from "framer-motion";
+import Invoice from "./pages/dashboard/documents/Invoice";
 
 export default function App() {
   const { user } = useUser();
@@ -56,6 +57,7 @@ export default function App() {
         <Route path="/dashboard" element={<Dashboard isMobile={isMobile} />}>
           <Route index element={<Documents />} />
           <Route path="documents" element={<Documents />} />
+          <Route path="invoice/:id" element={<Invoice />} />
           <Route path="add-document" element={<AddDocument />} />
           <Route path="user" element={<User />} />
         </Route>
