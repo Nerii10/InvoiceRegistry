@@ -185,13 +185,7 @@ export default function DocumentsDisplay({
 
             <tbody>
               {data?.clients?.map((client, idx) => (
-                <motion.tr
-                  onClick={() => {
-                    navigate("dashboard/invoice");
-                  }}
-                  key={idx}
-                  layout
-                >
+                <motion.tr key={idx} layout>
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {
