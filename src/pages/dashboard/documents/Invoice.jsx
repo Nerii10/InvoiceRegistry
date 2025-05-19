@@ -18,7 +18,13 @@ export function InvoiceData({ token, fetchDocument, data }) {
     }
   }, [token]);
 
-  return { invoiceData: data };
+  const paid =
+    data?.payments?.reduce(
+      (sum, value) => Number(sum) + Number(value.amount),
+      0
+    ) ?? 0;
+
+  return { invoiceData: { ...data, paid } };
 }
 
 export function InvoiceStatus({ invoiceData, token, addPayment }) {
@@ -33,13 +39,15 @@ export function InvoiceStatus({ invoiceData, token, addPayment }) {
     >
       <section className="invoice_status_payment">
         <p style={{ margin: 0 }}>
-          {invoiceData.amount_paid} PLN / {invoiceData.amount} PLN
+          {invoiceData.paid} PLN / {invoiceData.amount} PLN
         </p>
         <section
           className="invoice_status_payment_display"
           style={{
             "--completion-percent": `${
-              (invoiceData.amount == 0 ? 1 : invoiceData.amount_paid / invoiceData.amount) * 100
+              (invoiceData.amount == 0
+                ? 1
+                : invoiceData.paid / invoiceData.amount) * 100
             }%`,
           }}
         ></section>
@@ -97,7 +105,7 @@ export function InvoiceStatusIcon({ invoice }) {
     );
   }
 
-  const paid = Number(invoice.amount_paid) || 0;
+  const paid = invoice?.paid || 0;
   const total = Number(invoice.amount) || 0;
   const dueDate = new Date(invoice.due_date);
   const now = new Date();
@@ -143,7 +151,7 @@ export default function Invoice() {
   const { invoiceData } = InvoiceData({ token, fetchDocument, data });
 
   return (
-    <DashboardPageWrapper>
+    <DashboardPageWrapper maxWidth={"1250px"}>
       <Loader loading={loading} onlyLoader={true} position={"center"}></Loader>
       <section className="invoice_header">
         <h1>Invoice {invoiceData?.invoice_number}</h1>
@@ -154,16 +162,10 @@ export default function Invoice() {
       <section className="invoice_content">
         <section className="invoice_date">
           <p>
-            Issue date:{" "}
-            <time dateTime={invoiceData?.issue_date}>
-              {invoiceData?.issue_date}
-            </time>
+            Issue date: {new Date(invoiceData?.issue_date).toLocaleDateString()}
           </p>
           <p>
-            Due date:{" "}
-            <time dateTime={invoiceData?.due_date}>
-              {invoiceData?.due_date}
-            </time>
+            Due date: {new Date(invoiceData?.due_date).toLocaleDateString()}
           </p>
         </section>
 
@@ -185,21 +187,42 @@ export default function Invoice() {
         {invoiceData?.services?.length > 0 && (
           <>
             <section className="invoice_services">
-              {invoiceData.services.map((service, idx) => (
+              {invoiceData?.services?.map((service, idx) => (
                 <div key={idx} className="invoice_services_input">
                   <p>{service.name}</p>
                   <p>{service.price} PLN</p>
                 </div>
               ))}
             </section>
-            <section className="invoice_services">
-              <div className="invoice_services_input">
-                <p>Total</p>
-                <p>{invoiceData?.amount} PLN</p>
-              </div>
-            </section>
           </>
         )}
+        <div className="invoice_services_input">
+          <p>Total</p>
+          <p>{invoiceData?.amount} PLN</p>
+        </div>
+
+        <section className="invoice_main_input">
+          <h3>- Payments</h3>
+        </section>
+
+        {invoiceData?.services?.length > 0 && (
+          <>
+            <section className="invoice_services">
+              {invoiceData.payments?.map((payment, idx) => (
+                <div key={idx} className="invoice_services_input">
+                  <p>{payment.username}</p>
+                  <p>{new Date(payment.paid_at).toLocaleDateString()}</p>
+                  <p>{payment.amount} PLN</p>
+                </div>
+              ))}
+            </section>
+            <section className="invoice_services"></section>
+          </>
+        )}
+        <div className="invoice_services_input">
+          <p>Total</p>
+          <p>{invoiceData.paid || 0} PLN</p>
+        </div>
       </section>
       <InvoiceStatus
         invoiceData={invoiceData}

@@ -31,6 +31,7 @@ export default function Documents() {
   const [viewMode, setviewMode] = useState("list");
   const [documentType, setdocumentType] = useState("invoices");
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState({date:"desc"});
   const iconSize = 15;
   const invoiceTableHeaders = [
     "Invoice Number",
@@ -53,6 +54,7 @@ export default function Documents() {
     type: documentType,
     page: currentPage,
     search: search,
+    sort: sort
   });
 
   // Filters
@@ -73,6 +75,10 @@ export default function Documents() {
       return clientTableHeaders;
     }
   });
+
+  useEffect(()=>{
+    console.log(sort)
+  },[sort])
 
   useEffect(() => {
     try {
@@ -111,7 +117,7 @@ export default function Documents() {
       console.log("tw");
       fetchDocs();
     }
-  }, [token, documentType, currentPage]);
+  }, [token, documentType, currentPage, sort]);
 
   return (
     <DashboardPageWrapper maxWidth={"1250px"}>
@@ -258,8 +264,10 @@ export default function Documents() {
       <section className="documents-display">
         <DocumentsDisplay
           data={data}
+          setSort={setSort}
           documentType={documentType}
           loading={loading}
+          sort={sort}
           filters={documentType == "invoices" ? invoiceFilters : clientFilters}
           total={data.total}
         />

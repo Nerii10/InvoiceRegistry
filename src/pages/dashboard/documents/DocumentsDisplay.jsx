@@ -1,5 +1,5 @@
 import Loader from "../../../components/Loader.jsx";
-import { X, Check, ClockAlert } from "lucide-react";
+import { X, Check, ClockAlert, ChevronDown, ChevronUp } from "lucide-react";
 import { Reorder, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +17,7 @@ export function DocumentStateDisplay({ invoice }) {
     );
   }
 
-  const paid = Number(invoice.amount_paid) || 0;
+  const paid = Number(invoice.paid) || 0;
   const total = Number(invoice.amount) || 0;
   const dueDate = new Date(invoice.due_date);
   const now = new Date();
@@ -39,7 +39,7 @@ export function DocumentStateDisplay({ invoice }) {
       );
     } else {
       return (
-        <p className="invoice-status pending">
+        <p className="invoice-status pending-paid">
           <ClockAlert size={iconSize} />
         </p>
       );
@@ -63,6 +63,8 @@ export default function DocumentsDisplay({
   loading,
   filters: initialFilters,
   total,
+  setSort,
+  sort,
 }) {
   const navigate = useNavigate();
   const [filters, setFilters] = useState(initialFilters);
@@ -93,7 +95,21 @@ export default function DocumentsDisplay({
                     dragMomentum={false}
                     style={{ userSelect: "none", padding: "8px 12px" }}
                   >
-                    {filter}
+                    {filter == "Due Date" ? (
+                      <a
+                        className="sort_button"
+                        onClick={() =>
+                          setSort((prev) => ({
+                            ...prev,
+                            date: prev.date === "desc" ? "asc" : "desc",
+                          }))
+                        }
+                      >
+                        {filter} {sort.date == 'asc' ?  <ChevronUp /> : <ChevronDown />}
+                      </a>
+                    ) : (
+                      filter
+                    )}
                   </Reorder.Item>
                 ))}
               </Reorder.Group>

@@ -5,7 +5,7 @@
   z-index: 4;
   margin: 0;
   top: 0;
-  background-color: rgba(0, 0, 0, 0.129);
+  background-color: rgba(0, 0, 0, 0.394);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: center;
@@ -17,8 +17,9 @@
   margin-top: -100px;
   background-color: rgb(255, 255, 255);
   border-radius: 20px;
-  border: 1px rgba(0, 0, 0, 0.755) solid;
+  border: 1px rgba(69, 69, 69, 0.755) solid;
   max-width: 400px;
+  overflow: hidden;
   height: fit-content;
 }
 
@@ -26,15 +27,16 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(255, 27, 27);
     width: 20px;
     height: 20px;
 }
 
 .exit-poput-buttons {
   width: 100%;
+  background-color: var(--secondColor);
   display: flex;
-  justify-content: end;
+  justify-content: space-between;
   align-items: center;
   gap: 20px;
   max-width: 600px;
@@ -45,7 +47,9 @@
 
 .exit-popup-text {
   margin: 0;
+  background-color: var(--accentColor);
   padding: 20px;
   font-size: 15px;
+  border: 1px var(--borderColor) solid;
   box-sizing: border-box;
 }

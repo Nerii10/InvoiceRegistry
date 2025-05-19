@@ -77,6 +77,7 @@ export function CompanyProvider({ children }) {
   };
 
   const moveUnit = async (unitData) => {
+    console.log(unitData)
     const { ok } = await callApi({
       url: "/unit/move",
       method: "PATCH",

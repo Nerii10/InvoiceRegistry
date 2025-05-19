@@ -88,6 +88,9 @@
   height: 25px;
   padding: 5px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   box-sizing: border-box;
   color: rgb(0, 0, 0);
 }
@@ -102,6 +105,10 @@
 
 .invoice-status.pending {
   background-color: rgb(230, 173, 255);
+}
+
+.invoice-status.pending-paid {
+  background-color: rgb(101, 208, 254);
 }
 
 .no-results{
@@ -124,4 +131,12 @@
     justify-content: start;
     align-items: center;
   }
+}
+
+.sort_button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }

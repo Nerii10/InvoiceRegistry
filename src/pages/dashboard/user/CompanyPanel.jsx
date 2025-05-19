@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../../../components/Input";
 import Tree from "../../../components/Tree";
 import "../../../styles/User.css";
@@ -31,8 +31,9 @@ export default function CompanyPanel({
   const accessedUsers = company?.usersData.filter((u) =>
     company?.access?.users?.includes(u.user_id)
   );
-  console.log({ accessedUnits, accessedUsers });
-  console.log(company);
+
+  
+
   return (
     <section>
       {/* Empty‑state header */}
@@ -374,6 +375,9 @@ export default function CompanyPanel({
         <section className="add-document-content">
           <div className="add-document-input-container">
             <Tree
+              setNewUnitData={setNewUnitData}
+              setSelectedAction={setSelectedAction}
+              moveUnit={moveUnit}
               unitsData={company?.unitsData}
               usersData={company?.usersData}
             />

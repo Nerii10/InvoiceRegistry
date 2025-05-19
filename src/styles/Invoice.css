@@ -16,7 +16,6 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  max-width: 1000px;
 }
 
 .invoice_date {
@@ -56,7 +55,6 @@
 }
 
 .invoice_status {
-  max-width: 1000px;
   width: 100%;
   display: flex;
   gap: 20px;

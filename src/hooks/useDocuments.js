@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
-export function useDocuments({ token, type, page, search }) {
+export function useDocuments({ token, type, page, search, sort }) {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -23,6 +23,7 @@ export function useDocuments({ token, type, page, search }) {
         );
         url.searchParams.append("page", page);
         url.searchParams.append("search", search);
+        url.searchParams.append("sort_date", sort.date);
         const response = await fetch(url, {
           method: "GET",
           headers: {
@@ -91,8 +92,9 @@ export function useDocuments({ token, type, page, search }) {
           body: JSON.stringify({ amount, id }),
         });
         const result = await response.json();
-        setData(result.data);
+        setData(result);
         setLoading(false);
+        console.log(result)
         setError(null);
       } catch (error) {
         console.log(error);

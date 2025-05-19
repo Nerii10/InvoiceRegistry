@@ -72,7 +72,6 @@ export default function User() {
                   ? "Are you sure you want to delete the organization? This action will permanently remove all invoices and data associated with your company."
                   : "Are you sure you want to leave the organization? You will lose access to all units and invoices associated with this company."}
               </p>
-              <hr style={{ width: "90%", border: "1px gray dashed" }}></hr>
               <div className="exit-poput-buttons">
                 <Input
                   onClick={() => {
