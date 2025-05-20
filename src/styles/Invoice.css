@@ -104,3 +104,35 @@
     height: 100%;
   }
   
+  .search-clients{
+    position: absolute;
+    top: 240px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    z-index: 5;
+    width: 30%;
+    max-width: 220px;
+    background-color: gray;
+    overflow: auto;
+    max-height: 150px;
+    flex-direction: column;
+    gap: 10px;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    box-sizing: border-box;
+    background-color: white;
+  }
+
+  .search-client-input{
+    border-radius: 10px;
+    display: flex;
+    cursor: pointer;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--secondColor);
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+  }

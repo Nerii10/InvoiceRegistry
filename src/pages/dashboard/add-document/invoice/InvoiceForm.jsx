@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Input from "../../../../components/Input";
 import { Upload, Plus, X } from "lucide-react";
 import RenderInputs from "../../../../components/RenderInputs";
+import { useUser } from "../../../../contexts/UserContext";
+import { useDocuments } from "../../../../hooks/useDocuments";
 
 export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   const today = new Date().toISOString().split("T")[0];
@@ -17,6 +19,10 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   const [clientNip, setClientNip] = useState("");
   const [clientAddress, setClientAddress] = useState("");
 
+  const { token } = useUser();
+  const { serachForClients, data } = useDocuments({ token });
+
+  const [searchData, setSearchData] = useState([]);
   //SetInvoiceData
   useEffect(() => {
     setInvoiceData({
@@ -37,6 +43,25 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
     clientNip,
     clientAddress,
   ]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (clientName.trim() !== "") {
+        serachForClients(clientName);
+      } else {
+        setSearchData([])
+      }
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [clientName]);
+
+  useEffect(() => {
+    if(data?.clients[0]?.name != clientName)
+    {
+      setSearchData(data);
+    }
+  }, [data]);
 
   //OCR
   useEffect(() => {
@@ -143,7 +168,30 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
           data={invoiceInputSections}
           className={"add-document-input-container"}
         ></RenderInputs>
-
+        <div
+          className="search-clients"
+          style={
+            searchData.length != 0
+              ? { padding: "10px", border: "1px var(--borderColor) solid" }
+              : { padding: 0, border: "none" }
+          }
+        >
+          {searchData?.clients?.map((client) => {
+            return (
+              <a
+                onClick={() => {
+                  setSearchData([]);
+                  setClientAddress(client.address);
+                  setClientName(client.name);
+                  setClientNip(client.nip);
+                }}
+                className="search-client-input"
+              >
+                {client.name} - {client.nip}
+              </a>
+            );
+          })}
+        </div>
         {/* Services */}
         <div
           className="add-document-input-container"

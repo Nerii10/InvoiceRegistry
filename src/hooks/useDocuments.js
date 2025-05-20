@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
 
-export function useDocuments({ token, type, page, search, sort, filters}) {
+export function useDocuments({ token, type, page, search, sort, filters }) {
   const [data, setData] = useState([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -106,5 +106,42 @@ export function useDocuments({ token, type, page, search, sort, filters}) {
     }
   }
 
-  return { fetchDocs, addPayment, fetchDocument, data, total, loading, error };
+  async function serachForClients(name) {
+    if (token) {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const url = new URL(`${API_URL}/search/clients/all`);
+
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({name})
+        });
+        const result = await response.json();
+        setData(result);
+        setLoading(false);
+        setError(null);
+      } catch (error) {
+        console.log(error);
+        setError(error);
+        setLoading(false);
+      }
+    }
+  }
+
+  return {
+    fetchDocs,
+    serachForClients,
+    addPayment,
+    fetchDocument,
+    data,
+    total,
+    loading,
+    error,
+  };
 }

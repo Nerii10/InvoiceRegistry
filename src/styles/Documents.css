@@ -5,6 +5,7 @@
   flex-direction: row;
   width: 100%;
   padding: 10px;
+  gap: 10px;
   box-sizing: border-box;
   border-bottom: 1px var(--borderColor) solid;
 }
@@ -126,6 +127,7 @@
   .documents-controls-right {
     gap: 10px;
     display: flex;
+    flex-wrap: wrap;
     border-radius: 10px;
     box-sizing: border-box;
     justify-content: start;
