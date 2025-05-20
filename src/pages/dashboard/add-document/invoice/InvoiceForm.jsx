@@ -49,7 +49,7 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
       if (clientName.trim() !== "") {
         serachForClients(clientName);
       } else {
-        setSearchData([])
+        setSearchData([]);
       }
     }, 100);
 
@@ -57,8 +57,7 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   }, [clientName]);
 
   useEffect(() => {
-    if(data?.clients[0]?.name != clientName)
-    {
+    if (data?.clients && data?.clients[0]?.name != clientName) {
       setSearchData(data);
     }
   }, [data]);
