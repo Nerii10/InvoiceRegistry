@@ -258,16 +258,16 @@ export default function DocumentsDisplay({
             </thead>
 
             <tbody>
-              {data?.clients?.map((client, idx) => (
+              {data?.data?.map((item, idx) => (
                 <motion.tr key={idx} layout>
                   {filters.map((filter) => {
                     let cell;
                     switch (filter) {
-                      case "Name":
-                        cell = client.name;
+                      case "Item":
+                        cell = item.name;
                         break;
                       case "Quantity":
-                        cell = client.address;
+                        cell = item.quantity;
                         break;
                       default:
                         cell = null;
@@ -304,28 +304,30 @@ export default function DocumentsDisplay({
             </thead>
 
             <tbody>
-              {data?.clients?.map((client, idx) => (
-                <motion.tr key={idx} layout>
-                  {filters.map((filter) => {
-                    let cell;
-                    switch (filter) {
-                      case "Name":
-                        cell = client.name;
-                        break;
-                      case "Quantity":
-                        cell = client.address;
-                        break;
-                      default:
-                        cell = null;
-                    }
-                    return (
-                      <motion.td key={filter} layout>
-                        {cell}
-                      </motion.td>
-                    );
-                  })}
-                </motion.tr>
-              ))}
+              {data?.data &&
+                data.data.length > 0 &&
+                data.data.map((data, idx) => (
+                  <motion.tr key={idx} layout>
+                    {filters.map((filter) => {
+                      let cell;
+                      switch (filter) {
+                        case "Item":
+                          cell = data.name;
+                          break;
+                        case "Description":
+                          cell = data.description;
+                          break;
+                        default:
+                          cell = null;
+                      }
+                      return (
+                        <motion.td key={filter} layout>
+                          {cell}
+                        </motion.td>
+                      );
+                    })}
+                  </motion.tr>
+                ))}
             </tbody>
           </>
         )}
@@ -350,28 +352,36 @@ export default function DocumentsDisplay({
             </thead>
 
             <tbody>
-              {data?.clients?.map((client, idx) => (
-                <motion.tr key={idx} layout>
-                  {filters.map((filter) => {
-                    let cell;
-                    switch (filter) {
-                      case "Name":
-                        cell = client.name;
-                        break;
-                      case "Quantity":
-                        cell = client.address;
-                        break;
-                      default:
-                        cell = null;
-                    }
-                    return (
-                      <motion.td key={filter} layout>
-                        {cell}
-                      </motion.td>
-                    );
-                  })}
-                </motion.tr>
-              ))}
+              {data &&
+                data[0]?.order_number &&
+                data?.map((order, idx) => (
+                  <motion.tr key={idx} layout>
+                    {filters.map((filter) => {
+                      let cell;
+                      switch (filter) {
+                        case "Order Number":
+                          cell = order.order_number;
+                          break;
+                        case "Ordered By":
+                          cell = order.ordered_by;
+                          break;
+                        case "RequestID":
+                          cell = order.related_request_id;
+                          break;
+                        case "Status":
+                          cell = order.status;
+                          break;
+                        default:
+                          cell = null;
+                      }
+                      return (
+                        <motion.td key={filter} layout>
+                          {cell}
+                        </motion.td>
+                      );
+                    })}
+                  </motion.tr>
+                ))}
             </tbody>
           </>
         )}
@@ -396,28 +406,41 @@ export default function DocumentsDisplay({
             </thead>
 
             <tbody>
-              {data?.clients?.map((client, idx) => (
-                <motion.tr key={idx} layout>
-                  {filters.map((filter) => {
-                    let cell;
-                    switch (filter) {
-                      case "Name":
-                        cell = client.name;
-                        break;
-                      case "Quantity":
-                        cell = client.address;
-                        break;
-                      default:
-                        cell = null;
-                    }
-                    return (
-                      <motion.td key={filter} layout>
-                        {cell}
+              {data &&
+                data.length > 0 &&
+                data.map((order, orderIdx) =>
+                  order.items && order.items.length > 0 ? (
+                    order.items.map((item, itemIdx) => (
+                      <motion.tr key={`${orderIdx}-${itemIdx}`} layout>
+                        {filters.map((filter) => {
+                          let cell;
+                          switch (filter) {
+                            case "Item":
+                              // Wyświetl item_id
+                              cell = item.item_id || item.id || "Brak ID";
+                              break;
+                            case "Quantity":
+                              cell = item.quantity ?? "Brak ilości"; // zabezpieczenie przed undefined/null
+                              break;
+                            default:
+                              cell = null;
+                          }
+                          return (
+                            <motion.td key={filter} layout>
+                              {cell}
+                            </motion.td>
+                          );
+                        })}
+                      </motion.tr>
+                    ))
+                  ) : (
+                    <motion.tr key={orderIdx}>
+                      <motion.td colSpan={filters.length} layout>
+                        Brak pozycji
                       </motion.td>
-                    );
-                  })}
-                </motion.tr>
-              ))}
+                    </motion.tr>
+                  )
+                )}
             </tbody>
           </>
         )}

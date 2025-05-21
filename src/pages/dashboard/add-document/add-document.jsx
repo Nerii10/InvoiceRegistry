@@ -40,9 +40,13 @@ export default function AddDocument() {
   const [invoiceData, setInvoiceData] = useState(null);
   const [clientData, setClientData] = useState(null);
   const [fileURL, setFileURL] = useState(null);
-  const [itemData, setItemData] = useState(null);
-  const [orderData, setOrderData] = useState(null);
-  const [requestData, setRequestData] = useState(null);
+  const [itemData, setItemData] = useState([{ name: "", desc: "" }]);
+  const [orderData, setOrderData] = useState([null]);
+  const [requestData, setRequestData] = useState([{ quantity: null, item: null }]);
+
+  useEffect(()=>{
+    console.log(orderData)
+  },[orderData])
 
   const addDocumentSections = [
     <DashboardPageWrapper maxWidth={"1250px"}>

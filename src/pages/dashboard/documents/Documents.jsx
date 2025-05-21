@@ -44,9 +44,14 @@ export default function Documents() {
   ];
   const clientTableHeaders = ["Name", "Address", "NIP"];
   const warehouseTableHeaders = ["Item", "Quantity"];
-  const itemsTableHeader = ["Item", "Description", "Net Price", "Gross Price"];
-  const ordersTableHearder = ["Order Number", "Item", "Quantity", "Ordered By"];
-  const requestsTableHeaders = ["Item", "Quantity", "Requested By", "Stauts"];
+  const itemsTableHeader = ["Item", "Description"];
+  const ordersTableHearder = [
+    "Order Number",
+    "RequestID",
+    "Ordered By",
+    "Status",
+  ];
+  const requestsTableHeaders = ["Item", "Quantity"];
 
   const [filters, setFilters] = useState();
   const navigate = useNavigate();
@@ -155,7 +160,6 @@ export default function Documents() {
   // FetchingData
   useEffect(() => {
     if (token) {
-      console.log("tw");
       fetchDocs();
     }
   }, [token, documentType, currentPage, sort, filters]);
@@ -346,7 +350,9 @@ export default function Documents() {
               ? requestsTableHeaders
               : documentType == "items"
               ? itemsTableHeader
-              : documentType == "orders" ? ordersTableHearder : invoiceFilters
+              : documentType == "orders"
+              ? ordersTableHearder
+              : invoiceFilters
           }
           total={data.total}
         />
