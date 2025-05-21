@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useUser } from "../contexts/UserContext";
+import { useDocuments } from "./useDocuments";
 
 export function useCreateDocument({ token }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [data, setData] = useState(null);
-
   const { API_URL } = useUser();
 
   async function createDocument(document) {
@@ -97,5 +97,117 @@ export function useCreateDocument({ token }) {
     }
   }
 
-  return { createDocument, addClient, setMessage, data, message, loading };
+  async function addItem(item) {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_URL}/items/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(item),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        let responseMessage = responseData?.message;
+
+        throw new Error(responseMessage);
+      }
+
+      setMessage({ message: "Successfully added item", type: "message" });
+      setTimeout(() => {
+        setData(responseData);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setTimeout(() => {
+        setLoading(false);
+        setMessage({ message: err.message, type: "error" });
+      }, 1000);
+    }
+  }
+
+  async function addRequest(request) {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_URL}/requests/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(request),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        let responseMessage = responseData?.message;
+
+        throw new Error(responseMessage);
+      }
+
+      setMessage({ message: "Successfully added item", type: "message" });
+      setTimeout(() => {
+        setData(responseData);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setTimeout(() => {
+        setLoading(false);
+        setMessage({ message: err.message, type: "error" });
+      }, 1000);
+    }
+  }
+
+  async function addOrder(order) {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_URL}/orders/add`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(order),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        let responseMessage = responseData?.message;
+
+        throw new Error(responseMessage);
+      }
+
+      setMessage({ message: "Successfully added order", type: "message" });
+      setTimeout(() => {
+        setData(responseData);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setTimeout(() => {
+        setLoading(false);
+        setMessage({ message: err.message, type: "error" });
+      }, 1000);
+    }
+  }
+
+  return {
+    createDocument,
+    addRequest,
+    addItem,
+    addOrder,
+    addClient,
+    setMessage,
+    data,
+    message,
+    loading,
+  };
 }

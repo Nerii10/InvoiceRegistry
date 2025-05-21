@@ -19,11 +19,14 @@ import RenderInputs from "../../../components/RenderInputs.jsx";
 import Input from "../../../components/Input.jsx";
 import ClientForm from "./client/clientForm.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import OrderForm from "./order/OrderForm.jsx";
+import RequestForm from "./request/RequestForm.jsx";
+import ItemForm from "./item/ItemForm.jsx";
 
 export default function AddDocument() {
   //Hooks
   const { token, user } = useUser();
-  const { createDocument, addClient, message, loading } = useCreateDocument({
+  const { createDocument, addClient, addOrder, addRequest, addItem, message, loading } = useCreateDocument({
     token: token,
   });
   const { data: companyData, loading: companyLoading } = useCompany();
@@ -37,6 +40,9 @@ export default function AddDocument() {
   const [invoiceData, setInvoiceData] = useState(null);
   const [clientData, setClientData] = useState(null);
   const [fileURL, setFileURL] = useState(null);
+  const [itemData, setItemData] = useState(null);
+  const [orderData, setOrderData] = useState(null);
+  const [requestData, setRequestData] = useState(null);
 
   const addDocumentSections = [
     <DashboardPageWrapper maxWidth={"1250px"}>
@@ -51,9 +57,24 @@ export default function AddDocument() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          documentType == "Invoice"
-            ? createDocument({ invoiceData })
-            : addClient({ clientData });
+
+          switch (documentType) {
+            case "Invoice":
+              createDocument({ invoiceData });
+              break;
+            case "Client":
+              addClient({ clientData });
+              break;
+            case "Item":
+              addItem({ itemData });
+              break;
+            case "Order":
+              addOrder({ orderData });
+              break;
+            case "Request":
+              addRequest({ requestData });
+              break;
+          }
         }}
       >
         {/* Header */}
@@ -69,29 +90,54 @@ export default function AddDocument() {
             setValue={(e) => {
               setDocumentType(e);
             }}
-            options={[{ value: "Invoice" }, { value: "Client" }]}
+            options={[
+              { value: "Invoice" },
+              { value: "Client" },
+              { value: "Item" },
+              { value: "Request" },
+              { value: "Order" },
+            ]}
           />
         </section>
 
         {/* Form */}
-        {documentType == "Invoice" ? (
-          <InvoiceForm
-            user={user}
-            ocrData={data}
-            companyData={companyData}
-            setInvoiceData={setInvoiceData}
-          ></InvoiceForm>
-        ) : documentType == "Client" ? (
-          <ClientForm
-            setClientData={setClientData}
-            clientData={clientData}
-            ocrData={data}
-          />
-        ) : (
-          <section className="add-document-content-wrapper">
-            <p>Select document type to continue</p>
-          </section>
-        )}
+        {(() => {
+          const formComponents = {
+            Invoice: (
+              <InvoiceForm
+                user={user}
+                ocrData={data}
+                companyData={companyData}
+                setInvoiceData={setInvoiceData}
+              />
+            ),
+            Client: (
+              <ClientForm
+                setClientData={setClientData}
+                clientData={clientData}
+                ocrData={data}
+              />
+            ),
+            Order: (
+              <OrderForm orderData={orderData} setOrderData={setOrderData} />
+            ),
+            Request: (
+              <RequestForm
+                requestData={requestData}
+                setRequestData={setRequestData}
+              />
+            ),
+            Item: <ItemForm itemData={itemData} setItemData={setItemData} />,
+          };
+
+          return (
+            formComponents[documentType] || (
+              <section className="add-document-content-wrapper">
+                <p>Select document type to continue</p>
+              </section>
+            )
+          );
+        })()}
 
         {/* Controls */}
         <RenderInputs

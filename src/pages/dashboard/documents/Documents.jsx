@@ -43,6 +43,11 @@ export default function Documents() {
     "Amount",
   ];
   const clientTableHeaders = ["Name", "Address", "NIP"];
+  const warehouseTableHeaders = ["Item", "Quantity"];
+  const itemsTableHeader = ["Item", "Description", "Net Price", "Gross Price"];
+  const ordersTableHearder = ["Order Number", "Item", "Quantity", "Ordered By"];
+  const requestsTableHeaders = ["Item", "Quantity", "Requested By", "Stauts"];
+
   const [filters, setFilters] = useState();
   const navigate = useNavigate();
 
@@ -216,31 +221,25 @@ export default function Documents() {
             />
           </p>
           <Input
-            type="button"
-            disabled={loading}
-            width="fit-content"
-            height="30px"
-            borderRadius="10px"
-            active={documentType == "invoices"}
-            onClick={() => {
-              setdocumentType("invoices");
-            }}
-          >
-            Invoices
-          </Input>
-          <Input
-            type="button"
+            type="select"
             disabled={loading}
             width="fit-content"
             height="30px"
             active={documentType == "clients"}
             borderRadius="10px"
-            onClick={() => {
-              setdocumentType("clients");
+            value={documentType}
+            setValue={(e) => {
+              setdocumentType(e);
             }}
-          >
-            Clients
-          </Input>
+            options={[
+              { value: "invoices" },
+              { value: "clients" },
+              { value: "warehouse" },
+              { value: "orders" },
+              { value: "requests" },
+              { value: "items" },
+            ]}
+          />
           <Input
             width="50px"
             setValue={
@@ -336,7 +335,19 @@ export default function Documents() {
           documentType={documentType}
           loading={loading}
           sort={sort}
-          filters={documentType == "invoices" ? invoiceFilters : clientFilters}
+          filters={
+            documentType == "invoices"
+              ? invoiceFilters
+              : documentType == "clients"
+              ? clientFilters
+              : documentType == "warehouse"
+              ? warehouseTableHeaders
+              : documentType == "requests"
+              ? requestsTableHeaders
+              : documentType == "items"
+              ? itemsTableHeader
+              : documentType == "orders" ? ordersTableHearder : invoiceFilters
+          }
           total={data.total}
         />
       </section>

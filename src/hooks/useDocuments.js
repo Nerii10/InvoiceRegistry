@@ -18,13 +18,17 @@ export function useDocuments({ token, type, page, search, sort, filters }) {
         // console.log('Trying to fetch docs')
         const url = new URL(
           `${API_URL}/${
-            type == "invoices" ? "invoices" : type == "clients" && "clients"
+            type == "invoices"
+              ? "invoices"
+              : type == "clients"
+              ? "clients"
+              : type
           }/all`
         );
-        url.searchParams.append("page", page);
-        url.searchParams.append("search", search);
-        url.searchParams.append("sort_date", sort.date);
-        url.searchParams.append("filter_status", filters?.status);
+        url.searchParams.append("page", page || null);
+        url.searchParams.append("search", search || "");
+        url.searchParams.append("sort_date", sort?.date || null);
+        url.searchParams.append("filter_status", filters?.status || null);
 
         const response = await fetch(url, {
           method: "GET",
@@ -120,7 +124,7 @@ export function useDocuments({ token, type, page, search, sort, filters }) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({name})
+          body: JSON.stringify({ name }),
         });
         const result = await response.json();
         setData(result);

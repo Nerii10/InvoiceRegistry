@@ -66,10 +66,11 @@ export default function Input(props) {
         required={required}
         className="custom-input select"
         value={value}
+        disabled={disabled}
         onChange={(e) => setValue(e.target.value)}
         style={style}
       >
-        <option value="" hidden>
+        <option value="" hidden disabled>
           {label || "Select"}
         </option>
         {options?.map((option, idx) => (

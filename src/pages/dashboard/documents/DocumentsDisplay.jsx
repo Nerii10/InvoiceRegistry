@@ -237,6 +237,190 @@ export default function DocumentsDisplay({
             </tbody>
           </>
         )}
+
+        {documentType === "warehouse" && (
+          <>
+            <thead>
+              <Reorder.Group axis="x" values={filters} as="tr">
+                {filters.map((filter) => (
+                  <Reorder.Item
+                    as="th"
+                    key={filter}
+                    value={filter}
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
+                  >
+                    {filter}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </thead>
+
+            <tbody>
+              {data?.clients?.map((client, idx) => (
+                <motion.tr key={idx} layout>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Name":
+                        cell = client.name;
+                        break;
+                      case "Quantity":
+                        cell = client.address;
+                        break;
+                      default:
+                        cell = null;
+                    }
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
+                  })}
+                </motion.tr>
+              ))}
+            </tbody>
+          </>
+        )}
+
+        {documentType === "items" && (
+          <>
+            <thead>
+              <Reorder.Group axis="x" values={filters} as="tr">
+                {filters.map((filter) => (
+                  <Reorder.Item
+                    as="th"
+                    key={filter}
+                    value={filter}
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
+                  >
+                    {filter}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </thead>
+
+            <tbody>
+              {data?.clients?.map((client, idx) => (
+                <motion.tr key={idx} layout>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Name":
+                        cell = client.name;
+                        break;
+                      case "Quantity":
+                        cell = client.address;
+                        break;
+                      default:
+                        cell = null;
+                    }
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
+                  })}
+                </motion.tr>
+              ))}
+            </tbody>
+          </>
+        )}
+
+        {documentType === "orders" && (
+          <>
+            <thead>
+              <Reorder.Group axis="x" values={filters} as="tr">
+                {filters.map((filter) => (
+                  <Reorder.Item
+                    as="th"
+                    key={filter}
+                    value={filter}
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
+                  >
+                    {filter}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </thead>
+
+            <tbody>
+              {data?.clients?.map((client, idx) => (
+                <motion.tr key={idx} layout>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Name":
+                        cell = client.name;
+                        break;
+                      case "Quantity":
+                        cell = client.address;
+                        break;
+                      default:
+                        cell = null;
+                    }
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
+                  })}
+                </motion.tr>
+              ))}
+            </tbody>
+          </>
+        )}
+
+        {documentType === "requests" && (
+          <>
+            <thead>
+              <Reorder.Group axis="x" values={filters} as="tr">
+                {filters.map((filter) => (
+                  <Reorder.Item
+                    as="th"
+                    key={filter}
+                    value={filter}
+                    dragListener
+                    dragMomentum={false}
+                    style={{ userSelect: "none", padding: "8px 12px" }}
+                  >
+                    {filter}
+                  </Reorder.Item>
+                ))}
+              </Reorder.Group>
+            </thead>
+
+            <tbody>
+              {data?.clients?.map((client, idx) => (
+                <motion.tr key={idx} layout>
+                  {filters.map((filter) => {
+                    let cell;
+                    switch (filter) {
+                      case "Name":
+                        cell = client.name;
+                        break;
+                      case "Quantity":
+                        cell = client.address;
+                        break;
+                      default:
+                        cell = null;
+                    }
+                    return (
+                      <motion.td key={filter} layout>
+                        {cell}
+                      </motion.td>
+                    );
+                  })}
+                </motion.tr>
+              ))}
+            </tbody>
+          </>
+        )}
       </table>
 
       {loading && <p className="empty-row">e</p>}

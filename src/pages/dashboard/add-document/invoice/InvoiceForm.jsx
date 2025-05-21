@@ -18,9 +18,23 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   const [clientName, setClientName] = useState("");
   const [clientNip, setClientNip] = useState("");
   const [clientAddress, setClientAddress] = useState("");
+  const [orderId, setOrderId] = useState("");
 
   const { token } = useUser();
-  const { serachForClients, data } = useDocuments({ token });
+  const { data, fetchDocs } = useDocuments({
+    token,
+    type: "orders",
+  });
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+
+  useEffect(() => {
+    if (token) {
+      fetchDocs();
+    }
+  }, [token]);
 
   const [searchData, setSearchData] = useState([]);
   //SetInvoiceData
@@ -33,6 +47,18 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
       clientName,
       clientNip,
       clientAddress,
+      orderId,
+    });
+
+    console.log({
+      invoiceNumber,
+      issueDate,
+      dueDate,
+      services,
+      clientName,
+      clientNip,
+      clientAddress,
+      orderId,
     });
   }, [
     invoiceNumber,
@@ -42,25 +68,8 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
     clientName,
     clientNip,
     clientAddress,
+    orderId,
   ]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (clientName.trim() !== "") {
-        serachForClients(clientName);
-      } else {
-        setSearchData([]);
-      }
-    }, 100);
-
-    return () => clearTimeout(timeout);
-  }, [clientName]);
-
-  useEffect(() => {
-    if (data?.clients && data?.clients[0]?.name != clientName) {
-      setSearchData(data);
-    }
-  }, [data]);
 
   //OCR
   useEffect(() => {
@@ -196,70 +205,26 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
           className="add-document-input-container"
           style={{ justifyContent: "center", flexDirection: "column" }}
         >
-          {services.map((service, index) => {
-            return (
-              <div
-                key={index}
-                className="add-document-input-container"
-                style={{ padding: "0px 15%" }}
-              >
-                <RenderInputs
-                  className="add-document-input-container"
-                  data={[
-                    [
-                      {
-                        type: "text",
-                        width: "100%",
-                        label: "Service",
-                        value: service.name,
-                        setValue: (val) => {
-                          const updated = [...services];
-                          updated[index].name = val;
-                          setServices(updated);
-                        },
-                        borderRadius: "10px",
-                      },
-                      {
-                        type: "text",
-                        width: "100%",
-                        label: "Price",
-                        value: service.price,
-                        setValue: (val) => {
-                          const updated = [...services];
-                          updated[index].price = val;
-                          setServices(updated);
-                        },
-                        borderRadius: "10px",
-                      },
-                      {
-                        type: "button",
-                        width: "20%",
-                        borderRadius: "10px",
-                        onClick: () => {
-                          const updated = [...services];
-                          updated.splice(index, 1);
-                          setServices(updated);
-                        },
-                        children: <X size={20} />,
-                      },
-                    ],
-                  ]}
-                />
-              </div>
-            );
-          })}
-          <Input
-            type="button"
-            width="fit-content"
-            borderRadius="10px"
-            onClick={() => {
-              setServices((prev) => {
-                return [...prev, { name: "", price: "" }];
-              });
-            }}
+          <div
+            className="add-document-input-container"
+            style={{ padding: "0px 15%" }}
           >
-            <Plus size={20} /> Add Service
-          </Input>
+            <Input
+              width="100%"
+              borderRadius={borderRadius}
+              type="select"
+              label="Order number"
+              setValue={(e) => {
+                setOrderId(e);
+              }}
+              options={data
+                ?.filter((o) => o.status !== "completed")
+                .map((order, index) => ({
+                  value: order.id,
+                  label: order.order_number,
+                }))}
+            />
+          </div>
         </div>
       </section>
     </section>
