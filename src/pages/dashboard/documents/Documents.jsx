@@ -69,78 +69,51 @@ export default function Documents() {
   });
 
   // Displays
-  const [invoiceFilters, setInvoiceFilters] = useState(() => {
-    try {
-      const stored = localStorage.getItem("invoiceFilters");
-      return stored ? JSON.parse(stored) : invoiceTableHeaders;
-    } catch {
-      return invoiceTableHeaders;
-    }
-  });
+  function useLocalFilter(key, defaultValue) {
+    const [filter, setFilter] = useState(() => {
+      try {
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    });
 
-  const [clientFilters, setClientFilters] = useState(() => {
-    try {
-      const stored = localStorage.getItem("clientFilters");
-      return stored ? JSON.parse(stored) : clientFilters;
-    } catch {
-      return clientTableHeaders;
-    }
-  });
+    useEffect(() => {
+      try {
+        localStorage.setItem(key, JSON.stringify(filter));
+      } catch {
+        console.warn(`Nie udało się zapisać ustawień filtrów dla ${key}`);
+      }
+    }, [key, filter]);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("invoiceFilters", JSON.stringify(invoiceFilters));
-    } catch {
-      console.warn("Nie udało się zapisać ustawień filtrów");
-    }
-  }, [invoiceFilters]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem("clientFilters", JSON.stringify(clientFilters));
-    } catch {
-      console.warn("Nie udało się zapisać ustawień filtrów");
-    }
-  }, [clientFilters]);
-
-  function exportToCSV(jsonData, filename = "data.csv") {
-    if (!jsonData.length) {
-      alert("Brak danych do eksportu");
-      return;
-    }
-
-    const keys = Object.keys(jsonData[0]);
-    const csvRows = [];
-
-    // nagłówek
-    csvRows.push(keys.join(","));
-
-    // wiersze
-    for (const row of jsonData) {
-      const values = keys.map((key) => {
-        let val = row[key] === null || row[key] === undefined ? "" : row[key];
-        // ucieczka cudzysłowów i przecinków
-        if (
-          typeof val === "string" &&
-          (val.includes(",") || val.includes('"'))
-        ) {
-          val = `"${val.replace(/"/g, '""')}"`;
-        }
-        return val;
-      });
-      csvRows.push(values.join(","));
-    }
-
-    const csvString = csvRows.join("\n");
-    const blob = new Blob([csvString], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
+    return [filter, setFilter];
   }
+  const [invoiceFilters, setInvoiceFilters] = useLocalFilter(
+    "invoiceFilters",
+    invoiceTableHeaders
+  );
+
+  const [clientFilters, setClientFilters] = useLocalFilter(
+    "clientFilters",
+    clientTableHeaders
+  );
+  const [warehouseFilters, setWarehouseFilters] = useLocalFilter(
+    "warehouseFilters",
+    warehouseTableHeaders
+  );
+  const [orderFilters, setOrderFilters] = useLocalFilter(
+    "orderFilters",
+    ordersTableHearder
+  );
+  const [itemFilters, setItemFilters] = useLocalFilter(
+    "itemFilters",
+    itemsTableHeader
+  );
+  const [requestFilters, setRequestFilters] = useLocalFilter(
+    "requestFilters",
+    requestsTableHeaders
+  );
 
   // PageOptions
   useEffect(() => {
@@ -244,21 +217,59 @@ export default function Documents() {
               { value: "items" },
             ]}
           />
-          <Input
-            width="50px"
-            setValue={
-              documentType == "invoices" ? setInvoiceFilters : setClientFilters
-            }
-            value={documentType == "invoices" ? invoiceFilters : clientFilters}
-            height="30px"
-            borderRadius="10px"
-            type="multiselect"
-            options={
-              documentType == "invoices"
-                ? invoiceTableHeaders
-                : clientTableHeaders
-            }
-          ></Input>
+          {(() => {
+            const config = {
+              invoices: {
+                setValue: setInvoiceFilters,
+                value: invoiceFilters,
+                options: invoiceTableHeaders,
+              },
+              clients: {
+                setValue: setClientFilters,
+                value: clientFilters,
+                options: clientTableHeaders,
+              },
+              warehouse: {
+                setValue: setWarehouseFilters,
+                value: warehouseFilters,
+                options: warehouseTableHeaders,
+              },
+              orders: {
+                setValue: setOrderFilters,
+                value: orderFilters,
+                options: ordersTableHearder,
+              },
+              items: {
+                setValue: setItemFilters,
+                value: itemFilters,
+                options: itemsTableHeader,
+              },
+              requests: {
+                setValue: setRequestFilters,
+                value: requestFilters,
+                options: requestsTableHeaders,
+              },
+            };
+
+            const current = config[documentType] || {
+              setValue: () => {},
+              value: [],
+              options: [],
+            };
+
+            return (
+              <Input
+                width="50px"
+                height="30px"
+                borderRadius="10px"
+                type="multiselect"
+                setValue={current.setValue}
+                value={current.value}
+                options={current.options}
+              />
+            );
+          })()}
+
           <Input
             type="filter"
             width="50px"
@@ -345,13 +356,13 @@ export default function Documents() {
               : documentType == "clients"
               ? clientFilters
               : documentType == "warehouse"
-              ? warehouseTableHeaders
+              ? warehouseFilters
               : documentType == "requests"
-              ? requestsTableHeaders
+              ? requestFilters
               : documentType == "items"
-              ? itemsTableHeader
+              ? itemFilters
               : documentType == "orders"
-              ? ordersTableHearder
+              ? orderFilters
               : invoiceFilters
           }
           total={data.total}

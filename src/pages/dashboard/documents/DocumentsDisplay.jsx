@@ -241,7 +241,12 @@ export default function DocumentsDisplay({
         {documentType === "warehouse" && (
           <>
             <thead>
-              <Reorder.Group axis="x" values={filters} as="tr">
+              <Reorder.Group
+                axis="x"
+                values={filters}
+                onReorder={setFilters}
+                as="tr"
+              >
                 {filters.map((filter) => (
                   <Reorder.Item
                     as="th"
@@ -287,7 +292,12 @@ export default function DocumentsDisplay({
         {documentType === "items" && (
           <>
             <thead>
-              <Reorder.Group axis="x" values={filters} as="tr">
+              <Reorder.Group
+                axis="x"
+                values={filters}
+                onReorder={setFilters}
+                as="tr"
+              >
                 {filters.map((filter) => (
                   <Reorder.Item
                     as="th"
@@ -335,7 +345,12 @@ export default function DocumentsDisplay({
         {documentType === "orders" && (
           <>
             <thead>
-              <Reorder.Group axis="x" values={filters} as="tr">
+              <Reorder.Group
+                axis="x"
+                values={filters}
+                onReorder={setFilters}
+                as="tr"
+              >
                 {filters.map((filter) => (
                   <Reorder.Item
                     as="th"
@@ -389,7 +404,12 @@ export default function DocumentsDisplay({
         {documentType === "requests" && (
           <>
             <thead>
-              <Reorder.Group axis="x" values={filters} as="tr">
+              <Reorder.Group
+                axis="x"
+                values={filters}
+                onReorder={setFilters}
+                as="tr"
+              >
                 {filters.map((filter) => (
                   <Reorder.Item
                     as="th"

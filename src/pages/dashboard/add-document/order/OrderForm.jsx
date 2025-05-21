@@ -66,7 +66,7 @@ export default function OrderForm({ orderData, setOrderData }) {
     {
       type: "text",
       label: "Item ID",
-      value: item.item_id,
+      value: item.item_name,
     },
     {
       type: "text",

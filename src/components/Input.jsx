@@ -70,7 +70,7 @@ export default function Input(props) {
         onChange={(e) => setValue(e.target.value)}
         style={style}
       >
-        <option value="" hidden disabled>
+        <option value="" hidden>
           {label || "Select"}
         </option>
         {options?.map((option, idx) => (
