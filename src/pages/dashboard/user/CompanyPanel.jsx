@@ -13,6 +13,9 @@ export default function CompanyPanel({
   promoteUnit,
   setShowExitPopup,
   loading,
+  setTreeNewUnit,
+  newUnitData,
+  setNewUnitData
 }) {
   //Admin
   const [selectedAction, setSelectedAction] = useState("New");
@@ -22,7 +25,6 @@ export default function CompanyPanel({
     type: null,
   });
   const [selectedUnitData, setSelectedUnitData] = useState();
-  const [newUnitData, setNewUnitData] = useState({ name: null, parent: null });
 
   //Popup
   const accessedUnits = company?.unitsData.filter((u) =>
@@ -32,7 +34,6 @@ export default function CompanyPanel({
     company?.access?.users?.includes(u.user_id)
   );
 
-  
 
   return (
     <section>
@@ -378,6 +379,8 @@ export default function CompanyPanel({
               setNewUnitData={setNewUnitData}
               setSelectedAction={setSelectedAction}
               moveUnit={moveUnit}
+              newUnit={newUnit}
+              setTreeNewUnit={setTreeNewUnit}
               unitsData={company?.unitsData}
               usersData={company?.usersData}
             />

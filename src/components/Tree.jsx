@@ -6,6 +6,7 @@ import { ChevronDown, UserRound, ShieldUser, Crown, Plus } from "lucide-react";
 function RenderTreeNodes({
   node,
   level = 0,
+  setTreeNewUnit,
   usersData = [],
   onDropUser,
   setNewUnitData,
@@ -72,7 +73,7 @@ function RenderTreeNodes({
         <Plus
           size={20}
           onClick={() => {
-            setSelectedAction("New");
+            setTreeNewUnit(true);
             setNewUnitData({ parent: node.id });
           }}
         />
@@ -131,6 +132,7 @@ function RenderTreeNodes({
         {(node.children ?? []).map((child) => (
           <RenderTreeNodes
             key={child.id}
+            setTreeNewUnit={setTreeNewUnit}
             node={child}
             setNewUnitData={setNewUnitData}
             setSelectedAction={setSelectedAction}
@@ -163,6 +165,7 @@ export default function Tree({
   moveUnit,
   setSelectedAction,
   setNewUnitData,
+  setTreeNewUnit,
 }) {
   // map user → jego bieżący unit
   const userToUnit = Object.fromEntries(
@@ -193,6 +196,7 @@ export default function Tree({
           setNewUnitData={setNewUnitData}
           key={root.id}
           node={root}
+          setTreeNewUnit={setTreeNewUnit}
           usersData={usersData}
           onDropUser={handleDropUser}
         />
