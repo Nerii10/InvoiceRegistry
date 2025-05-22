@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import RenderInputs from "../../../../components/RenderInputs";
 import Input from "../../../../components/Input";
 import { useDocuments } from "../../../../hooks/useDocuments";
+import { useMemo } from "react";
 import { useUser } from "../../../../contexts/UserContext";
 
 export default function RequestForm({ requestData, setRequestData }) {
@@ -14,6 +15,16 @@ export default function RequestForm({ requestData, setRequestData }) {
   useEffect(() => {
     fetchDocs();
   }, []);
+
+  useEffect(() => {
+    console.log(requestData);
+  }, [requestData]);
+
+  const filteredData = useMemo(() => {
+    return data?.data?.filter(
+      (d) => !requestData.some((r) => Number(r.item) === Number(d.id))
+    );
+  }, [data, requestData]);
 
   const addNewRequest = () => {
     setRequestData((prev) => [...prev, { item: null, quantity: "" }]);
@@ -40,38 +51,52 @@ export default function RequestForm({ requestData, setRequestData }) {
     setRequestData(updated);
   };
 
-  const clientInputs = requestData?.map((request, index) => [
-    {
-      type: "select",
-      required,
-      width: "100%",
-      borderRadius,
-      label: "Item",
-      value: request.item,
-      options: data.data
-        ? data.data.map((item) => ({ value: item.id, label: item.name }))
-        : [],
-      setValue: (e) => handleChange(index, "item", e),
-    },
-    {
-      type: "text",
-      required,
-      width: "100%",
-      borderRadius,
-      label: "Quantity",
-      value: request.quantity,
-      setValue: (e) => handleChange(index, "quantity", e),
-    },
-    {
-      type: "button",
-      required,
-      width: "20%",
-      borderRadius,
-      label: "Remove",
-      children: "-",
-      onClick: () => removeRequest(index),
-    },
-  ]);
+  const clientInputs = requestData?.map((request, index) => {
+    const selectedItemsExceptCurrent = requestData
+      .filter((_, i) => i !== index)
+      .map((r) => Number(r.item));
+
+    const options =
+      data?.data
+        ?.filter((item) => {
+          return (
+            !selectedItemsExceptCurrent.includes(Number(item.id)) ||
+            Number(item.id) === Number(request.item)
+          );
+        })
+        .map((item) => ({ value: item.id, label: item.name })) || [];
+
+    return [
+      {
+        type: "select",
+        required,
+        width: "100%",
+        borderRadius,
+        label: "Item",
+        value: request.item ?? "",
+        options,
+        setValue: (e) => handleChange(index, "item", e),
+      },
+      {
+        type: "text",
+        required,
+        width: "100%",
+        borderRadius,
+        label: "Quantity",
+        value: request.quantity,
+        setValue: (e) => handleChange(index, "quantity", e),
+      },
+      {
+        type: "button",
+        required,
+        width: "20%",
+        borderRadius,
+        label: "Remove",
+        children: "-",
+        onClick: () => removeRequest(index),
+      },
+    ];
+  });
 
   return (
     <section className="add-document-content-wrapper">

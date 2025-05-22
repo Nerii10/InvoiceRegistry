@@ -58,7 +58,7 @@ export function useDocuments({ token, type, page, search, sort, filters }) {
       try {
         const url = new URL(
           `${API_URL}/${
-            type == "invoice" ? "invoices" : type == "client" && "clients"
+            type == "invoice" ? "invoices" : type == "client" ? "clients" : type
           }/${id}`
         );
 

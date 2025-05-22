@@ -106,7 +106,7 @@
 //   );
 // }
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useEffect, useRef } from "react";
 
 export default function TEST() {
@@ -116,7 +116,7 @@ export default function TEST() {
   const { scrollYProgress } = useScroll({
     container: containerRef,
     target: imageRef,
-    offset: ["start end", "end start"],
+    offset: ["start end", "start center"],
   });
 
   useEffect(() => {
@@ -127,9 +127,11 @@ export default function TEST() {
     return () => unsubscribe();
   }, [scrollYProgress]);
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.3, 1]);
-  const width = useTransform(scrollYProgress, [0, 1], [400, 500]);
-  const rotateX = useTransform(scrollYProgress, [0, 0.5], [80, 0]);
+const smooth = useSpring(scrollYProgress, {damping:23})
+  const opacity = useTransform(smooth, [0, 1], [0, 1]);
+  const width = useTransform(smooth, [0, 1], [250, 500]);
+  const rotateX = useTransform(smooth, [0, 1], [100, 0]);
+  const y = useTransform(smooth, [0, 1], [300, 0]);
 
   return (
     <div
@@ -161,7 +163,7 @@ export default function TEST() {
         <div style={{ perspective: "500px" }}>
           <motion.img
             ref={imageRef}
-            style={{ width, rotateX, opacity }}
+            style={{ width, rotateX, opacity, translateY:y }}
             src="/InvoiceRegistry/placeholder.png"
           />
         </div>

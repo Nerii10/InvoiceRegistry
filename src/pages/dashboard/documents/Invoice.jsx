@@ -171,13 +171,13 @@ export default function Invoice() {
 
         <section className="invoice_main">
           <section className="invoice_main_input">
-            <h3>Bill to.</h3>
+            <h3>From</h3>
             <p>{invoiceData?.receiver_name}</p>
             <p>{invoiceData?.receiver_address}</p>
             <p>{invoiceData?.receiver_nip}</p>
           </section>
           <section className="invoice_main_input">
-            <h3>From</h3>
+            <h3>Bill to.</h3>
             <p>{invoiceData?.sender_name}</p>
             <p>{invoiceData?.sender_address}</p>
             <p>{invoiceData?.sender_nip}</p>

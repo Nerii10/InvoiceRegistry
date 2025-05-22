@@ -74,9 +74,9 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
   //OCR
   useEffect(() => {
     setInvoiceNumber(ocrData.invoiceNumber ?? "");
-    setClientName(ocrData.clientName ?? "");
-    setClientNip(ocrData.clientNip ?? "");
-    setClientAddress(ocrData.clientAddress ?? "");
+    setClientName(ocrData.sellerName ?? "");
+    setClientNip(ocrData.sellerNip ?? "");
+    setClientAddress(ocrData.sellerAddress ?? "");
     setIssueDate(ocrData.issueDate ?? today);
     setDueDate(ocrData.dueDate ?? "");
     setServices(ocrData.services ?? services);
@@ -141,7 +141,7 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
     [
       {
         type: "text",
-        label: "Client name",
+        label: "Seller name",
         value: clientName,
         setValue: setClientName,
         width: "100%",
@@ -150,7 +150,7 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
       },
       {
         type: "text",
-        label: "Client NIP",
+        label: "Seller NIP",
         value: clientNip,
         setValue: setClientNip,
         width: "100%",
@@ -159,7 +159,7 @@ export default function InvoiceForm({ ocrData, setInvoiceData, companyData }) {
       },
       {
         type: "text",
-        label: "Client Address",
+        label: "Seller Address",
         value: clientAddress,
         setValue: setClientAddress,
         width: "100%",

@@ -65,6 +65,7 @@ export default function OrderForm({ orderData, setOrderData }) {
   const itemInputs = selectedRequestItems.map((item, index) => [
     {
       type: "text",
+      borderRadius,
       label: "Item ID",
       value: item.item_name,
     },
@@ -72,6 +73,8 @@ export default function OrderForm({ orderData, setOrderData }) {
       type: "text",
       label: "Price",
       value: item.price,
+      min: 0,
+      borderRadius,
       required: true,
       setValue: (val) => {
         setSelectedRequestItems((prev) => {

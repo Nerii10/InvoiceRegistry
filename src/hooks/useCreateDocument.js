@@ -165,6 +165,40 @@ export function useCreateDocument({ token }) {
     }
   }
 
+  async function completeRequest(request) {
+    setLoading(true);
+    setMessage(null);
+    try {
+      const response = await fetch(`${API_URL}/requests/complete`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(request),
+      });
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        let responseMessage = responseData?.message;
+
+        throw new Error(responseMessage);
+      }
+
+      setMessage({ message: "Successfully completed request", type: "message" });
+      setTimeout(() => {
+        setData(responseData);
+        setLoading(false);
+      }, 1000);
+    } catch (err) {
+      setTimeout(() => {
+        setLoading(false);
+        setMessage({ message: err.message, type: "error" });
+      }, 1000);
+    }
+  }
+
   async function addOrder(order) {
     setLoading(true);
     setMessage(null);
@@ -205,6 +239,7 @@ export function useCreateDocument({ token }) {
     addItem,
     addOrder,
     addClient,
+    completeRequest,
     setMessage,
     data,
     message,

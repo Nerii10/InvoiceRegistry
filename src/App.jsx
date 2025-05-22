@@ -16,6 +16,7 @@ import "./App.css";
 import TEST from "./pages/test";
 import { AnimatePresence } from "framer-motion";
 import Invoice from "./pages/dashboard/documents/Invoice";
+import Request from "./pages/dashboard/documents/Request";
 
 export default function App() {
   const { user } = useUser();
@@ -58,6 +59,7 @@ export default function App() {
           <Route index element={<Documents />} />
           <Route path="documents" element={<Documents />} />
           <Route path="invoice/:id" element={<Invoice />} />
+          <Route path="request/:id" element={<Request />} />
           <Route path="add-document" element={<AddDocument />} />
           <Route path="user" element={<User />} />
         </Route>

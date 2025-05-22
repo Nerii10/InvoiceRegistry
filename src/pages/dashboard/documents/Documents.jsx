@@ -51,7 +51,7 @@ export default function Documents() {
     "Ordered By",
     "Status",
   ];
-  const requestsTableHeaders = ["Item", "Quantity"];
+  const requestsTableHeaders = ["RequestID", "Status", "Item", "Quantity"];
 
   const [filters, setFilters] = useState();
   const navigate = useNavigate();
@@ -306,9 +306,7 @@ export default function Documents() {
           width="50px"
           borderRadius="0px"
           onClick={() => {
-            documentType == "invoices"
-              ? navigate("/dashboard/add-document?document")
-              : navigate("/dashboard/add-document?client");
+            navigate(`/dashboard/add-document?${documentType}`);
           }}
           borderStyle="none"
           customStyle={{ borderRight: "1px var(--borderColor) solid" }}
@@ -372,7 +370,11 @@ export default function Documents() {
       {!loading && data?.total != 0 && currentPage && (
         <section className="documents-details">
           <p style={{ padding: "10px" }}>
-            {(currentPage - 1) * 50} - {Math.min(currentPage * 50, data?.total)}
+            {data?.total != undefined &&
+              `${(currentPage - 1) * 50} - ${Math.min(
+                currentPage * 50,
+                data?.total
+              )}`}
           </p>
         </section>
       )}

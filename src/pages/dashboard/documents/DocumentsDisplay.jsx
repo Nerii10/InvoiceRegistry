@@ -384,11 +384,30 @@ export default function DocumentsDisplay({
                           cell = order.related_request_id;
                           break;
                         case "Status":
-                          cell = order.status;
+                          if (order.status === "completed") {
+                            cell = (
+                              <div className="invoice-status-container">
+                                <p className="invoice-status paid">
+                                  <Check size={15} />
+                                </p>
+                              </div>
+                            );
+                          } else if (order.status === "paid") {
+                            cell = (
+                              <div className="invoice-status-container">
+                                <p className="invoice-status pending">
+                                  <ClockAlert size={15} />
+                                </p>
+                              </div>
+                            );
+                          } else {
+                            cell = null;
+                          }
                           break;
                         default:
                           cell = null;
                       }
+
                       return (
                         <motion.td key={filter} layout>
                           {cell}
@@ -431,16 +450,50 @@ export default function DocumentsDisplay({
                 data.map((order, orderIdx) =>
                   order.items && order.items.length > 0 ? (
                     order.items.map((item, itemIdx) => (
-                      <motion.tr key={`${orderIdx}-${itemIdx}`} layout>
+                      <motion.tr
+                        onClick={() => {
+                          navigate(`/dashboard/request/${order.id}`);
+                        }}
+                        key={`${orderIdx}-${itemIdx}`}
+                        layout
+                      >
                         {filters.map((filter) => {
                           let cell;
                           switch (filter) {
+                            case "RequestID":
+                              // Wyświetl item_id
+                              cell = item.request_id || "Brak ID";
+                              break;
                             case "Item":
                               // Wyświetl item_id
-                              cell = item.item_id || item.id || "Brak ID";
+                              cell = item.item_name || item.id || "Brak ID";
                               break;
                             case "Quantity":
-                              cell = item.quantity ?? "Brak ilości"; // zabezpieczenie przed undefined/null
+                              cell = item.quantity ?? "Brak ilości";
+                              break;
+                            case "Status":
+                              if (order.status === "completed") {
+                                cell = (
+                                  <div className="invoice-status-container">
+                                    <p className="invoice-status paid">
+                                      <Check size={15} />
+                                    </p>
+                                  </div>
+                                );
+                              } else if (
+                                order.status === "paid" ||
+                                order.status === "pending"
+                              ) {
+                                cell = (
+                                  <div className="invoice-status-container">
+                                    <p className="invoice-status pending">
+                                      <ClockAlert size={15} />
+                                    </p>
+                                  </div>
+                                );
+                              } else {
+                                cell = null;
+                              }
                               break;
                             default:
                               cell = null;

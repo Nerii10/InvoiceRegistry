@@ -1,10 +1,18 @@
 //Lib
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 //Components
 import DashboardPageWrapper from "../DashboardPageWrapper";
 import Loader from "../../../components/Loader";
 import MessagePopup from "../../../components/MessagePopup.jsx";
+import InvoiceForm from "./invoice/InvoiceForm.jsx";
+import RenderInputs from "../../../components/RenderInputs.jsx";
+import Input from "../../../components/Input.jsx";
+import ClientForm from "./client/clientForm.jsx";
+import OrderForm from "./order/OrderForm.jsx";
+import RequestForm from "./request/RequestForm.jsx";
+import ItemForm from "./item/ItemForm.jsx";
 
 //Styles
 import "../../../styles/Add-Document.css";
@@ -14,27 +22,28 @@ import { useCreateDocument } from "../../../hooks/useCreateDocument";
 import { useOcr } from "../../../hooks/useOcr.js";
 import { useUser } from "../../../contexts/UserContext";
 import { useCompany } from "../../../contexts/CompanyContext.jsx";
-import InvoiceForm from "./invoice/InvoiceForm.jsx";
-import RenderInputs from "../../../components/RenderInputs.jsx";
-import Input from "../../../components/Input.jsx";
-import ClientForm from "./client/clientForm.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
-import OrderForm from "./order/OrderForm.jsx";
-import RequestForm from "./request/RequestForm.jsx";
-import ItemForm from "./item/ItemForm.jsx";
 
 export default function AddDocument() {
-  //Hooks
   const { token, user } = useUser();
-  const { createDocument, addClient, addOrder, addRequest, addItem, message, loading } = useCreateDocument({
-    token: token,
-  });
+  const {
+    createDocument,
+    addClient,
+    addOrder,
+    addRequest,
+    addItem,
+    message,
+    loading,
+  } = useCreateDocument({ token });
   const { data: companyData, loading: companyLoading } = useCompany();
   const { ocrFile, data, loading: ocrLoading } = useOcr({ token });
   const Company = companyData ? true : companyLoading ? null : false;
   const { search } = useLocation();
   const navigate = useNavigate();
-  //States
+
+  // Typy dokumentów
+  const validTypes = ["Invoice", "Client", "Order", "Request", "Item"];
+
+  // States
   const [currentFile, setCurrentFile] = useState(null);
   const [documentType, setDocumentType] = useState("Invoice");
   const [invoiceData, setInvoiceData] = useState(null);
@@ -42,26 +51,58 @@ export default function AddDocument() {
   const [fileURL, setFileURL] = useState(null);
   const [itemData, setItemData] = useState([{ name: "", desc: "" }]);
   const [orderData, setOrderData] = useState([null]);
-  const [requestData, setRequestData] = useState([{ quantity: null, item: null }]);
+  const [requestData, setRequestData] = useState([
+    { quantity: null, item: null },
+  ]);
 
-  useEffect(()=>{
-    console.log(orderData)
-  },[orderData])
+  // Inicjalizacja typu dokumentu z linku
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const typeFromURL = params.entries().next().value?.[0]; // np. "client" z "?client"
+    const capitalized =
+      typeFromURL?.charAt(0).toUpperCase() +
+      typeFromURL?.slice(1).toLowerCase();
+
+    if (validTypes.includes(capitalized)) {
+      setDocumentType(capitalized);
+    }
+
+    console.log("Search:", search, "→ type:", capitalized);
+  }, [search]);
+
+  // Aktualizacja URL po zmianie typu
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    const typeFromURL = params.entries().next().value?.[0];
+    const capitalized =
+      typeFromURL?.charAt(0).toUpperCase() +
+      typeFromURL?.slice(1).toLowerCase();
+
+    if (validTypes.includes(capitalized)) {
+      setDocumentType(capitalized);
+    }
+
+    console.log("Search:", search, "→ type:", capitalized);
+  }, [search]);
+
+  // 2. A ten useEffect zmienia search (nawiguje do nowego search)
+  useEffect(() => {
+    navigate(`?${documentType.toLowerCase()}`);
+  }, [documentType]);
 
   const addDocumentSections = [
-    <DashboardPageWrapper maxWidth={"1250px"}>
+    <DashboardPageWrapper maxWidth={"1250px"} key="form-section">
       <Loader
         loading={loading || ocrLoading}
-        error={message?.type == "error"}
+        error={message?.type === "error"}
         size={30}
         position={"center"}
         color={"black"}
-      ></Loader>
+      />
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
-
           switch (documentType) {
             case "Invoice":
               createDocument({ invoiceData });
@@ -78,6 +119,8 @@ export default function AddDocument() {
             case "Request":
               addRequest({ requestData });
               break;
+            default:
+              break;
           }
         }}
       >
@@ -91,16 +134,8 @@ export default function AddDocument() {
             borderRadius="10px"
             label="Document Type"
             value={documentType}
-            setValue={(e) => {
-              setDocumentType(e);
-            }}
-            options={[
-              { value: "Invoice" },
-              { value: "Client" },
-              { value: "Item" },
-              { value: "Request" },
-              { value: "Order" },
-            ]}
+            setValue={(e) => setDocumentType(e)}
+            options={validTypes.map((type) => ({ value: type }))}
           />
         </section>
 
@@ -155,7 +190,6 @@ export default function AddDocument() {
                 borderRadius: "10px",
                 disabled: loading,
                 setValue: (e) => {
-                  console.log(e);
                   setCurrentFile(e);
                   ocrFile(e);
                   const url = URL.createObjectURL(e);
@@ -175,21 +209,22 @@ export default function AddDocument() {
       </form>
     </DashboardPageWrapper>,
 
-    <>
-      {fileURL && (
-        <div className="add-document-frame">
-          <iframe
-            src={fileURL}
-            width="100%"
-            height="100%"
-            style={{ borderRadius: "var(--borderRadius)", border: "none" }}
-            title="Podgląd PDF-a"
-          />
-        </div>
-      )}
-    </>,
+    // PDF preview
+    fileURL && (
+      <div className="add-document-frame" key="preview-section">
+        <iframe
+          src={fileURL}
+          width="100%"
+          height="100%"
+          style={{ borderRadius: "var(--borderRadius)", border: "none" }}
+          title="Podgląd PDF-a"
+        />
+      </div>
+    ),
 
+    // Wiadomość
     <MessagePopup
+      key="popup-section"
       message={
         !companyLoading &&
         (Company
@@ -203,19 +238,6 @@ export default function AddDocument() {
       loading={companyLoading}
     />,
   ];
-
-  useEffect(() => {
-    if (search == "?client") {
-      setDocumentType("Client");
-    }
-    if (search == "?invoice") {
-      setDocumentType("Invoice");
-    }
-  }, []);
-
-  useEffect(() => {
-    navigate(`?client${documentType.toLowerCase()}`);
-  }, [documentType]);
 
   return <>{addDocumentSections.map((section) => section)}</>;
 }
